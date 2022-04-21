@@ -18,7 +18,6 @@
 		422B87EA2811BEBD00A082F0 /* Quote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B87E92811BEBD00A082F0 /* Quote.swift */; };
 		422B87ED2811CBF400A082F0 /* QuoteNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B87EC2811CBF400A082F0 /* QuoteNetworkManager.swift */; };
 		422B87EF2811D56900A082F0 /* AssetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B87EE2811D56800A082F0 /* AssetType.swift */; };
-		422B87F12811F60400A082F0 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B87F02811F60400A082F0 /* API.swift */; };
 		42AD702E28031D4000817752 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD702D28031D4000817752 /* AppDelegate.swift */; };
 		42AD703028031D4000817752 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD702F28031D4000817752 /* SceneDelegate.swift */; };
 		42AD703728031D4200817752 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42AD703628031D4200817752 /* Assets.xcassets */; };
@@ -46,7 +45,6 @@
 		422B87E92811BEBD00A082F0 /* Quote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quote.swift; sourceTree = "<group>"; };
 		422B87EC2811CBF400A082F0 /* QuoteNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteNetworkManager.swift; sourceTree = "<group>"; };
 		422B87EE2811D56800A082F0 /* AssetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetType.swift; sourceTree = "<group>"; };
-		422B87F02811F60400A082F0 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		42AD702A28031D4000817752 /* ShareMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42AD702D28031D4000817752 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		42AD702F28031D4000817752 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -214,7 +212,6 @@
 				42AD70542807334B00817752 /* NetworkManager.swift */,
 				42AD70532807334B00817752 /* EndpointProtocol.swift */,
 				42AD70582807335400817752 /* NetworkError.swift */,
-				422B87F02811F60400A082F0 /* API.swift */,
 				421D41BB280F0E24002E291D /* Search */,
 				421D41B2280DF31A002E291D /* Prices */,
 			);
@@ -367,7 +364,6 @@
 				42AD70552807334B00817752 /* EndpointProtocol.swift in Sources */,
 				422B87E42811728E00A082F0 /* RoundedImageView.swift in Sources */,
 				42AD70592807335400817752 /* PricesNetworkManager.swift in Sources */,
-				422B87F12811F60400A082F0 /* API.swift in Sources */,
 				42AD703028031D4000817752 /* SceneDelegate.swift in Sources */,
 				422B87EA2811BEBD00A082F0 /* Quote.swift in Sources */,
 				42AD704728033CB200817752 /* AssetViewController.swift in Sources */,
