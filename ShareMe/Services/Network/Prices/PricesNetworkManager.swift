@@ -5,8 +5,6 @@
 //  Created by Andrey Khakimov on 10.04.2022.
 //
 
-import UIKit
-
 class PricesNetworkManager {
     
     private enum Endpoints: EndpointProtocol {

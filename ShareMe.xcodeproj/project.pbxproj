@@ -9,35 +9,59 @@
 /* Begin PBXBuildFile section */
 		421D41B4280DF3CA002E291D /* PricesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421D41B3280DF3CA002E291D /* PricesList.swift */; };
 		421D41B9280DFC9A002E291D /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421D41B8280DFC9A002E291D /* UIViewController+Alert.swift */; };
+		421D41BD280F0E4C002E291D /* SearchAssetNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421D41BC280F0E4C002E291D /* SearchAssetNetworkManager.swift */; };
+		422B87DC2811618300A082F0 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B87DB2811618300A082F0 /* SearchViewController.swift */; };
+		422B87E02811653000A082F0 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B87DE2811653000A082F0 /* SearchResultTableViewCell.swift */; };
+		422B87E12811653000A082F0 /* SearchResultTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 422B87DF2811653000A082F0 /* SearchResultTableViewCell.xib */; };
+		422B87E42811728E00A082F0 /* RoundedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B87E32811728E00A082F0 /* RoundedImageView.swift */; };
+		422B87E828117D7A00A082F0 /* SearchRespond.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B87E728117D7A00A082F0 /* SearchRespond.swift */; };
+		422B87EA2811BEBD00A082F0 /* Quote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B87E92811BEBD00A082F0 /* Quote.swift */; };
+		422B87ED2811CBF400A082F0 /* QuoteNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B87EC2811CBF400A082F0 /* QuoteNetworkManager.swift */; };
+		422B87EF2811D56900A082F0 /* AssetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B87EE2811D56800A082F0 /* AssetType.swift */; };
+		422B87F12811F60400A082F0 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B87F02811F60400A082F0 /* API.swift */; };
 		42AD702E28031D4000817752 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD702D28031D4000817752 /* AppDelegate.swift */; };
 		42AD703028031D4000817752 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD702F28031D4000817752 /* SceneDelegate.swift */; };
 		42AD703728031D4200817752 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42AD703628031D4200817752 /* Assets.xcassets */; };
 		42AD703A28031D4200817752 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42AD703828031D4200817752 /* LaunchScreen.storyboard */; };
-		42AD704728033CB200817752 /* AssetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD704628033CB200817752 /* AssetsViewController.swift */; };
+		42AD704728033CB200817752 /* AssetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD704628033CB200817752 /* AssetViewController.swift */; };
 		42AD704E280341CF00817752 /* Quotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD704D280341CF00817752 /* Quotation.swift */; };
 		42AD70552807334B00817752 /* EndpointProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD70532807334B00817752 /* EndpointProtocol.swift */; };
 		42AD70562807334B00817752 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD70542807334B00817752 /* NetworkManager.swift */; };
 		42AD70592807335400817752 /* PricesNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD70572807335400817752 /* PricesNetworkManager.swift */; };
 		42AD705A2807335400817752 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD70582807335400817752 /* NetworkError.swift */; };
 		42AD705C2807341B00817752 /* SimpleChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD705B2807341B00817752 /* SimpleChartView.swift */; };
+		B88076ED76633FE0EF5EC5DB /* Pods_ShareMe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5773896E19DD619742BA63F /* Pods_ShareMe.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		07EE6EDCE91A76412774F57D /* Pods-ShareMe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareMe.debug.xcconfig"; path = "Target Support Files/Pods-ShareMe/Pods-ShareMe.debug.xcconfig"; sourceTree = "<group>"; };
 		421D41B3280DF3CA002E291D /* PricesList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesList.swift; sourceTree = "<group>"; };
 		421D41B8280DFC9A002E291D /* UIViewController+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
+		421D41BC280F0E4C002E291D /* SearchAssetNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchAssetNetworkManager.swift; sourceTree = "<group>"; };
+		422B87DB2811618300A082F0 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		422B87DE2811653000A082F0 /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
+		422B87DF2811653000A082F0 /* SearchResultTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchResultTableViewCell.xib; sourceTree = "<group>"; };
+		422B87E32811728E00A082F0 /* RoundedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedImageView.swift; sourceTree = "<group>"; };
+		422B87E728117D7A00A082F0 /* SearchRespond.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRespond.swift; sourceTree = "<group>"; };
+		422B87E92811BEBD00A082F0 /* Quote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quote.swift; sourceTree = "<group>"; };
+		422B87EC2811CBF400A082F0 /* QuoteNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteNetworkManager.swift; sourceTree = "<group>"; };
+		422B87EE2811D56800A082F0 /* AssetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetType.swift; sourceTree = "<group>"; };
+		422B87F02811F60400A082F0 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		42AD702A28031D4000817752 /* ShareMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42AD702D28031D4000817752 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		42AD702F28031D4000817752 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		42AD703628031D4200817752 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		42AD703928031D4200817752 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		42AD703B28031D4300817752 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		42AD704628033CB200817752 /* AssetsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsViewController.swift; sourceTree = "<group>"; };
+		42AD704628033CB200817752 /* AssetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetViewController.swift; sourceTree = "<group>"; };
 		42AD704D280341CF00817752 /* Quotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quotation.swift; sourceTree = "<group>"; };
 		42AD70532807334B00817752 /* EndpointProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndpointProtocol.swift; sourceTree = "<group>"; };
 		42AD70542807334B00817752 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		42AD70572807335400817752 /* PricesNetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PricesNetworkManager.swift; sourceTree = "<group>"; };
 		42AD70582807335400817752 /* NetworkError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		42AD705B2807341B00817752 /* SimpleChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleChartView.swift; sourceTree = "<group>"; };
+		9A83B45E94240348F7A0EDE9 /* Pods-ShareMe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareMe.release.xcconfig"; path = "Target Support Files/Pods-ShareMe/Pods-ShareMe.release.xcconfig"; sourceTree = "<group>"; };
+		E5773896E19DD619742BA63F /* Pods_ShareMe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShareMe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B88076ED76633FE0EF5EC5DB /* Pods_ShareMe.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,6 +79,7 @@
 		421D41B2280DF31A002E291D /* Prices */ = {
 			isa = PBXGroup;
 			children = (
+				422B87EC2811CBF400A082F0 /* QuoteNetworkManager.swift */,
 				42AD70572807335400817752 /* PricesNetworkManager.swift */,
 				42AD704C280341BF00817752 /* Models */,
 			);
@@ -78,11 +104,48 @@
 			path = App;
 			sourceTree = "<group>";
 		};
+		421D41BB280F0E24002E291D /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				421D41BC280F0E4C002E291D /* SearchAssetNetworkManager.swift */,
+				422B87E628117D4D00A082F0 /* Models */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		422B87DD2811650900A082F0 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				422B87DE2811653000A082F0 /* SearchResultTableViewCell.swift */,
+				422B87DF2811653000A082F0 /* SearchResultTableViewCell.xib */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		422B87E22811726F00A082F0 /* ImageViews */ = {
+			isa = PBXGroup;
+			children = (
+				422B87E32811728E00A082F0 /* RoundedImageView.swift */,
+			);
+			path = ImageViews;
+			sourceTree = "<group>";
+		};
+		422B87E628117D4D00A082F0 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				422B87E728117D7A00A082F0 /* SearchRespond.swift */,
+				422B87EE2811D56800A082F0 /* AssetType.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		42AD702128031D4000817752 = {
 			isa = PBXGroup;
 			children = (
 				42AD702C28031D4000817752 /* ShareMe */,
 				42AD702B28031D4000817752 /* Products */,
+				C60FD769128FB8C1C721A293 /* Pods */,
+				68F90F90F4EFFC2AB1A1D57B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -110,6 +173,8 @@
 		42AD7043280325AB00817752 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				422B87E22811726F00A082F0 /* ImageViews */,
+				422B87DD2811650900A082F0 /* Cells */,
 				42AD705B2807341B00817752 /* SimpleChartView.swift */,
 				42AD703828031D4200817752 /* LaunchScreen.storyboard */,
 			);
@@ -119,7 +184,8 @@
 		42AD7044280325B700817752 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				42AD704628033CB200817752 /* AssetsViewController.swift */,
+				42AD704628033CB200817752 /* AssetViewController.swift */,
+				422B87DB2811618300A082F0 /* SearchViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -127,6 +193,7 @@
 		42AD704C280341BF00817752 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				422B87E92811BEBD00A082F0 /* Quote.swift */,
 				42AD704D280341CF00817752 /* Quotation.swift */,
 				421D41B3280DF3CA002E291D /* PricesList.swift */,
 			);
@@ -147,9 +214,28 @@
 				42AD70542807334B00817752 /* NetworkManager.swift */,
 				42AD70532807334B00817752 /* EndpointProtocol.swift */,
 				42AD70582807335400817752 /* NetworkError.swift */,
+				422B87F02811F60400A082F0 /* API.swift */,
+				421D41BB280F0E24002E291D /* Search */,
 				421D41B2280DF31A002E291D /* Prices */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		68F90F90F4EFFC2AB1A1D57B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E5773896E19DD619742BA63F /* Pods_ShareMe.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C60FD769128FB8C1C721A293 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				07EE6EDCE91A76412774F57D /* Pods-ShareMe.debug.xcconfig */,
+				9A83B45E94240348F7A0EDE9 /* Pods-ShareMe.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -159,9 +245,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 42AD703E28031D4300817752 /* Build configuration list for PBXNativeTarget "ShareMe" */;
 			buildPhases = (
+				930625A6FE81012C50384963 /* [CP] Check Pods Manifest.lock */,
 				42AD702628031D4000817752 /* Sources */,
 				42AD702728031D4000817752 /* Frameworks */,
 				42AD702828031D4000817752 /* Resources */,
+				4C0889B72661950EC4C02E40 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -210,6 +298,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				422B87E12811653000A082F0 /* SearchResultTableViewCell.xib in Resources */,
 				42AD703A28031D4200817752 /* LaunchScreen.storyboard in Resources */,
 				42AD703728031D4200817752 /* Assets.xcassets in Resources */,
 			);
@@ -217,22 +306,73 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4C0889B72661950EC4C02E40 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ShareMe/Pods-ShareMe-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ShareMe/Pods-ShareMe-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ShareMe/Pods-ShareMe-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		930625A6FE81012C50384963 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ShareMe-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		42AD702628031D4000817752 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				422B87E02811653000A082F0 /* SearchResultTableViewCell.swift in Sources */,
+				421D41BD280F0E4C002E291D /* SearchAssetNetworkManager.swift in Sources */,
 				42AD70562807334B00817752 /* NetworkManager.swift in Sources */,
 				42AD705C2807341B00817752 /* SimpleChartView.swift in Sources */,
 				42AD705A2807335400817752 /* NetworkError.swift in Sources */,
 				421D41B9280DFC9A002E291D /* UIViewController+Alert.swift in Sources */,
 				42AD704E280341CF00817752 /* Quotation.swift in Sources */,
+				422B87ED2811CBF400A082F0 /* QuoteNetworkManager.swift in Sources */,
 				42AD702E28031D4000817752 /* AppDelegate.swift in Sources */,
 				421D41B4280DF3CA002E291D /* PricesList.swift in Sources */,
+				422B87DC2811618300A082F0 /* SearchViewController.swift in Sources */,
 				42AD70552807334B00817752 /* EndpointProtocol.swift in Sources */,
+				422B87E42811728E00A082F0 /* RoundedImageView.swift in Sources */,
 				42AD70592807335400817752 /* PricesNetworkManager.swift in Sources */,
+				422B87F12811F60400A082F0 /* API.swift in Sources */,
 				42AD703028031D4000817752 /* SceneDelegate.swift in Sources */,
-				42AD704728033CB200817752 /* AssetsViewController.swift in Sources */,
+				422B87EA2811BEBD00A082F0 /* Quote.swift in Sources */,
+				42AD704728033CB200817752 /* AssetViewController.swift in Sources */,
+				422B87EF2811D56900A082F0 /* AssetType.swift in Sources */,
+				422B87E828117D7A00A082F0 /* SearchRespond.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -368,6 +508,7 @@
 		};
 		42AD703F28031D4300817752 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 07EE6EDCE91A76412774F57D /* Pods-ShareMe.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -395,6 +536,7 @@
 		};
 		42AD704028031D4300817752 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9A83B45E94240348F7A0EDE9 /* Pods-ShareMe.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

@@ -18,7 +18,7 @@ protocol EndpointProtocol {
 
 extension EndpointProtocol {
     static var hostURL: String { NetworkManager.hostUrl }
-    static var apiKey: String { NetworkManager.apiKey }
+    static var apiKey: String { API.apiKey }
     
     var url: URL { URL(string: Self.hostURL + query)! }
     var httpMethod: String { "GET" }

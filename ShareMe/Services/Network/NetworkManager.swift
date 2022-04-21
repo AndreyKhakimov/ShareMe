@@ -10,19 +10,15 @@ import Foundation
 class NetworkManager {
     
     static let shared = NetworkManager()
-    static let hostUrl = "https://finnhub.io/api/v1"
-    static let apiKey = "c99ef6iad3ibm81cdmc0"
-    static let sandboxApiKey = "sandbox_c99ef6iad3ibm81cdmcg"
     
-    //"https://finnhub.io/api/v1/quote?symbol=AAPL&token=c99ef6iad3ibm81cdmc0"
-
+    static let hostUrl = "https://eodhistoricaldata.com/api"
     
     private init() {}
     
     func sendRequest<Response: Decodable>(endpoint: EndpointProtocol, completion: @escaping (Result<Response, NetworkError>) -> Void) {
         var request = URLRequest(url: endpoint.url)
         request.httpMethod = endpoint.httpMethod
-        
+        print(request.url)
         URLSession.shared.dataTask(with: request) { data, _, error in
             if let error = error {
                 completion(.failure(.other(error)))
