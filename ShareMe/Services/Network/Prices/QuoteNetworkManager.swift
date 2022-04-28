@@ -15,7 +15,6 @@ class QuoteNetworkManager {
             switch self {
             case .getQuote(let assetName, let exchange):
                 return "/real-time/\(assetName).\(exchange)?api_token=\(Endpoints.apiKey)&fmt=json"
-                //real-time/BTC-USD.CC?api_token=OeAFFmMliFG5orCUuwAKQ8l4WWFQ67YX&fmt=json
             }
         }
     }

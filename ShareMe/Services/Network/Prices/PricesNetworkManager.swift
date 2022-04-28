@@ -39,19 +39,4 @@ class PricesNetworkManager {
         )
     }
     
-    func getPrices(companySymbol: String, resolution: String, from: Int, to: Int, completion: @escaping (Result<PricesList, NetworkError>) -> Void) {
-        networkManager.sendRequest(
-            endpoint: Endpoints.getPrices(symbol: companySymbol, resolution: resolution, from: from, to: to),
-            completion: { (result: Result<PricesList, NetworkError>) in
-                switch result {
-                case .success(let pricesList):
-                    completion(.success(pricesList))
-                    
-                case .failure(let error):
-                    completion(.failure(error))
-                }
-            }
-        )
-    }
-    
 }

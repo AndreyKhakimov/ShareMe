@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SearchRespond: Decodable {
+class SearchRespond: Decodable {
     let code: String
     let exchange: String
     let name: String
@@ -17,9 +17,14 @@ struct SearchRespond: Decodable {
     let isin: String?
     let previousClose: Double
     let previousCloseDate: String
+    var logo: URL?
     
     var info: String {
-        "\(name), exchange: \(exchange) \(country) \(previousClose) \(currency)"
+        "\(name)"
+    }
+    
+    var descriprion: String {
+        "Exchange: \(exchange) \(country), \(previousClose) \(currency)"
     }
     
     enum CodingKeys: String, CodingKey {
@@ -30,7 +35,7 @@ struct SearchRespond: Decodable {
         case country = "Country"
         case currency = "Currency"
         case isin = "ISIN"
-        case previousClose, previousCloseDate
+        case previousClose, previousCloseDate, logo
     }
     
 }

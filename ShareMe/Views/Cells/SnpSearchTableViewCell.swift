@@ -7,8 +7,9 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
-class SearchResultSnpTableViewCell: UITableViewCell {
+class SearchResultCell: UITableViewCell {
 
     static let identifier = "SearchResultSnpTableViewCell"
 
@@ -29,8 +30,7 @@ class SearchResultSnpTableViewCell: UITableViewCell {
         label.font = .systemFont(ofSize: 14)
         return label
     }()
-
-
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
@@ -56,9 +56,7 @@ class SearchResultSnpTableViewCell: UITableViewCell {
 //                                         height: contentView.frame.size.height-10)
 //    }
     
-    private func setupViews() {
-//        contentView.backgroundColor = .orange
-        
+    private func setupViews() {        
         contentView.addSubview(logoImageView)
         contentView.addSubview(searchResultLabel)
         contentView.addSubview(descriptionLabel)

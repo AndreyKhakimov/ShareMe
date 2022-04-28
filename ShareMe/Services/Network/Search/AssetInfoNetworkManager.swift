@@ -32,7 +32,6 @@ class AssetInfoNetworkManager {
                 switch result {
                 case .success(let logo):
                     completion(.success(logo))
-                    print("Asset info \(logo.logo ?? "none")")
                 case .failure(let error):
                     completion(.failure(error))
                 }

@@ -13,7 +13,8 @@ class SearchViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(UINib(nibName: "SearchResultTableViewCell", bundle: nil), forCellReuseIdentifier: "searchResultCell")
+        //        tableView.register(UINib(nibName: "SearchResultTableViewCell", bundle: nil), forCellReuseIdentifier: "searchResultCell")
+        tableView.register(SearchResultCell.self, forCellReuseIdentifier: SearchResultCell.identifier)
         return tableView
     }()
     
@@ -31,7 +32,9 @@ class SearchViewController: UIViewController {
     }()
     
     private let networkManager = SearchAssetNetworkManager()
+    private let assetInfoNetworkManager = AssetInfoNetworkManager()
     private var assets = [SearchRespond]()
+    private var logos = [URL?]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,12 +52,47 @@ class SearchViewController: UIViewController {
                 case .success(let assets):
                     self.assets = assets
                     self.tableView.reloadData()
+                    
+//                    let myGroup = DispatchGroup()
+//                    for asset in assets {
+//                        myGroup.enter()
+//
+//                        self.fetchLogo(with: asset.code) { logo in
+//                            print("Fetch Assets \(logo.logo ?? "none")")
+//                            guard let logo = logo.logo else { return }
+//                            guard let url = URL(string: logo) else { return }
+//                            asset.logo = url
+//                            print("Fetch Assets asset logo \(asset.logo ?? URL(string: ""))")
+//                            myGroup.leave()
+//                        }
+//                    }
+//                    myGroup.notify(queue: .main) {
+//                        self.tableView.reloadData()
+//                        print("notify worked")
+//                    }
+//                    print("notify didnt worked")
                 case .failure(let error):
                     self.showAlert(title: error.title, message: error.description)
                 }
             }
         }
     }
+    
+    private func fetchLogo(with symbol: String, completion: @escaping (Logo) -> Void) {
+        assetInfoNetworkManager.getAssetInfo(symbol: symbol) { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(let logo):
+                    completion(logo)
+                case .failure(let error):
+                    self.showAlert(title: error.title, message: error.description)
+                }
+            }
+        }
+    }
+    
 }
 
 // MARK: - TableView Datasource Methods
@@ -64,9 +102,9 @@ extension SearchViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "searchResultCell", for: indexPath) as! SearchResultTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultCell.identifier, for: indexPath) as! SearchResultCell
         let asset = assets[indexPath.row]
-        cell.configure(image: nil, info: asset.info)
+        cell.configure(image: asset.logo ,info: asset.info, description: asset.descriprion)
         return cell
     }
     
@@ -110,15 +148,15 @@ extension SearchViewController: UISearchBarDelegate {
         fetchAssets(with: text)
     }
     
-        func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-            guard let text = searchController.searchBar.text else { return }
-            guard !isSearchBarEmpty() else { return }
-            switch searchController.searchBar.selectedScopeButtonIndex {
-            case 1:
-                fetchAssets(with: text, and: .crypto)
-            default:
-                fetchAssets(with: text)
-            }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard let text = searchController.searchBar.text else { return }
+        guard !isSearchBarEmpty() else { return }
+        switch searchController.searchBar.selectedScopeButtonIndex {
+        case 1:
+            fetchAssets(with: text, and: .crypto)
+        default:
+            fetchAssets(with: text)
         }
+    }
     
 }
