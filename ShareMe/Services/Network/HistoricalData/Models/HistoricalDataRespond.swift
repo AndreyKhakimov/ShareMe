@@ -12,7 +12,7 @@ struct HistoricalDataRespond: Codable {
     let open, high, low, close: Double
     let volume: Int
     
-    var descriprion: String {
+    var description: String {
         "Date: \(date)\n Open \(open), Close \(close)"
     }
 }

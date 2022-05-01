@@ -8,7 +8,7 @@
 import Foundation
 
 enum Period: String {
-    case d
-    case w
-    case m
+    case day = "d"
+    case week = "w"
+    case month = "m"
 }

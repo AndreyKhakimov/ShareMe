@@ -17,6 +17,7 @@ class NetworkManager {
     
     func sendRequest<Response: Decodable>(endpoint: EndpointProtocol, completion: @escaping (Result<Response, NetworkError>) -> Void) {
         var request = URLRequest(url: endpoint.url)
+        print(request.url)
         request.httpMethod = endpoint.httpMethod
         URLSession.shared.dataTask(with: request) { data, _, error in
             if let error = error {

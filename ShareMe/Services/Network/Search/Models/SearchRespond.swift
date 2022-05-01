@@ -7,7 +7,7 @@
 
 import Foundation
 
-class SearchRespond: Decodable {
+struct SearchRespond: Decodable {
     let code: String
     let exchange: String
     let name: String

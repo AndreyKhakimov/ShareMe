@@ -18,7 +18,7 @@ class AssetInfoNetworkManager {
         var query: String {
             switch self {
             case .getAssetInfo(let symbol):
-                return "/stock/profile2?symbol=\(symbol)&token=\(APIFinnhub.apiKey)"
+                return "/stock/profile2?symbol=\(symbol)&token=\(APIFinnHub.apiKey)"
             }
         }
     }

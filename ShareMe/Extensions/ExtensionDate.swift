@@ -8,13 +8,16 @@
 import Foundation
 
 extension Date {
-    
-    var getCurrentDate: String {
-        let date = Date()
+
+    var shortFormatString: String {
         let df = DateFormatter()
         df.dateFormat = "yyyy-MM-dd"
-        let dateString = df.string(from: date)
+        let dateString = df.string(from: self)
         return dateString
+    }
+    
+    func getPreviousMonthDate() -> Date {
+        Calendar.current.date(byAdding: .month, value: -1, to: self) ?? self
     }
     
 }

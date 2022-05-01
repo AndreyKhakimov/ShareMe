@@ -54,7 +54,7 @@ class AssetViewController: UIViewController {
         }
     }
     
-    private func fetchHistoricalData(assetName: String, exchange: String, from: String = "2022-01-05", to: String = Date().getCurrentDate, period: Period = .d) {
+    private func fetchHistoricalData(assetName: String, exchange: String, from: String = Date().getPreviousMonthDate().shortFormatString, to: String = Date().shortFormatString, period: Period = .day) {
         historicalDataNetworkManager.getHistoricalData(
             assetName: assetName,
             exchange: exchange,
@@ -68,6 +68,8 @@ class AssetViewController: UIViewController {
                 case .success(let data):
                     // TODO: - Map data for the asset graph
                     print("dddd \(data.description)")
+                    let closePrices = data.map { $0.close }
+                    print("dddd \(closePrices)")
                 case .failure(let error):
                     self.showAlert(title: error.title, message: error.description)
                 }

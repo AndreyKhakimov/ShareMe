@@ -1,5 +1,5 @@
 //
-//  SnpSearchTableViewCell.swift
+//  SearchTableViewCell.swift
 //  ShareMe
 //
 //  Created by Andrey Khakimov on 24.04.2022.
@@ -56,6 +56,7 @@ class SearchResultCell: UITableViewCell {
 //                                         height: contentView.frame.size.height-10)
 //    }
     
+    // TODO: - Change offsets to 8
     private func setupViews() {        
         contentView.addSubview(logoImageView)
         contentView.addSubview(searchResultLabel)
@@ -71,14 +72,13 @@ class SearchResultCell: UITableViewCell {
             make.left.equalTo(logoImageView.snp.right).offset(16)
             make.top.equalToSuperview().offset(6)
             make.right.equalToSuperview().offset(6)
-            make.height.equalTo(15)
         }
         
         descriptionLabel.snp.makeConstraints { make in
             make.left.equalTo(logoImageView.snp.right).offset(16)
             make.top.equalTo(searchResultLabel.snp.bottom).offset(2)
             make.right.equalToSuperview().offset(6)
-            make.height.equalTo(14)
+            make.bottom.equalToSuperview().offset(-6)
         }
         
     }
