@@ -11,6 +11,8 @@
 		420EA7302819995200BA9FD1 /* HistoricalDataRespond.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420EA72F2819995200BA9FD1 /* HistoricalDataRespond.swift */; };
 		420EA73228199B6300BA9FD1 /* Period.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420EA73128199B6300BA9FD1 /* Period.swift */; };
 		420EA7342819AB1500BA9FD1 /* ExtensionDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420EA7332819AB1500BA9FD1 /* ExtensionDate.swift */; };
+		420EA73A281B3C2200BA9FD1 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420EA739281B3C2200BA9FD1 /* API.swift */; };
+		420EA73C281B3C8C00BA9FD1 /* APIFinnHub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420EA73B281B3C8C00BA9FD1 /* APIFinnHub.swift */; };
 		421D41B4280DF3CA002E291D /* PricesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421D41B3280DF3CA002E291D /* PricesList.swift */; };
 		421D41B9280DFC9A002E291D /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421D41B8280DFC9A002E291D /* UIViewController+Alert.swift */; };
 		421D41BD280F0E4C002E291D /* SearchAssetNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421D41BC280F0E4C002E291D /* SearchAssetNetworkManager.swift */; };
@@ -33,7 +35,7 @@
 		42AD70592807335400817752 /* PricesNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD70572807335400817752 /* PricesNetworkManager.swift */; };
 		42AD705A2807335400817752 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD70582807335400817752 /* NetworkError.swift */; };
 		42AD705C2807341B00817752 /* SimpleChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD705B2807341B00817752 /* SimpleChartView.swift */; };
-		42C0224928157515003FF14A /* SnpSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C0224828157515003FF14A /* SnpSearchTableViewCell.swift */; };
+		42C0224928157515003FF14A /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C0224828157515003FF14A /* SearchTableViewCell.swift */; };
 		B88076ED76633FE0EF5EC5DB /* Pods_ShareMe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5773896E19DD619742BA63F /* Pods_ShareMe.framework */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +45,8 @@
 		420EA72F2819995200BA9FD1 /* HistoricalDataRespond.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricalDataRespond.swift; sourceTree = "<group>"; };
 		420EA73128199B6300BA9FD1 /* Period.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Period.swift; sourceTree = "<group>"; };
 		420EA7332819AB1500BA9FD1 /* ExtensionDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDate.swift; sourceTree = "<group>"; };
+		420EA739281B3C2200BA9FD1 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		420EA73B281B3C8C00BA9FD1 /* APIFinnHub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIFinnHub.swift; sourceTree = "<group>"; };
 		421D41B3280DF3CA002E291D /* PricesList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesList.swift; sourceTree = "<group>"; };
 		421D41B8280DFC9A002E291D /* UIViewController+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
 		421D41BC280F0E4C002E291D /* SearchAssetNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchAssetNetworkManager.swift; sourceTree = "<group>"; };
@@ -67,7 +71,7 @@
 		42AD70572807335400817752 /* PricesNetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PricesNetworkManager.swift; sourceTree = "<group>"; };
 		42AD70582807335400817752 /* NetworkError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		42AD705B2807341B00817752 /* SimpleChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleChartView.swift; sourceTree = "<group>"; };
-		42C0224828157515003FF14A /* SnpSearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnpSearchTableViewCell.swift; sourceTree = "<group>"; };
+		42C0224828157515003FF14A /* SearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
 		9A83B45E94240348F7A0EDE9 /* Pods-ShareMe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareMe.release.xcconfig"; path = "Target Support Files/Pods-ShareMe/Pods-ShareMe.release.xcconfig"; sourceTree = "<group>"; };
 		E5773896E19DD619742BA63F /* Pods_ShareMe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShareMe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -98,7 +102,6 @@
 			children = (
 				420EA72F2819995200BA9FD1 /* HistoricalDataRespond.swift */,
 				420EA73128199B6300BA9FD1 /* Period.swift */,
-				420EA7332819AB1500BA9FD1 /* ExtensionDate.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -117,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				421D41B8280DFC9A002E291D /* UIViewController+Alert.swift */,
+				420EA7332819AB1500BA9FD1 /* ExtensionDate.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -144,7 +148,7 @@
 		422B87DD2811650900A082F0 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				42C0224828157515003FF14A /* SnpSearchTableViewCell.swift */,
+				42C0224828157515003FF14A /* SearchTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -200,10 +204,10 @@
 		42AD7043280325AB00817752 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				422B87E22811726F00A082F0 /* ImageViews */,
-				422B87DD2811650900A082F0 /* Cells */,
 				42AD705B2807341B00817752 /* SimpleChartView.swift */,
 				42AD703828031D4200817752 /* LaunchScreen.storyboard */,
+				422B87E22811726F00A082F0 /* ImageViews */,
+				422B87DD2811650900A082F0 /* Cells */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -242,6 +246,8 @@
 				42AD70532807334B00817752 /* EndpointProtocol.swift */,
 				42AD70582807335400817752 /* NetworkError.swift */,
 				422B87F6281322F300A082F0 /* AssetType.swift */,
+				420EA739281B3C2200BA9FD1 /* API.swift */,
+				420EA73B281B3C8C00BA9FD1 /* APIFinnHub.swift */,
 				421D41BB280F0E24002E291D /* Search */,
 				421D41B2280DF31A002E291D /* Prices */,
 				420EA7292818902300BA9FD1 /* HistoricalData */,
@@ -388,6 +394,8 @@
 				420EA72B2818915D00BA9FD1 /* HistoricalDataNetworkManager.swift in Sources */,
 				421D41B9280DFC9A002E291D /* UIViewController+Alert.swift in Sources */,
 				42AD704E280341CF00817752 /* Quotation.swift in Sources */,
+				420EA73A281B3C2200BA9FD1 /* API.swift in Sources */,
+				420EA73C281B3C8C00BA9FD1 /* APIFinnHub.swift in Sources */,
 				422B87ED2811CBF400A082F0 /* QuoteNetworkManager.swift in Sources */,
 				420EA7302819995200BA9FD1 /* HistoricalDataRespond.swift in Sources */,
 				42AD702E28031D4000817752 /* AppDelegate.swift in Sources */,
@@ -401,7 +409,7 @@
 				422B87EA2811BEBD00A082F0 /* Quote.swift in Sources */,
 				420EA73228199B6300BA9FD1 /* Period.swift in Sources */,
 				420EA7342819AB1500BA9FD1 /* ExtensionDate.swift in Sources */,
-				42C0224928157515003FF14A /* SnpSearchTableViewCell.swift in Sources */,
+				42C0224928157515003FF14A /* SearchTableViewCell.swift in Sources */,
 				42AD704728033CB200817752 /* AssetViewController.swift in Sources */,
 				422B87E828117D7A00A082F0 /* SearchRespond.swift in Sources */,
 				422B87F7281322F300A082F0 /* AssetType.swift in Sources */,

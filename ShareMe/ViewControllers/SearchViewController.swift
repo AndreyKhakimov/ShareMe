@@ -9,11 +9,10 @@ import UIKit
 import SnapKit
 
 class SearchViewController: UIViewController {
-    // lazy var??
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        //        tableView.register(UINib(nibName: "SearchResultTableViewCell", bundle: nil), forCellReuseIdentifier: "searchResultCell")
         tableView.register(SearchResultCell.self, forCellReuseIdentifier: SearchResultCell.identifier)
         return tableView
     }()
@@ -32,9 +31,9 @@ class SearchViewController: UIViewController {
     }()
     
     private let networkManager = SearchAssetNetworkManager()
-    private let assetInfoNetworkManager = AssetInfoNetworkManager()
     private var assets = [SearchRespond]()
-    private var logos = [URL?]()
+    private var cellHeights = [IndexPath: CGFloat]()
+//    private var logos = [URL?]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,43 +48,10 @@ class SearchViewController: UIViewController {
                 guard let self = self else { return }
                 
                 switch result {
-                case .success(let assets):
-                    self.assets = assets
+                case .success(let assetsRespond):
+                    self.assets = assetsRespond
+                    self.cellHeights.removeAll()
                     self.tableView.reloadData()
-                    
-//                    let myGroup = DispatchGroup()
-//                    for asset in assets {
-//                        myGroup.enter()
-//
-//                        self.fetchLogo(with: asset.code) { logo in
-//                            print("Fetch Assets \(logo.logo ?? "none")")
-//                            guard let logo = logo.logo else { return }
-//                            guard let url = URL(string: logo) else { return }
-//                            asset.logo = url
-//                            print("Fetch Assets asset logo \(asset.logo ?? URL(string: ""))")
-//                            myGroup.leave()
-//                        }
-//                    }
-//                    myGroup.notify(queue: .main) {
-//                        self.tableView.reloadData()
-//                        print("notify worked")
-//                    }
-//                    print("notify didnt worked")
-                case .failure(let error):
-                    self.showAlert(title: error.title, message: error.description)
-                }
-            }
-        }
-    }
-    
-    private func fetchLogo(with symbol: String, completion: @escaping (Logo) -> Void) {
-        assetInfoNetworkManager.getAssetInfo(symbol: symbol) { [weak self] result in
-            DispatchQueue.main.async {
-                guard let self = self else { return }
-                
-                switch result {
-                case .success(let logo):
-                    completion(logo)
                 case .failure(let error):
                     self.showAlert(title: error.title, message: error.description)
                 }
@@ -124,6 +90,18 @@ extension SearchViewController: UITableViewDelegate {
         navigationController?.pushViewController(assetVC, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cellHeights[indexPath] = cell.bounds.height
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        cellHeights[indexPath] ?? UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        UITableView.automaticDimension
+    }
 }
 
 // MARK: - Setup Views
@@ -140,8 +118,9 @@ extension SearchViewController {
 
 // MARK: - Search Bar Delegate
 extension SearchViewController: UISearchBarDelegate {
-    //    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-    //    }
+        func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+            searchBar.text = ""
+        }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let text = searchController.searchBar.text else { return }
