@@ -41,7 +41,7 @@ class AssetViewController: UIViewController {
     
     private func fetchPrice(for code: String, and exchange: String) {
         networkManager.getQuote(name: code, exchange: exchange) { [weak self] result in
-            DispatchQueue.main.async {
+//            DispatchQueue.main.async {
                 guard let self = self else { return }
                 
                 switch result {
@@ -50,7 +50,7 @@ class AssetViewController: UIViewController {
                 case .failure(let error):
                     self.showAlert(title: error.title, message: error.description)
                 }
-            }
+//            }
         }
     }
     
@@ -61,7 +61,7 @@ class AssetViewController: UIViewController {
             from: from,
             to: to,
             period: period) { [weak self] result in
-            DispatchQueue.main.async {
+//            DispatchQueue.main.async {
                 guard let self = self else { return }
                 
                 switch result {
@@ -73,7 +73,7 @@ class AssetViewController: UIViewController {
                 case .failure(let error):
                     self.showAlert(title: error.title, message: error.description)
                 }
-            }
+//            }
         }
     }
     

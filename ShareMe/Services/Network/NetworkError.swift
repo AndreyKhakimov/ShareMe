@@ -20,10 +20,8 @@ enum NetworkError: Error {
         switch self {
         case .noData:
             return "The data received from the server is invalid"
-            
         case .decodingError:
             return "The data can not be decoded"
-            
         case .other(let error):
             return error.localizedDescription
         }

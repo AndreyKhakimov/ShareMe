@@ -44,7 +44,7 @@ class SearchViewController: UIViewController {
     
     private func fetchAssets(with name: String, and type: AssetType = .stock) {
         networkManager.getAssetsWithName(name: name, type: type) { [weak self] result in
-            DispatchQueue.main.async {
+//            DispatchQueue.main.async {
                 guard let self = self else { return }
                 
                 switch result {
@@ -55,7 +55,7 @@ class SearchViewController: UIViewController {
                 case .failure(let error):
                     self.showAlert(title: error.title, message: error.description)
                 }
-            }
+//            }
         }
     }
     

@@ -19,26 +19,36 @@ class NetworkManager {
         var request = URLRequest(url: endpoint.url)
         print(request.url)
         request.httpMethod = endpoint.httpMethod
-        URLSession.shared.dataTask(with: request) { data, _, error in
-            if let error = error {
-                completion(.failure(.other(error)))
-                return
-            }
-            
-            var data = data
-            if Response.self == Void.self {
-                data = Data()
-            }
-            guard let data = data
-            else {
-                completion(.failure(.noData))
-                return
-            }
-            do {
-                let result = try JSONDecoder().decode(Response.self, from: data)
-                completion(.success(result))
-            } catch {
-                completion(.failure(.decodingError))
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if error == nil {
+                let statusCode = (response as! HTTPURLResponse).statusCode
+                print("URL Session Task Succeeded: HTTP \(statusCode)")
+                print("TRYING TO DECODE DATA:")
+                if let data = data {
+                    do {
+                        let decodedObject = try JSONDecoder().decode(Response.self, from: data)
+                        print("DECODED \(Response.self) SUCCESSFULLY")
+                        print(decodedObject)
+                        DispatchQueue.main.async {
+                            completion(.success(decodedObject))
+                        }
+                    } catch let DecodingError.dataCorrupted(context) {
+                        print(context)
+                    } catch let DecodingError.keyNotFound(key, context) {
+                        print("Key '\(key)' not found:", context.debugDescription)
+                        print("codingPath:", context.codingPath)
+                    } catch let DecodingError.valueNotFound(value, context) {
+                        print("Value '\(value)' not found:", context.debugDescription)
+                        print("codingPath:", context.codingPath)
+                    } catch let DecodingError.typeMismatch(type, context)  {
+                        print("Type '\(type)' mismatch:", context.debugDescription)
+                        print("codingPath:", context.codingPath)
+                    } catch {
+                        print("error: ", error)
+                    }
+                }
+            } else {
+                print("URL Session Task Failed: %@", error!.localizedDescription);
             }
         }.resume()
     }

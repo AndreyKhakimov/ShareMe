@@ -31,7 +31,6 @@ class HistoricalDataNetworkManager {
                 switch result {
                 case .success(let historicalData):
                     completion(.success(historicalData))
-                    
                 case .failure(let error):
                     completion(.failure(error))
                 }

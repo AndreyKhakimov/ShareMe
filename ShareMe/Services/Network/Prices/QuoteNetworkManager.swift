@@ -28,7 +28,7 @@ class QuoteNetworkManager {
                 switch result {
                 case .success(let asset):
                     completion(.success(asset))
-                    
+
                 case .failure(let error):
                     completion(.failure(error))
                 }
