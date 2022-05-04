@@ -20,4 +20,8 @@ extension Date {
         Calendar.current.date(byAdding: .month, value: -1, to: self) ?? self
     }
     
+    func getPreviousWeekDate() -> Date {
+        Calendar.current.date(byAdding: .weekOfMonth, value: -1, to: self) ?? self
+    }
+    
 }

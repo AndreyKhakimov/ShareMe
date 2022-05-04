@@ -20,6 +20,13 @@ class AssetViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    // Added simple chart for testing
+    private let simpleChart: SimpleChartView = {
+        let simpleChart =  SimpleChartView()
+        simpleChart.lineColor = .green
+        simpleChart.gradientColor = .green.withAlphaComponent(0.5)
+        return simpleChart
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,10 +38,17 @@ class AssetViewController: UIViewController {
     private func setupViews() {
         view.backgroundColor = .white
         view.addSubview(descriptionLabel)
-
+        view.addSubview(simpleChart)
+        
         descriptionLabel.snp.makeConstraints { make in
             make.width.equalTo(200)
             make.center.equalToSuperview()
+        }
+        // Added simple chart constraints for testing
+        simpleChart.snp.makeConstraints { make in
+            make.width.height.equalTo(200)
+            make.centerX.equalToSuperview()
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(16)
         }
         
     }
@@ -61,20 +75,18 @@ class AssetViewController: UIViewController {
             from: from,
             to: to,
             period: period) { [weak self] result in
-            DispatchQueue.main.async {
-                guard let self = self else { return }
-                
-                switch result {
-                case .success(let data):
-                    // TODO: - Map data for the asset graph
-                    print("dddd \(data.description)")
-                    let closePrices = data.map { $0.close }
-                    print("dddd \(closePrices)")
-                case .failure(let error):
-                    self.showAlert(title: error.title, message: error.description)
+                DispatchQueue.main.async {
+                    guard let self = self else { return }
+                    
+                    switch result {
+                    case .success(let data):
+                        let closePrices = data.map { $0.close }
+                        self.simpleChart.chartData = closePrices
+                    case .failure(let error):
+                        self.showAlert(title: error.title, message: error.description)
+                    }
                 }
             }
-        }
     }
     
 }

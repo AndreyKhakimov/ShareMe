@@ -11,7 +11,7 @@ class SearchAssetNetworkManager {
     
     private enum Endpoints: EndpointProtocol {
         case searchAssetWithName(String, AssetType)
-
+        
         var query: String {
             switch self {
             case .searchAssetWithName(let name, let type):
@@ -23,6 +23,7 @@ class SearchAssetNetworkManager {
     
     private let networkManager = NetworkManager.shared
     private let assetInfoNetworkManager = AssetInfoNetworkManager()
+    private let historicalDataNetworkManager = HistoricalDataNetworkManager()
     
     func getAssetsWithName(name: String, type: AssetType, completion: @escaping (Result<[SearchRespond], NetworkError>) -> Void) {
         networkManager.sendRequest(
@@ -46,6 +47,19 @@ class SearchAssetNetworkManager {
                             myGroup.leave()
                         }
                     }
+                    for i in 0..<assets.count {
+                        myGroup.enter()
+                        self.historicalDataNetworkManager.getHistoricalData(assetName: assets[i].code, exchange: assets[i].exchange, from: Date().getPreviousWeekDate().shortFormatString, to: Date().shortFormatString, period: .day) { result  in
+                            switch result {
+                            case .success(let data):
+                                let closePrices = data.map { $0.close }
+                                assets[i].chartData = closePrices
+                            case .failure:
+                                break
+                            }
+                            myGroup.leave()
+                        }
+                    }
                     myGroup.notify(queue: .main) {
                         completion(.success(assets))
                     }
@@ -56,5 +70,5 @@ class SearchAssetNetworkManager {
             }
         )
     }
-        
+    
 }

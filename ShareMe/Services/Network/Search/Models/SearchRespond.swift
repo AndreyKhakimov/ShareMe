@@ -18,6 +18,7 @@ struct SearchRespond: Decodable {
     let previousClose: Double
     let previousCloseDate: String
     var logo: URL?
+    var chartData: [Double]?
     
     var info: String {
         "\(name)"
