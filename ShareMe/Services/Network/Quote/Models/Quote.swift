@@ -15,8 +15,8 @@ struct Quote: Decodable {
     var currentDate: String {
         let date = Date(timeIntervalSince1970: Double(time))
         let dateFormatter = DateFormatter()
-        dateFormatter.timeStyle = DateFormatter.Style.medium //Set time style
-        dateFormatter.dateStyle = DateFormatter.Style.medium //Set date style
+        dateFormatter.timeStyle = DateFormatter.Style.medium
+        dateFormatter.dateStyle = DateFormatter.Style.medium
         dateFormatter.timeZone = .current
         let localDate = dateFormatter.string(from: date)
         return localDate

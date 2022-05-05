@@ -10,7 +10,6 @@ class QuoteNetworkManager {
     private enum Endpoints: EndpointProtocol {
         
         case getQuote(String, String)
-
         var query: String {
             switch self {
             case .getQuote(let assetName, let exchange):

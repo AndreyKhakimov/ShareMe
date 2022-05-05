@@ -127,7 +127,6 @@ class SimpleChartView: UIView {
         chartLineLayer.lineWidth = 2
         chartLineLayer.fillColor = nil
     }
-    
-  
+   
 }
 
