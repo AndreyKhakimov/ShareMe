@@ -19,7 +19,9 @@ protocol EndpointProtocol {
 extension EndpointProtocol {
     static var hostURL: String { NetworkManager.hostUrl }
     static var apiKey: String { API.apiKey }
-    // TODO: - Fix force unwrap issue
-    var url: URL { URL(string: Self.hostURL + query) ?? URL(string: "")! }
+    var url: URL {
+        let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        return URL(string: Self.hostURL + encodedQuery) ?? URL(string: "")!
+    }
     var httpMethod: String { "GET" }
 }
