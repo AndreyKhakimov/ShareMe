@@ -12,12 +12,16 @@ class HistoricalDataNetworkManager {
     private enum Endpoints: EndpointProtocol {
 
         case getHistoricalData(String, String, String, String, String)
+        case getIntradayHistoricalData(String, String, String, String, String)
 
         var query: String {
             switch self {
             case .getHistoricalData(let assetName, let exchange, let from, let to, let period):
                 return
                 "/eod/\(assetName).\(exchange)?fmt=json&from=\(from)&to=\(to)&period=\(period)&api_token=\(Endpoints.apiKey)"
+            case .getIntradayHistoricalData(let assetName, let exchange, let from, let to, let interval):
+                return
+                "/intraday/\(assetName).\(exchange)?fmt=json&from=\(from)&to=\(to)&interval=\(interval)&api_token=\(Endpoints.apiKey)"
             }
         }
     }
@@ -28,6 +32,21 @@ class HistoricalDataNetworkManager {
         networkManager.sendRequest(
             endpoint: Endpoints.getHistoricalData(assetName, exchange, from, to, period.rawValue),
             completion: { (result: Result<[HistoricalDataRespond], NetworkError>) in
+                switch result {
+                case .success(let historicalData):
+                    completion(.success(historicalData))
+                    
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+        )
+    }
+    
+    func getIntradayHistoricalData(assetName: String, exchange: String, from: Double, to: Double, interval: IntraDayPeriod, completion: @escaping (Result<[HistoricalIntradayDataResponse], NetworkError>) -> Void) {
+        networkManager.sendRequest(
+            endpoint: Endpoints.getIntradayHistoricalData(assetName, exchange, String(from), String(to), interval.rawValue),
+            completion: { (result: Result<[HistoricalIntradayDataResponse], NetworkError>) in
                 switch result {
                 case .success(let historicalData):
                     completion(.success(historicalData))

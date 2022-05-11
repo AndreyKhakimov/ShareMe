@@ -1,20 +1,26 @@
 PODS:
-  - Kingfisher (7.2.1)
+  - Charts (3.6.0):
+    - Charts/Core (= 3.6.0)
+  - Charts/Core (3.6.0)
+  - Kingfisher (7.2.2)
   - SnapKit (5.0.1)
 
 DEPENDENCIES:
+  - Charts (~> 3.6.0)
   - Kingfisher (~> 7.1)
   - SnapKit (~> 5.0.0)
 
 SPEC REPOS:
   trunk:
+    - Charts
     - Kingfisher
     - SnapKit
 
 SPEC CHECKSUMS:
-  Kingfisher: 7c084bebf7d548c623ad41bcf765fb200efed369
+  Charts: b1e3a1f5a1c9ba5394438ca3b91bd8c9076310af
+  Kingfisher: 184d4d1a8c36666e663caf8e08abe87898595c53
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
-PODFILE CHECKSUM: 6155a46549817ea79429a04378978ee1ab7a76d1
+PODFILE CHECKSUM: f83ad710da90179bb1414b302e30c7b00f2a31c0
 
 COCOAPODS: 1.11.2

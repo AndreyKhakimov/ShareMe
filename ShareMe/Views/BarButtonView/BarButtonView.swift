@@ -1,0 +1,64 @@
+//
+//  BarButtonView.swift
+//  ShareMe
+//
+//  Created by Andrey Khakimov on 10.05.2022.
+//
+
+import UIKit
+import SnapKit
+
+class BarButtonView: UIView {
+    
+    lazy var logoImageView: RoundedImageView = {
+        let contentView = RoundedImageView(frame: .zero)
+        contentView.image = UIImage(systemName: "envelope")
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        return contentView
+    }()
+    
+    lazy var descriptionLabel: UILabel = {
+        let descriptionLabel = UILabel()
+        descriptionLabel.font = UIFont.systemFont(ofSize: 22, weight: .medium)
+        descriptionLabel.textAlignment = .center
+        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        return descriptionLabel
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupView()
+    }
+    
+    private func setupView() {
+        backgroundColor = .white
+        addSubview(logoImageView)
+        addSubview(descriptionLabel)
+        setupLayout()
+    }
+    
+    private func setupLayout() {
+        logoImageView.snp.makeConstraints { make in
+            make.width.height.equalTo(30)
+            make.centerY.equalToSuperview()
+        }
+        
+        descriptionLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(logoImageView)
+            make.left.equalTo(logoImageView.snp.right).offset(8)
+            make.height.equalTo(27)
+        }
+    }
+    
+    //custom views should override this to return true if
+    //they cannot layout correctly using autoresizing.
+    //from apple docs https://developer.apple.com/documentation/uikit/uiview/1622549-requiresconstraintbasedlayout
+    override class var requiresConstraintBasedLayout: Bool {
+        return true
+    }
+}

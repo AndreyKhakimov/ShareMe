@@ -86,7 +86,10 @@ extension SearchViewController: UITableViewDelegate {
         let asset = assets[indexPath.row]
         let assetVC = AssetViewController()
         assetVC.code = asset.code
+        assetVC.assetName = asset.name
         assetVC.exchange = asset.exchange
+        assetVC.currency = asset.currency
+        assetVC.logoURL = asset.logo
         navigationController?.pushViewController(assetVC, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
     }

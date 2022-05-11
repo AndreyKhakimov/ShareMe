@@ -8,14 +8,14 @@
 import UIKit
 
 class SimpleChartView: UIView {
-        
+    
     var contentInsetX: CGFloat = 8 {
         didSet {
             setNeedsLayout()
             layoutIfNeeded()
         }
     }
-
+    
     var contentInsetY: CGFloat = 8 {
         didSet {
             setNeedsLayout()
@@ -28,7 +28,7 @@ class SimpleChartView: UIView {
             chartLineLayer.strokeColor = (lineColor ?? tintColor).cgColor
         }
     }
-
+    
     var gradientColor: UIColor? {
         didSet {
             chartGradientLayer.colors = [
@@ -37,11 +37,11 @@ class SimpleChartView: UIView {
             ]
         }
     }
-
+    
     private var contentInset: UIEdgeInsets {
         UIEdgeInsets(top: contentInsetY, left: contentInsetX, bottom: contentInsetY, right: contentInsetX)
     }
-
+    
     var chartData = [Double]() {
         didSet {
             setNeedsLayout()
@@ -52,7 +52,7 @@ class SimpleChartView: UIView {
     private var chartLineLayer = CAShapeLayer()
     private var chartGradientLayerMask = CAShapeLayer()
     private var chartGradientLayer = CAGradientLayer()
-
+    private var errorLabel = UILabel()
     
     private var adjustedBounds: CGRect {
         bounds.inset(by: contentInset)
@@ -63,9 +63,20 @@ class SimpleChartView: UIView {
         chartGradientLayer.frame = bounds
         chartLineLayer.frame = bounds
         chartGradientLayerMask.frame = bounds
-        chartLineLayer.path = makeChartPath().cgPath
-        chartGradientLayerMask.path = makeChartMaskPath().cgPath
-        chartGradientLayer.mask = chartGradientLayerMask
+        errorLabel.frame = adjustedBounds
+        // TODO: - Make label text
+        if chartData.count > 1 {
+            chartLineLayer.path = makeChartPath().cgPath
+            chartGradientLayerMask.path = makeChartMaskPath().cgPath
+            chartGradientLayer.mask = chartGradientLayerMask
+            chartLineLayer.isHidden = false
+            chartGradientLayer.isHidden = false
+            errorLabel.isHidden = true
+        } else {
+            chartLineLayer.isHidden = true
+            chartGradientLayer.isHidden = true
+            errorLabel.isHidden = false
+        }
     }
     
     private func chartPositions() -> [CGPoint] {
@@ -90,6 +101,7 @@ class SimpleChartView: UIView {
         let chartLastIndex = chartData.count - 1
         let chartPositions = chartPositions()
         path.move(to: chartPositions.first ?? .zero)
+        // TODO: - Fix Fatal error: Range requires lowerBound <= upperBound when chartLastIndex = 0
         for chartPosition in chartPositions[1...chartLastIndex] {
             path.addLine(to: chartPosition)
         }
@@ -118,7 +130,7 @@ class SimpleChartView: UIView {
     private func commonInit() {
         layer.addSublayer(chartGradientLayer)
         layer.addSublayer(chartLineLayer)
-
+        
         chartGradientLayer.colors = [
             (gradientColor ?? tintColor.withAlphaComponent(0.5)).cgColor,
             (backgroundColor ?? UIColor.white.withAlphaComponent(0)).cgColor
@@ -127,6 +139,6 @@ class SimpleChartView: UIView {
         chartLineLayer.lineWidth = 2
         chartLineLayer.fillColor = nil
     }
-   
+    
 }
 

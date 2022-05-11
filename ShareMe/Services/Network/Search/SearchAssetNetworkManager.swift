@@ -46,8 +46,7 @@ class SearchAssetNetworkManager {
                             }
                             myGroup.leave()
                         }
-                    }
-                    for i in 0..<assets.count {
+                        
                         myGroup.enter()
                         self.historicalDataNetworkManager.getHistoricalData(assetName: assets[i].code, exchange: assets[i].exchange, from: Date().getPreviousWeekDate().shortFormatString, to: Date().shortFormatString, period: .day) { result  in
                             switch result {
@@ -60,6 +59,7 @@ class SearchAssetNetworkManager {
                             myGroup.leave()
                         }
                     }
+
                     myGroup.notify(queue: .main) {
                         completion(.success(assets))
                     }

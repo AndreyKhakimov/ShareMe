@@ -13,8 +13,8 @@ class SearchResultCell: UITableViewCell {
     
     static let identifier = "SearchResultSnpTableViewCell"
     
-    private let logoImageView: UIImageView = {
-        let imageView = UIImageView()
+    private let logoImageView: RoundedImageView = {
+        let imageView = RoundedImageView(frame: CGRect())
         return imageView
     }()
     
@@ -46,22 +46,6 @@ class SearchResultCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    //    override func layoutSubviews() {
-    //        super.layoutSubviews()
-    //
-    //        let imageSize = contentView.frame.size.height - 5
-    //
-    //
-    //        logoImageView.frame = CGRect(x: 5,
-    //                                     y: 5,
-    //                                     width: imageSize,
-    //                                     height: imageSize)
-    //        searchResultLabel.frame = CGRect(x: 10 + logoImageView.frame.size.width - 10,
-    //                                         y: 5,
-    //                                         width: contentView.frame.size.width - imageSize - 10,
-    //                                         height: contentView.frame.size.height-10)
-    //    }
     
     // TODO: - Change offsets to 8
     private func setupViews() {
