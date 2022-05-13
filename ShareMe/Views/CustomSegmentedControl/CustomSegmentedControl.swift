@@ -125,6 +125,7 @@ class CustomSegmentedControl: UIControl {
     
     private func configureSelector() {
         addSubview(selector)
+        bringSubviewToFront(stackView)
     }
     
     private func configureColors() {
@@ -141,7 +142,6 @@ class CustomSegmentedControl: UIControl {
     
     private func configureStackView() {
         addSubview(stackView)
-        
         stackView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
