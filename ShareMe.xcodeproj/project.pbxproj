@@ -40,7 +40,6 @@
 		42E617AD2829B2F400101CD0 /* HistoricalIntradayDataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E617AC2829B2F400101CD0 /* HistoricalIntradayDataResponse.swift */; };
 		42E617B0282AAAEC00101CD0 /* BarButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E617AF282AAAEC00101CD0 /* BarButtonView.swift */; };
 		42E617B2282AAE9000101CD0 /* CircleMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E617B1282AAE9000101CD0 /* CircleMarker.swift */; };
-		42E617B4282C5D5A00101CD0 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42E617B3282C5D5A00101CD0 /* Storyboard.storyboard */; };
 		B88076ED76633FE0EF5EC5DB /* Pods_ShareMe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5773896E19DD619742BA63F /* Pods_ShareMe.framework */; };
 /* End PBXBuildFile section */
 
@@ -81,7 +80,6 @@
 		42E617AC2829B2F400101CD0 /* HistoricalIntradayDataResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricalIntradayDataResponse.swift; sourceTree = "<group>"; };
 		42E617AF282AAAEC00101CD0 /* BarButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarButtonView.swift; sourceTree = "<group>"; };
 		42E617B1282AAE9000101CD0 /* CircleMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleMarker.swift; sourceTree = "<group>"; };
-		42E617B3282C5D5A00101CD0 /* Storyboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
 		9A83B45E94240348F7A0EDE9 /* Pods-ShareMe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareMe.release.xcconfig"; path = "Target Support Files/Pods-ShareMe/Pods-ShareMe.release.xcconfig"; sourceTree = "<group>"; };
 		E5773896E19DD619742BA63F /* Pods_ShareMe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShareMe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -290,7 +288,6 @@
 			isa = PBXGroup;
 			children = (
 				42E617A828298C0B00101CD0 /* CustomSegmentedControl.swift */,
-				42E617B3282C5D5A00101CD0 /* Storyboard.storyboard */,
 			);
 			path = CustomSegmentedControl;
 			sourceTree = "<group>";
@@ -382,7 +379,6 @@
 			files = (
 				42AD703A28031D4200817752 /* LaunchScreen.storyboard in Resources */,
 				42AD703728031D4200817752 /* Assets.xcassets in Resources */,
-				42E617B4282C5D5A00101CD0 /* Storyboard.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

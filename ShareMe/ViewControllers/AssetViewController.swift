@@ -37,12 +37,11 @@ class AssetViewController: UIViewController {
         return mainChart
     }()
     
-    private lazy var chartSegmentedControl: UISegmentedControl = {
+    private lazy var chartSegmentedControl: CustomSegmentedControl = {
         let items = ["W" ,"M", "6M", "1Y", "All"]
-        let segmentedControl = UISegmentedControl(items: items)
+        let segmentedControl = CustomSegmentedControl()
+        segmentedControl.items = items
         segmentedControl.selectedSegmentIndex = 2
-//        segmentedControl.tintColor = UIColor.yellow
-        
         segmentedControl.addTarget(self, action: #selector(timeIntervalDidChange(_:)), for: .valueChanged)
         return segmentedControl
     }()
@@ -177,7 +176,7 @@ class AssetViewController: UIViewController {
             }
     }
     
-    @objc private func timeIntervalDidChange(_ segmentedControl: UISegmentedControl) {
+    @objc private func timeIntervalDidChange(_ segmentedControl: CustomSegmentedControl) {
         switch segmentedControl.selectedSegmentIndex {
         case 0:
             fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getPreviousWeekDate().shortFormatString, to: Date().shortFormatString, period: .day)
@@ -207,4 +206,9 @@ extension AssetViewController: ChartViewDelegate {
     func chartViewDidEndPanning(_ chartView: ChartViewBase) {
         print("selecting ended")
     }
+    
+    func chartValueNothingSelected(_ chartView: ChartViewBase) {
+        print("selecting ended")
+    }
+
 }

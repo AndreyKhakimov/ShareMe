@@ -37,12 +37,13 @@ class BarButtonView: UIView {
     
     private func setupView() {
         backgroundColor = .white
-        addSubview(logoImageView)
-        addSubview(descriptionLabel)
         setupLayout()
     }
     
     private func setupLayout() {
+        addSubview(logoImageView)
+        addSubview(descriptionLabel)
+        
         logoImageView.snp.makeConstraints { make in
             make.width.height.equalTo(30)
             make.centerY.equalToSuperview()
@@ -55,10 +56,4 @@ class BarButtonView: UIView {
         }
     }
     
-    //custom views should override this to return true if
-    //they cannot layout correctly using autoresizing.
-    //from apple docs https://developer.apple.com/documentation/uikit/uiview/1622549-requiresconstraintbasedlayout
-    override class var requiresConstraintBasedLayout: Bool {
-        return true
-    }
 }
