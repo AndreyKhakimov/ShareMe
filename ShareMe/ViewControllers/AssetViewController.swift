@@ -16,15 +16,14 @@ class AssetViewController: UIViewController {
     var exchange: String?
     var currency: String?
     var logoURL: URL?
+    var quote: Quote?
     
     private let networkManager = QuoteNetworkManager()
     private let historicalDataNetworkManager = HistoricalDataNetworkManager()
     
-    private lazy var priceLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    private lazy var assetInfoView: AssetInfoView = {
+        let assetInfoView = AssetInfoView()
+        return assetInfoView
     }()
     
     private lazy var mainChart: MainChartView = {
@@ -53,13 +52,6 @@ class AssetViewController: UIViewController {
         return barButtonView
     }()
     
-    private lazy var descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
@@ -71,24 +63,22 @@ class AssetViewController: UIViewController {
     
     private func setupViews() {
         view.backgroundColor = .white
-        view.addSubview(priceLabel)
+        view.addSubview(assetInfoView)
         view.addSubview(mainChart)
         view.addSubview(chartSegmentedControl)
-        view.addSubview(descriptionLabel)
         
-        priceLabel.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.9)
-            make.height.equalTo(16)
-            make.centerX.equalToSuperview()
+        assetInfoView.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(16)
+            make.right.equalToSuperview().offset(-16)
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(8)
+            make.height.equalTo(40)
         }
         
         mainChart.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(16)
             make.right.equalToSuperview().offset(-16)
             make.height.equalTo(view.snp.width).multipliedBy(0.8)
-//            make.centerX.equalToSuperview()
-            make.top.equalTo(priceLabel.snp.bottom).offset(8)
+            make.top.equalTo(assetInfoView.snp.bottom).offset(8)
         }
         
         chartSegmentedControl.snp.makeConstraints { make in
@@ -96,12 +86,6 @@ class AssetViewController: UIViewController {
             make.height.equalTo(16)
             make.centerX.equalToSuperview()
             make.top.equalTo(mainChart.snp.bottom).offset(8)
-        }
-        
-        descriptionLabel.snp.makeConstraints { make in
-            make.width.equalTo(200)
-            make.centerX.equalToSuperview()
-            make.top.equalTo(chartSegmentedControl.snp.bottom).offset(16)
         }
     }
         
@@ -122,8 +106,8 @@ class AssetViewController: UIViewController {
                 
                 switch result {
                 case .success(let quote):
-                    self.descriptionLabel.text = quote.description
-                    self.priceLabel.text = "\(quote.currentPrice) \(self.currency ?? "")"
+                    self.assetInfoView.configure(priceText: "\(quote.currentPrice)", descriptionText: "\(quote.currentDate)")
+                    self.quote = quote
                 case .failure(let error):
                     self.showAlert(title: error.title, message: error.description)
                 }
@@ -195,20 +179,14 @@ class AssetViewController: UIViewController {
 
 extension AssetViewController: ChartViewDelegate {
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
-        //        print(entry.y)
-//        let marker = PillMarker(color: .lightGray, font: UIFont.boldSystemFont(ofSize: 12), textColor: .black)
-        //        chartView.drawMarkers = true
         let marker = CircleMarker(color: .lightGray)
         mainChart.marker = marker
-        priceLabel.text = "\(entry.y) \(currency ?? "") \(entry.data ?? "")"
+        assetInfoView.configure(priceText: "\(entry.y) \(currency ?? "")", descriptionText: "\(entry.data ?? "")")
     }
     
     func chartViewDidEndPanning(_ chartView: ChartViewBase) {
-        print("selecting ended")
-    }
-    
-    func chartValueNothingSelected(_ chartView: ChartViewBase) {
-        print("selecting ended")
+        chartView.highlightValues(nil)
+        self.assetInfoView.configure(priceText: "\(quote?.currentPrice ?? 0)", descriptionText: "\(quote?.currentDate ?? "")")
     }
 
 }

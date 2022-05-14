@@ -26,7 +26,6 @@ class CustomSegmentedControl: UIControl {
             configureColors()
             setNeedsLayout()
             layoutIfNeeded()
-//            updateView(force: true)
         }
     }
     
@@ -52,7 +51,7 @@ class CustomSegmentedControl: UIControl {
             layer.borderColor = borderColor.cgColor
         }
     }
-
+    
     @IBInspectable
     var textColor: UIColor = .lightGray {
         didSet {
@@ -85,8 +84,8 @@ class CustomSegmentedControl: UIControl {
     }
     
     private func commonInit() {
-        configureStackView()
         configureSelector()
+        configureStackView()
     }
     
     private func updateView(force: Bool = false) {
@@ -99,7 +98,7 @@ class CustomSegmentedControl: UIControl {
     override func layoutSubviews() {
         super.layoutSubviews()
         selector.layer.cornerRadius = bounds.height / 2
-//        selector.frame = stackView.arrangedSubviews[selectedSegmentIndex].frame
+        //        selector.frame = stackView.arrangedSubviews[selectedSegmentIndex].frame
         selector.frame = CGRect(
             x: frame.width / CGFloat(buttons.count) * CGFloat(selectedSegmentIndex),
             y: 0,
@@ -108,7 +107,7 @@ class CustomSegmentedControl: UIControl {
         )
         layer.cornerRadius = frame.height / 2
     }
-
+    
     private func configureButtons() {
         buttons.removeAll()
         stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
@@ -125,7 +124,6 @@ class CustomSegmentedControl: UIControl {
     
     private func configureSelector() {
         addSubview(selector)
-        bringSubviewToFront(stackView)
     }
     
     private func configureColors() {

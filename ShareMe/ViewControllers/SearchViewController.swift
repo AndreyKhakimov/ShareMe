@@ -33,7 +33,6 @@ class SearchViewController: UIViewController {
     private let networkManager = SearchAssetNetworkManager()
     private var assets = [SearchRespond]()
     private var cellHeights = [IndexPath: CGFloat]()
-//    private var logos = [URL?]()
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -48,7 +48,7 @@ class SearchAssetNetworkManager {
                         }
                         
                         myGroup.enter()
-                        self.historicalDataNetworkManager.getHistoricalData(assetName: assets[i].code, exchange: assets[i].exchange, from: Date().getPreviousWeekDate().shortFormatString, to: Date().shortFormatString, period: .day) { result  in
+                        self.historicalDataNetworkManager.getHistoricalData(assetName: assets[i].code, exchange: assets[i].exchange, from: Date().getPreviousMonthDate().shortFormatString, to: Date().shortFormatString, period: .day) { result  in
                             switch result {
                             case .success(let data):
                                 let closePrices = data.map { $0.close }

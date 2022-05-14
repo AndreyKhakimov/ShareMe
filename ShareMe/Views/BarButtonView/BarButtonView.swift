@@ -21,6 +21,7 @@ class BarButtonView: UIView {
         let descriptionLabel = UILabel()
         descriptionLabel.font = UIFont.systemFont(ofSize: 22, weight: .medium)
         descriptionLabel.textAlignment = .center
+        descriptionLabel.numberOfLines = 0
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         return descriptionLabel
     }()
@@ -47,12 +48,14 @@ class BarButtonView: UIView {
         logoImageView.snp.makeConstraints { make in
             make.width.height.equalTo(30)
             make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().offset(16)
         }
         
         descriptionLabel.snp.makeConstraints { make in
             make.centerY.equalTo(logoImageView)
             make.left.equalTo(logoImageView.snp.right).offset(8)
-            make.height.equalTo(27)
+            make.right.equalToSuperview().offset(-16)
+//            make.height.equalTo(27)
         }
     }
     
