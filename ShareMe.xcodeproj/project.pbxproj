@@ -18,6 +18,7 @@
 		422B87F7281322F300A082F0 /* AssetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B87F6281322F300A082F0 /* AssetType.swift */; };
 		422B87F92813241600A082F0 /* Logo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B87F82813241600A082F0 /* Logo.swift */; };
 		422B87FB2813253300A082F0 /* AssetInfoNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B87FA2813253300A082F0 /* AssetInfoNetworkManager.swift */; };
+		42797E672833CED2004D1A76 /* PriceChangeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42797E662833CED2004D1A76 /* PriceChangeView.swift */; };
 		427BA773283044A100D5FC81 /* AssetInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427BA772283044A100D5FC81 /* AssetInfoView.swift */; };
 		42AD702E28031D4000817752 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD702D28031D4000817752 /* AppDelegate.swift */; };
 		42AD703028031D4000817752 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD702F28031D4000817752 /* SceneDelegate.swift */; };
@@ -57,6 +58,7 @@
 		422B87F6281322F300A082F0 /* AssetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetType.swift; sourceTree = "<group>"; };
 		422B87F82813241600A082F0 /* Logo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logo.swift; sourceTree = "<group>"; };
 		422B87FA2813253300A082F0 /* AssetInfoNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetInfoNetworkManager.swift; sourceTree = "<group>"; };
+		42797E662833CED2004D1A76 /* PriceChangeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceChangeView.swift; sourceTree = "<group>"; };
 		427BA772283044A100D5FC81 /* AssetInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetInfoView.swift; sourceTree = "<group>"; };
 		42AD702A28031D4000817752 /* ShareMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42AD702D28031D4000817752 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				427BA772283044A100D5FC81 /* AssetInfoView.swift */,
+				42797E662833CED2004D1A76 /* PriceChangeView.swift */,
 			);
 			path = AssetInfo;
 			sourceTree = "<group>";
@@ -452,6 +455,7 @@
 				42E0704D2824463D00A000C2 /* Quote.swift in Sources */,
 				42E0704E2824463D00A000C2 /* QuoteNetworkManager.swift in Sources */,
 				420EA7302819995200BA9FD1 /* HistoricalDataRespond.swift in Sources */,
+				42797E672833CED2004D1A76 /* PriceChangeView.swift in Sources */,
 				42AD702E28031D4000817752 /* AppDelegate.swift in Sources */,
 				42E617A62828F59100101CD0 /* PillMarker.swift in Sources */,
 				422B87FB2813253300A082F0 /* AssetInfoNetworkManager.swift in Sources */,

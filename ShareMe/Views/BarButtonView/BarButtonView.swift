@@ -12,7 +12,6 @@ class BarButtonView: UIView {
     
     lazy var logoImageView: RoundedImageView = {
         let contentView = RoundedImageView(frame: .zero)
-        contentView.image = UIImage(systemName: "envelope")
         contentView.translatesAutoresizingMaskIntoConstraints = false
         return contentView
     }()
