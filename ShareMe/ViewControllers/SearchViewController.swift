@@ -69,7 +69,7 @@ extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultCell.identifier, for: indexPath) as! SearchResultCell
         let asset = assets[indexPath.row]
-        cell.configure(image: asset.logo ,info: asset.info, description: asset.descriprion, chartData: asset.chartData)
+        cell.configure(image: asset.logo ,info: asset.info, description: asset.description, chartData: asset.chartData)
         return cell
     }
     
@@ -130,13 +130,13 @@ extension SearchViewController: UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        guard let text = searchController.searchBar.text else { return }
+        guard let assetName = searchController.searchBar.text else { return }
         guard !isSearchBarEmpty() else { return }
         switch searchController.searchBar.selectedScopeButtonIndex {
         case 1:
-            fetchAssets(with: text, and: .crypto)
+            fetchAssets(with: assetName, and: .crypto)
         default:
-            fetchAssets(with: text)
+            fetchAssets(with: assetName)
         }
     }
     

@@ -24,7 +24,7 @@ struct SearchRespond: Decodable {
         "\(name)"
     }
     
-    var descriprion: String {
+    var description: String {
         "Exchange: \(exchange) \(country), \(previousClose) \(currency)"
     }
     
