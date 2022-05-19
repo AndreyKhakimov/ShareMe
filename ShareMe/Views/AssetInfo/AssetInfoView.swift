@@ -51,10 +51,12 @@ class AssetInfoView: UIView {
     func configure() {
         switch state {
         case .staticPrice(let price, let currency, let priceChange, let pricePercentChange):
-            priceLabel.text = "\(price) \(currency)"
+            let formattedPrice = String(format: "%.2f", price)
             let formattedPriceChange = String(format: "%.2f", priceChange)
             let formattedPricePercentChange = String(format: "%.2f", pricePercentChange)
-
+            
+            priceLabel.text = "\(formattedPrice) \(currency)"
+            
             if priceChange >= 0 {
                 descriptionLabel.textColor = .systemGreen
                 descriptionLabel.text = "+ \(formattedPriceChange) \(currency), (\(formattedPricePercentChange)%)"
@@ -62,9 +64,10 @@ class AssetInfoView: UIView {
                 descriptionLabel.textColor = .red
                 descriptionLabel.text = "\(formattedPriceChange) \(currency), (\(formattedPricePercentChange)%)"
             }
-            
         case .tracking(let price, let currency, let descriptionText):
-            priceLabel.text = "\(price) \(currency)"
+            let formattedPrice = String(format: "%.2f", price)
+            
+            priceLabel.text = "\(formattedPrice) \(currency)"
             descriptionLabel.textColor = .lightGray
             descriptionLabel.text = descriptionText
         }
@@ -92,7 +95,6 @@ class AssetInfoView: UIView {
     private func updateView() {
         switch state {
         case .staticPrice:
-            
             priceLabel.snp.remakeConstraints { make in
                 make.width.equalToSuperview()
                 make.height.equalTo(25)

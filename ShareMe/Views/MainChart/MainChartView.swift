@@ -14,14 +14,11 @@ struct ChartEntryData {
 
 class MainChartView: LineChartView {
     
-    
     var chartData = [ChartEntryData]() {
         didSet {
             setData()
         }
     }
-    
-    
     
     func prepareEntriesFromData() -> [ChartDataEntry] {
         guard !chartData.isEmpty else { return [ChartDataEntry]() }
@@ -41,6 +38,7 @@ class MainChartView: LineChartView {
         let set = LineChartDataSet(entries: entries, label: "Asset info")
         set.mode = .cubicBezier
         set.lineWidth = 2
+        set.drawValuesEnabled = false
         set.drawCirclesEnabled = false
         set.drawHorizontalHighlightIndicatorEnabled = false
         set.highlightColor = .black
@@ -49,18 +47,5 @@ class MainChartView: LineChartView {
         let data = LineChartData(dataSet: set)
         self.data = data
     }
-    
-    //    func chartValueSelected(chartView: ChartViewBase, entry: ChartDataEntry, dataSetIndex: Int, highlight: Highlight) {
-    //            let markerView = MarkerView()
-    //
-    //            let graphPoint = chartView.getMarkerPosition(highlight: highlight)
-    //
-    //            // Adding top marker
-    //        markerView..text = "\(entry.value)"
-    //            markerView.dateLabel.text = "\(months[entry.xIndex])"
-    //            markerView.center = CGPointMake(graphPoint.x, markerView.center.y)
-    //            markerView.hidden = false
-    //    }
-    
     
 }

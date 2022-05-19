@@ -25,15 +25,15 @@ class CustomSegmentedControl: UIControl {
         didSet {
             configureColors()
             setNeedsLayout()
-            layoutIfNeeded()
         }
     }
     
     private let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
+        stackView.spacing = 28
         stackView.alignment = .fill
-        stackView.distribution = .fillProportionally
+        stackView.distribution = .fillEqually
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -99,10 +99,12 @@ class CustomSegmentedControl: UIControl {
         super.layoutSubviews()
         selector.layer.cornerRadius = bounds.height / 2
         //        selector.frame = stackView.arrangedSubviews[selectedSegmentIndex].frame
+        let adjustedWidth = frame.width - stackView.spacing * CGFloat(buttons.count - 1)
+        let xSpacingPosition = stackView.spacing * CGFloat(selectedSegmentIndex)
         selector.frame = CGRect(
-            x: frame.width / CGFloat(buttons.count) * CGFloat(selectedSegmentIndex),
+            x: adjustedWidth / CGFloat(buttons.count) * CGFloat(selectedSegmentIndex) + xSpacingPosition,
             y: 0,
-            width: frame.width / CGFloat(buttons.count),
+            width: adjustedWidth / CGFloat(buttons.count),
             height: frame.height
         )
         layer.cornerRadius = frame.height / 2
@@ -146,8 +148,9 @@ class CustomSegmentedControl: UIControl {
     }
     
     @objc func buttonPressed(button: UIButton) {
+        self.selectedSegmentIndex = button.tag
         UIView.animate(withDuration: 0.3) {
-            self.selectedSegmentIndex = button.tag
+            self.layoutIfNeeded()
         }
         configureColors()
         sendActions(for: .valueChanged)
