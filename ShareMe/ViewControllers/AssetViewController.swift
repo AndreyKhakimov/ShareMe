@@ -13,13 +13,21 @@ import Kingfisher
 class AssetViewController: UIViewController {
     var code: String?
     var assetName: String?
+    lazy var isFavourite: Bool = StorageManager.shared.checkAssetIsFavourite(code: code ?? "", exchange: exchange ?? "") {
+        didSet {
+            isFavourite ? setFavourite() : deleteFavourite()
+            configureRightBarButton()
+        }
+    }
     var exchange: String?
     var currency: String?
+    var type: AssetType?
     var logoURL: URL?
     var quote: Quote?
     
     private let networkManager = QuoteNetworkManager()
     private let historicalDataNetworkManager = HistoricalDataNetworkManager()
+    private let storageManager = StorageManager.shared
     
     private lazy var assetInfoView: AssetInfoView = {
         let assetInfoView = AssetInfoView()
@@ -52,6 +60,20 @@ class AssetViewController: UIViewController {
         return barButtonView
     }()
     
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        commonInit()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        commonInit()
+    }
+    
+    private func commonInit() {
+        hidesBottomBarWhenPushed = true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
@@ -59,6 +81,7 @@ class AssetViewController: UIViewController {
         fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "")
         mainChart.delegate = self
         configureLeftBarButton()
+        configureRightBarButton()
     }
     
     private func setupViews() {
@@ -88,15 +111,37 @@ class AssetViewController: UIViewController {
             make.top.equalTo(mainChart.snp.bottom).offset(8)
         }
     }
-        
-        private func configureLeftBarButton() {
-            let leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"), style: .plain, target: self, action: #selector(popViewController))
-            let assetLogoBarButtonItem = UIBarButtonItem(customView: barButtonView)
-            navigationItem.leftBarButtonItems = [leftBarButtonItem, assetLogoBarButtonItem]
-        }
+    
+    private func configureLeftBarButton() {
+        let leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"), style: .plain, target: self, action: #selector(popViewController))
+        let assetLogoBarButtonItem = UIBarButtonItem(customView: barButtonView)
+        navigationItem.leftBarButtonItems = [leftBarButtonItem, assetLogoBarButtonItem]
+    }
+    
+    private func configureRightBarButton() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: isFavourite ? "star.fill" : "star"), style: .plain, target: self, action: #selector(toggleFavourite))
+    }
     
     @objc private func popViewController() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc private func toggleFavourite() {
+        isFavourite.toggle()
+    }
+    
+    @objc private func setFavourite() {
+        guard let code = code else { return }
+        guard let exchange = exchange else { return }
+        guard let type = type else { return }
+        storageManager.saveAsset(code: code, exchange: exchange, type: type)
+    }
+    
+    @objc private func deleteFavourite() {
+        guard let code = code else { return }
+        guard let exchange = exchange else { return }
+        guard let asset = storageManager.getAsset(code: code, exchange: exchange) else { return }
+        storageManager.deleteAsset(asset: asset)
     }
     
     private func fetchPrice(for code: String, and exchange: String) {
@@ -190,5 +235,5 @@ extension AssetViewController: ChartViewDelegate {
         
         assetInfoView.state = .staticPrice(price: quote?.currentPrice ?? 0, currency: currency ?? "", priceChange: quote?.change ?? 0, pricePercentChange: quote?.changePercent ?? 0)
     }
-
+    
 }

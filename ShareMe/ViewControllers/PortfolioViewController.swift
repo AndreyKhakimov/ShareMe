@@ -1,16 +1,14 @@
 //
-//  SearchViewController.swift
+//  PortfolioViewController.swift
 //  ShareMe
 //
-//  Created by Andrey Khakimov on 21.04.2022.
+//  Created by Andrey Khakimov on 21.05.2022.
 //
 
 import UIKit
 import SnapKit
 
-class SearchViewController: UIViewController {
-    
-    private var type: AssetType = .stock
+class PortfolioViewController: UIViewController {
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -32,8 +30,10 @@ class SearchViewController: UIViewController {
         return searchController
     }()
     
-    private let networkManager = SearchAssetNetworkManager()
-    private var assets = [SearchRespond]()
+    private let networkManager = PortfolioNetworkManager()
+    private let storageManager = StorageManager.shared
+    var assets: [Asset]?
+    private var portfolioAssets = [PortfolioAsset]()
     private var cellHeights = [IndexPath: CGFloat]()
     
     override func viewDidLoad() {
@@ -41,16 +41,18 @@ class SearchViewController: UIViewController {
         setupViews()
         tableView.dataSource = self
         tableView.delegate = self
+        assets = StorageManager.shared.getAllAssets()
+        fetchAssets(assets ?? [Asset]())
     }
     
-    private func fetchAssets(with name: String, and type: AssetType = .stock) {
-        networkManager.getAssetsWithName(name: name, type: type) { [weak self] result in
+    private func fetchAssets(_ assets: [Asset]) {
+        networkManager.getAssets(assets: assets) { [weak self] result in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 
                 switch result {
-                case .success(let assetsRespond):
-                    self.assets = assetsRespond
+                case .success(let portfolioAssets):
+                    self.portfolioAssets = portfolioAssets
                     self.cellHeights.removeAll()
                     self.tableView.reloadData()
                 case .failure(let error):
@@ -63,15 +65,15 @@ class SearchViewController: UIViewController {
 }
 
 // MARK: - TableView Datasource Methods
-extension SearchViewController: UITableViewDataSource {
+extension PortfolioViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        assets.count
+        portfolioAssets.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultCell.identifier, for: indexPath) as! SearchResultCell
-        let asset = assets[indexPath.row]
-        cell.configure(image: asset.logo ,info: asset.info, description: asset.description, chartData: asset.chartData)
+        let asset = portfolioAssets[indexPath.row]
+        cell.configure(image: asset.logo, info: String(asset.currentPrice), description: String(asset.code), chartData: asset.chartData)
         return cell
     }
     
@@ -82,17 +84,16 @@ extension SearchViewController: UITableViewDataSource {
 }
 
 // MARK: - TableView Delegate Methods
-extension SearchViewController: UITableViewDelegate {
+extension PortfolioViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let asset = assets[indexPath.row]
-        let assetVC = AssetViewController()
-        assetVC.code = asset.code
-        assetVC.assetName = asset.name
-        assetVC.exchange = asset.exchange
-        assetVC.currency = asset.currency
-        assetVC.type = type
-        assetVC.logoURL = asset.logo
-        navigationController?.pushViewController(assetVC, animated: true)
+//        let asset = assets[indexPath.row]
+//        let assetVC = AssetViewController()
+//        assetVC.code = asset.code
+//        assetVC.assetName = asset.name
+//        assetVC.exchange = asset.exchange
+//        assetVC.currency = asset.currency
+//        assetVC.logoURL = asset.logo
+//        navigationController?.pushViewController(assetVC, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -110,7 +111,7 @@ extension SearchViewController: UITableViewDelegate {
 }
 
 // MARK: - Setup Views
-extension SearchViewController {
+extension PortfolioViewController {
     func setupViews() {
         view.addSubview(tableView)
         navigationItem.searchController = searchController
@@ -122,27 +123,25 @@ extension SearchViewController {
 }
 
 // MARK: - Search Bar Delegate
-extension SearchViewController: UISearchBarDelegate {
-        func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-            searchBar.text = ""
-        }
+extension PortfolioViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        searchBar.text = ""
+    }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let text = searchController.searchBar.text else { return }
-        fetchAssets(with: text)
+//        guard let text = searchController.searchBar.text else { return }
+//        fetchAssets(with: text)
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        guard let assetName = searchController.searchBar.text else { return }
-        guard !isSearchBarEmpty() else { return }
-        switch searchController.searchBar.selectedScopeButtonIndex {
-        case 1:
-            fetchAssets(with: assetName, and: .crypto)
-            type = .crypto
-        default:
-            fetchAssets(with: assetName)
-            type = .stock
-        }
+//        guard let assetName = searchController.searchBar.text else { return }
+//        guard !isSearchBarEmpty() else { return }
+//        switch searchController.searchBar.selectedScopeButtonIndex {
+//        case 1:
+//            fetchAssets(with: assetName, and: .crypto)
+//        default:
+//            fetchAssets(with: assetName)
+//        }
     }
     
 }

@@ -15,12 +15,13 @@ class SearchResultCell: UITableViewCell {
     
     private let logoImageView: RoundedImageView = {
         let imageView = RoundedImageView(frame: CGRect())
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
     private let searchResultLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 17,weight: .medium)
+        label.font = .systemFont(ofSize: 17, weight: .medium)
         return label
     }()
     
@@ -56,27 +57,27 @@ class SearchResultCell: UITableViewCell {
         
         logoImageView.snp.makeConstraints { make in
             make.width.height.equalTo(32)
-            make.left.top.equalTo(6)
+            make.left.top.equalTo(8)
         }
         
         searchResultLabel.snp.makeConstraints { make in
             make.left.equalTo(logoImageView.snp.right).offset(16)
-            make.top.equalToSuperview().offset(6)
-            make.right.equalTo(simpleChartView.snp.left).offset(-6)
+            make.top.equalToSuperview().offset(8)
+            make.right.equalTo(simpleChartView.snp.left).offset(-8)
         }
         
         descriptionLabel.snp.makeConstraints { make in
             make.left.equalTo(logoImageView.snp.right).offset(16)
             make.top.equalTo(searchResultLabel.snp.bottom).offset(2)
-            make.right.equalTo(simpleChartView.snp.left).offset(-6)
-            make.bottom.equalToSuperview().offset(-6)
+            make.right.equalTo(simpleChartView.snp.left).offset(-8)
+            make.bottom.equalToSuperview().offset(-8)
         }
         
         simpleChartView.snp.makeConstraints { make in
             make.height.equalTo(32)
             make.width.equalTo(48)
             make.centerY.equalToSuperview()
-            make.right.equalToSuperview().offset(-6)
+            make.right.equalToSuperview().offset(-8)
         }
         
     }

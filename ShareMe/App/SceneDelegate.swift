@@ -20,7 +20,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(windowScene: windowScene)
         window?.makeKeyAndVisible()
-        window?.rootViewController = UINavigationController(rootViewController: SearchViewController())
+        
+        let tabBarVC = UITabBarController()
+        
+        let portfolioVC = PortfolioViewController()
+        portfolioVC.tabBarItem = UITabBarItem(title: "Portfolio", image: UIImage(systemName: "briefcase"), selectedImage: UIImage(systemName: "briefcase.fill"))
+        
+        let searchVC = SearchViewController()
+        searchVC.tabBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass.circle"), selectedImage: UIImage(systemName: "magnifyingglass.circle.fill"))
+        
+        tabBarVC.setViewControllers([portfolioVC, UINavigationController(rootViewController: searchVC)], animated: true)
+        window?.rootViewController = tabBarVC
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

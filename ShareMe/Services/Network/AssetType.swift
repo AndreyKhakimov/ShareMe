@@ -7,7 +7,17 @@
 
 import Foundation
 
-enum AssetType: String {
+@objc
+public enum AssetType: Int16 {
     case stock
     case crypto
+    
+    var assetType: String {
+        switch self {
+        case .stock:
+            return "stock"
+        case .crypto:
+            return "crypto"
+        }
+    }
 }

@@ -16,7 +16,7 @@ class SearchAssetNetworkManager {
             switch self {
             case .searchAssetWithName(let name, let type):
                 // TODO: - Try using URLComponents to stop using Endpoints.apiKey
-                return "/search/\(name)?api_token=\(Endpoints.apiKey)&limit=3&type=\(type.rawValue)"
+                return "/search/\(name)?api_token=\(Endpoints.apiKey)&limit=3&type=\(type.assetType)"
             }
         }
     }
@@ -59,7 +59,7 @@ class SearchAssetNetworkManager {
                             myGroup.leave()
                         }
                     }
-
+                    
                     myGroup.notify(queue: .main) {
                         completion(.success(assets))
                     }
@@ -70,5 +70,5 @@ class SearchAssetNetworkManager {
             }
         )
     }
-    
+
 }
