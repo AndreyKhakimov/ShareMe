@@ -23,7 +23,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let tabBarVC = UITabBarController()
         
-        let portfolioVC = PortfolioViewController()
+//        let portfolioVC = PortfolioViewController()
+        let portfolioVC = PortfolioCollectionViewController()
         portfolioVC.tabBarItem = UITabBarItem(title: "Portfolio", image: UIImage(systemName: "briefcase"), selectedImage: UIImage(systemName: "briefcase.fill"))
         
         let searchVC = SearchViewController()

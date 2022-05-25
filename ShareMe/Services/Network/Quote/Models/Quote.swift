@@ -11,7 +11,7 @@ struct Quote: Decodable {
     let code: String
     let time: Int
     let currentPrice: Double
-    let change: Double
+    let priceChange: Double
     let changePercent: Double
     
     var currentDate: String {
@@ -35,7 +35,7 @@ struct Quote: Decodable {
         case code = "code"
         case time = "timestamp"
         case currentPrice = "close"
-        case change
+        case priceChange = "change"
         case changePercent = "change_p"
     }
 }

@@ -1,30 +1,35 @@
 PODS:
-  - Charts (4.0.2):
-    - Charts/Core (= 4.0.2)
-  - Charts/Core (4.0.2):
-    - SwiftAlgorithms (~> 1.0)
+  - Charts (4.0.0):
+    - Charts/Core (= 4.0.0)
+  - Charts/Core (4.0.0)
   - Kingfisher (7.2.2)
   - SnapKit (5.0.1)
-  - SwiftAlgorithms (1.0.0)
 
 DEPENDENCIES:
-  - Charts (~> 4.0.2)
+  - Charts (from `https://github.com/gavynriebau/Charts.git`, branch `fix-filter-predicate`)
   - Kingfisher (~> 7.1)
   - SnapKit (~> 5.0.0)
 
 SPEC REPOS:
   trunk:
-    - Charts
     - Kingfisher
     - SnapKit
-    - SwiftAlgorithms
+
+EXTERNAL SOURCES:
+  Charts:
+    :branch: fix-filter-predicate
+    :git: https://github.com/gavynriebau/Charts.git
+
+CHECKOUT OPTIONS:
+  Charts:
+    :commit: 9ea6c62b9642682917c7fe1abbd3b56da7e498b0
+    :git: https://github.com/gavynriebau/Charts.git
 
 SPEC CHECKSUMS:
-  Charts: cfa4e911e6dc289582c2fe011a0e87c03d96727f
+  Charts: 22f3a1f5993f0769aa5ad380ccb242a1500d6b95
   Kingfisher: 184d4d1a8c36666e663caf8e08abe87898595c53
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
-  SwiftAlgorithms: 38dda4731d19027fdeee1125f973111bf3386b53
 
-PODFILE CHECKSUM: ab301c15f8258974c1adc72aa1033c9b45cbf77a
+PODFILE CHECKSUM: b4f56e8570de368f73360a277b22f186efec1157
 
 COCOAPODS: 1.11.2

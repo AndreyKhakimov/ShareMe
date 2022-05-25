@@ -9,4 +9,6 @@ import Foundation
 
 struct Logo: Decodable {
     let logo: String?
+    let name: String?
+    let currency: String?
 }

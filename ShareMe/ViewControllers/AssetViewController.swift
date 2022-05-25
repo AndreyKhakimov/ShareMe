@@ -151,7 +151,7 @@ class AssetViewController: UIViewController {
                 
                 switch result {
                 case .success(let quote):
-                    self.assetInfoView.state = .staticPrice(price: quote.currentPrice, currency: self.currency ?? "", priceChange: quote.change, pricePercentChange: quote.changePercent)
+                    self.assetInfoView.state = .staticPrice(price: quote.currentPrice, currency: self.currency ?? "", priceChange: quote.priceChange, pricePercentChange: quote.changePercent)
                     self.quote = quote
                 case .failure(let error):
                     self.showAlert(title: error.title, message: error.description)
@@ -233,7 +233,7 @@ extension AssetViewController: ChartViewDelegate {
     func chartViewDidEndPanning(_ chartView: ChartViewBase) {
         chartView.highlightValues(nil)
         
-        assetInfoView.state = .staticPrice(price: quote?.currentPrice ?? 0, currency: currency ?? "", priceChange: quote?.change ?? 0, pricePercentChange: quote?.changePercent ?? 0)
+        assetInfoView.state = .staticPrice(price: quote?.currentPrice ?? 0, currency: currency ?? "", priceChange: quote?.priceChange ?? 0, pricePercentChange: quote?.changePercent ?? 0)
     }
     
 }

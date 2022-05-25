@@ -27,6 +27,10 @@
 		427A2A43283BB6820043D1C9 /* AssetMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427A2A42283BB6820043D1C9 /* AssetMapping.swift */; };
 		427A2A45283BC1360043D1C9 /* MappingAssetModel.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 427A2A44283BC1360043D1C9 /* MappingAssetModel.xcmappingmodel */; };
 		427A2A4D283C0E810043D1C9 /* AssetModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 427A2A4A283C0E810043D1C9 /* AssetModel.xcdatamodeld */; };
+		427A2A4F283D5C490043D1C9 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427A2A4E283D5C490043D1C9 /* API.swift */; };
+		427A2A51283D65570043D1C9 /* APIFinnhub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427A2A50283D65570043D1C9 /* APIFinnhub.swift */; };
+		427A2A55283DF4950043D1C9 /* PortfolioCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427A2A54283DF4950043D1C9 /* PortfolioCollectionViewController.swift */; };
+		427A2A57283DF91F0043D1C9 /* PortfolioCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427A2A56283DF91F0043D1C9 /* PortfolioCollectionViewCell.swift */; };
 		427BA773283044A100D5FC81 /* AssetInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427BA772283044A100D5FC81 /* AssetInfoView.swift */; };
 		42AD702E28031D4000817752 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD702D28031D4000817752 /* AppDelegate.swift */; };
 		42AD703028031D4000817752 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD702F28031D4000817752 /* SceneDelegate.swift */; };
@@ -41,8 +45,6 @@
 		42E070482824461000A000C2 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E070472824461000A000C2 /* Date.swift */; };
 		42E0704D2824463D00A000C2 /* Quote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0704B2824463D00A000C2 /* Quote.swift */; };
 		42E0704E2824463D00A000C2 /* QuoteNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0704C2824463D00A000C2 /* QuoteNetworkManager.swift */; };
-		42E070932824496F00A000C2 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E070922824496F00A000C2 /* API.swift */; };
-		42E07097282449CD00A000C2 /* APIFinnHub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E07096282449CD00A000C2 /* APIFinnHub.swift */; };
 		42E0709A2827E47100A000C2 /* MainChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E070992827E47100A000C2 /* MainChartView.swift */; };
 		42E617A62828F59100101CD0 /* PillMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E617A52828F59100101CD0 /* PillMarker.swift */; };
 		42E617A928298C0B00101CD0 /* CustomSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E617A828298C0B00101CD0 /* CustomSegmentedControl.swift */; };
@@ -76,6 +78,10 @@
 		427A2A44283BC1360043D1C9 /* MappingAssetModel.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = MappingAssetModel.xcmappingmodel; sourceTree = "<group>"; };
 		427A2A4B283C0E810043D1C9 /* AssetModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AssetModel.xcdatamodel; sourceTree = "<group>"; };
 		427A2A4C283C0E810043D1C9 /* AssetModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "AssetModel 2.xcdatamodel"; sourceTree = "<group>"; };
+		427A2A4E283D5C490043D1C9 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		427A2A50283D65570043D1C9 /* APIFinnhub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIFinnhub.swift; sourceTree = "<group>"; };
+		427A2A54283DF4950043D1C9 /* PortfolioCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioCollectionViewController.swift; sourceTree = "<group>"; };
+		427A2A56283DF91F0043D1C9 /* PortfolioCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioCollectionViewCell.swift; sourceTree = "<group>"; };
 		427BA772283044A100D5FC81 /* AssetInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetInfoView.swift; sourceTree = "<group>"; };
 		42AD702A28031D4000817752 /* ShareMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42AD702D28031D4000817752 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -92,8 +98,6 @@
 		42E070472824461000A000C2 /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		42E0704B2824463D00A000C2 /* Quote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Quote.swift; sourceTree = "<group>"; };
 		42E0704C2824463D00A000C2 /* QuoteNetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuoteNetworkManager.swift; sourceTree = "<group>"; };
-		42E070922824496F00A000C2 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
-		42E07096282449CD00A000C2 /* APIFinnHub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIFinnHub.swift; sourceTree = "<group>"; };
 		42E070992827E47100A000C2 /* MainChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChartView.swift; sourceTree = "<group>"; };
 		42E617A52828F59100101CD0 /* PillMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillMarker.swift; sourceTree = "<group>"; };
 		42E617A828298C0B00101CD0 /* CustomSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegmentedControl.swift; sourceTree = "<group>"; };
@@ -170,6 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				42C0224828157515003FF14A /* SearchTableViewCell.swift */,
+				427A2A56283DF91F0043D1C9 /* PortfolioCollectionViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -294,9 +299,10 @@
 		42AD7044280325B700817752 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				424AE4B22839449400AD6002 /* PortfolioViewController.swift */,
 				422B87DB2811618300A082F0 /* SearchViewController.swift */,
 				42AD704628033CB200817752 /* AssetViewController.swift */,
+				424AE4B22839449400AD6002 /* PortfolioViewController.swift */,
+				427A2A54283DF4950043D1C9 /* PortfolioCollectionViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -317,8 +323,8 @@
 				42AD70532807334B00817752 /* EndpointProtocol.swift */,
 				42AD70582807335400817752 /* NetworkError.swift */,
 				422B87F6281322F300A082F0 /* AssetType.swift */,
-				42E070922824496F00A000C2 /* API.swift */,
-				42E07096282449CD00A000C2 /* APIFinnHub.swift */,
+				427A2A4E283D5C490043D1C9 /* API.swift */,
+				427A2A50283D65570043D1C9 /* APIFinnhub.swift */,
 				424AE4B4283A150A00AD6002 /* Portfolio */,
 				421D41BB280F0E24002E291D /* Search */,
 				420EA7292818902300BA9FD1 /* HistoricalData */,
@@ -513,6 +519,7 @@
 				42E617A928298C0B00101CD0 /* CustomSegmentedControl.swift in Sources */,
 				422B87F92813241600A082F0 /* Logo.swift in Sources */,
 				424AE4AA283930A200AD6002 /* Asset+CoreDataProperties.swift in Sources */,
+				427A2A55283DF4950043D1C9 /* PortfolioCollectionViewController.swift in Sources */,
 				424AE4AE2839342D00AD6002 /* StorageManager.swift in Sources */,
 				421D41BD280F0E4C002E291D /* SearchAssetNetworkManager.swift in Sources */,
 				42AD70562807334B00817752 /* NetworkManager.swift in Sources */,
@@ -524,8 +531,10 @@
 				424AE4B32839449400AD6002 /* PortfolioViewController.swift in Sources */,
 				42E0704E2824463D00A000C2 /* QuoteNetworkManager.swift in Sources */,
 				424AE4B7283A194100AD6002 /* Portfolio.swift in Sources */,
+				427A2A4F283D5C490043D1C9 /* API.swift in Sources */,
 				424AE4B9283A1A2500AD6002 /* PortfolioNetworkManager.swift in Sources */,
 				420EA7302819995200BA9FD1 /* HistoricalDataRespond.swift in Sources */,
+				427A2A57283DF91F0043D1C9 /* PortfolioCollectionViewCell.swift in Sources */,
 				42AD702E28031D4000817752 /* AppDelegate.swift in Sources */,
 				424AE4A9283930A200AD6002 /* Asset+CoreDataClass.swift in Sources */,
 				427A2A4D283C0E810043D1C9 /* AssetModel.xcdatamodeld in Sources */,
@@ -535,12 +544,11 @@
 				42E0709A2827E47100A000C2 /* MainChartView.swift in Sources */,
 				42AD70552807334B00817752 /* EndpointProtocol.swift in Sources */,
 				422B87E42811728E00A082F0 /* RoundedImageView.swift in Sources */,
+				427A2A51283D65570043D1C9 /* APIFinnhub.swift in Sources */,
 				42AD703028031D4000817752 /* SceneDelegate.swift in Sources */,
 				42E617AB2829AF0D00101CD0 /* IntraDayPeriod.swift in Sources */,
-				42E07097282449CD00A000C2 /* APIFinnHub.swift in Sources */,
 				42E617B2282AAE9000101CD0 /* CircleMarker.swift in Sources */,
 				427BA773283044A100D5FC81 /* AssetInfoView.swift in Sources */,
-				42E070932824496F00A000C2 /* API.swift in Sources */,
 				420EA73228199B6300BA9FD1 /* Period.swift in Sources */,
 				42E07046282445E000A000C2 /* SimpleChartView.swift in Sources */,
 				42E070482824461000A000C2 /* Date.swift in Sources */,

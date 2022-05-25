@@ -27,9 +27,13 @@ class PortfolioNetworkManager {
             assetInfoNetworkManager.getAssetInfo(symbol: assets[index].code) { result in
                 switch result {
                 case .success(let logo):
+                    guard let currency = logo.currency else { break }
+                    guard let name = logo.name else { break }
                     guard let logo = logo.logo else { break }
                     guard let url = URL(string: logo) else { break }
                     portfolioAssets[index].logo = url
+                    portfolioAssets[index].name = name
+                    portfolioAssets[index].currency = currency
                 case .failure:
                     break
                 }
@@ -53,7 +57,11 @@ class PortfolioNetworkManager {
                 switch result {
                 case .success(let quote):
                     let currentPrice = quote.currentPrice
+                    let priceChange = quote.priceChange
+                    let priceChangePercent = quote.changePercent
                     portfolioAssets[index].currentPrice = currentPrice
+                    portfolioAssets[index].priceChange = priceChange
+                    portfolioAssets[index].priceChangePercent = priceChangePercent
                 case .failure:
                     break
                 }
