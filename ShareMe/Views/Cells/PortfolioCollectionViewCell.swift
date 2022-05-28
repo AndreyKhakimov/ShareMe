@@ -21,14 +21,14 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
     
     private let assetNameLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 18, weight: .bold)
+        label.font = .systemFont(ofSize: 16, weight: .bold)
         return label
     }()
     
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.textColor = .lightGray
-        label.font = .systemFont(ofSize: 16)
+        label.font = .systemFont(ofSize: 12)
         return label
     }()
     
@@ -41,12 +41,14 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
     
     private let priceLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 18, weight: .bold)
+        label.textAlignment = .right
+        label.font = .systemFont(ofSize: 16, weight: .bold)
         return label
     }()
     
     private let priceChangeLabel: UILabel = {
         let label = UILabel()
+        label.textAlignment = .right
         label.textColor = .lightGray
         label.font = .systemFont(ofSize: 14)
         return label
@@ -68,48 +70,47 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(simpleChartView)
         contentView.addSubview(priceLabel)
         contentView.addSubview(priceChangeLabel)
-        // TODO: - remove multipliedBy + top..bottom...
+        
         logoImageView.snp.makeConstraints { make in
-            make.height.equalToSuperview().multipliedBy(0.8)
-            make.width.equalTo(contentView.snp.height).multipliedBy(0.8)
-            make.centerY.equalToSuperview()
-            make.left.equalTo(contentView.snp.left).offset(8)
+            make.height.width.equalTo(48)
+            make.left.equalToSuperview().offset(8)
+            make.top.equalToSuperview()
         }
         
         assetNameLabel.snp.makeConstraints { make in
             make.left.equalTo(logoImageView.snp.right).offset(16)
-            make.top.equalToSuperview().offset(8)
-            make.height.equalToSuperview().multipliedBy(0.4)
-            make.width.equalToSuperview().multipliedBy(0.2)
+            make.top.equalToSuperview()
+            make.height.equalTo(28)
+            make.width.equalTo(90)
         }
         
         descriptionLabel.snp.makeConstraints { make in
             make.left.equalTo(logoImageView.snp.right).offset(16)
-            make.top.equalTo(assetNameLabel.snp.bottom).offset(2)
-            make.height.equalToSuperview().multipliedBy(0.4)
-            make.width.equalToSuperview().multipliedBy(0.2)
+            make.top.equalTo(assetNameLabel.snp.bottom).offset(4)
+            make.height.equalTo(16)
+            make.width.equalTo(90)
         }
         
         simpleChartView.snp.makeConstraints { make in
-            make.height.equalToSuperview().multipliedBy(0.65)
-            make.width.equalToSuperview().multipliedBy(0.25)
-            make.centerY.equalToSuperview()
-            make.left.equalTo(assetNameLabel.snp.right).offset(16)
+            make.height.equalToSuperview()
+            make.left.equalTo(assetNameLabel.snp.right).offset(8)
+            make.right.equalTo(priceLabel.snp.left).offset(-8)
         }
         
         priceLabel.snp.makeConstraints { make in
             make.left.equalTo(simpleChartView.snp.right).offset(8)
-            make.top.equalToSuperview().offset(8)
-            make.height.equalToSuperview().multipliedBy(0.3)
-            make.width.equalToSuperview().multipliedBy(0.2)
+            make.right.equalToSuperview().offset(-8)
+            make.top.equalToSuperview()
+            make.height.equalTo(28)
+            make.width.equalTo(100)
         }
         
         priceChangeLabel.snp.makeConstraints { make in
             make.left.equalTo(simpleChartView.snp.right).offset(8)
             make.right.equalToSuperview().offset(-8)
-            make.top.equalTo(priceLabel.snp.bottom).offset(2)
-            make.height.equalToSuperview().multipliedBy(0.3)
-//            make.width.equalToSuperview().multipliedBy(0.2)
+            make.top.equalTo(priceLabel.snp.bottom).offset(4)
+            make.height.equalTo(16)
+            make.width.equalTo(100)
         }
     }
     
@@ -125,18 +126,28 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
         if let chartData = chartData {
             simpleChartView.chartData = chartData
         }
-        let formattedPrice = String(format: "%.2f", price)
-        let formattedPriceChange = String(format: "%.2f", priceChange)
-        let formattedPricePercentChange = String(format: "%.2f", pricePercentChange)
-
-        if priceChange >= 0 {
-            priceChangeLabel.textColor = .systemGreen
-            priceChangeLabel.text = "+\(formattedPriceChange) \(currency), (\(formattedPricePercentChange)%)"
-        } else {
-            priceChangeLabel.textColor = .red
-            priceChangeLabel.text = "\(formattedPriceChange) \(currency), (\(formattedPricePercentChange)%)"
+        
+        switch price {
+        case 10000... :
+            priceLabel.text = "\(String(format: "%.f", price)) \(currency)"
+        default:
+            priceLabel.text = "\(String(format: "%.2f", price)) \(currency)"
+            
         }
-        priceLabel.text = formattedPrice
+        
+        let formattedPricePercentChange = String(format: "%.2f", pricePercentChange)
+        
+        if priceChange >= 0 {
+            simpleChartView.lineColor = .systemGreen
+            simpleChartView.gradientColor = .systemGreen
+            priceChangeLabel.textColor = .systemGreen
+            priceChangeLabel.text = "+\(formattedPricePercentChange) %"
+        } else {
+            simpleChartView.lineColor = .systemRed
+            simpleChartView.gradientColor = .systemRed
+            priceChangeLabel.textColor = .red
+            priceChangeLabel.text = "\(formattedPricePercentChange) %"
+        }
     }
     
 }

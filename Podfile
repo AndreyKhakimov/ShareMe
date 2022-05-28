@@ -7,6 +7,9 @@ target 'ShareMe' do
 
    pod 'SnapKit', '~> 5.0.0'
    pod 'Kingfisher', '~> 7.1'
-   pod 'Charts', :git => 'https://github.com/gavynriebau/Charts.git', :branch => 'fix-filter-predicate'
+   #pod 'Charts', '~> 3.6.0'
+   pod 'Charts', :git => 'https://github.com/AndreyKhakimov/Charts.git', :branch => 'master'
+
+
 
 end

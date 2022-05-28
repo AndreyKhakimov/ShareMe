@@ -9,7 +9,7 @@ import Charts
 
 class PillMarker: MarkerImage {
 
-    private (set) var color: UIColor
+//    private (set) var color: UIColor
     private (set) var font: UIFont
     private (set) var textColor: UIColor
     private var labelText: String = ""
@@ -23,7 +23,7 @@ class PillMarker: MarkerImage {
     }()
 
     init(color: UIColor, font: UIFont, textColor: UIColor) {
-        self.color = color
+//        self.color = color
         self.font = font
         self.textColor = textColor
 
@@ -34,17 +34,26 @@ class PillMarker: MarkerImage {
     }
 
     override func draw(context: CGContext, point: CGPoint) {
+        let chartWidth = chartView?.bounds.width ?? 0
+        let chartHeight = chartView?.bounds.height ?? 0
         // custom padding around text
-        let labelWidth = labelText.size(withAttributes: attrs).width + 10
+        let labelWidth = labelText.size(withAttributes: attrs).width + 8
         // if you modify labelHeigh you will have to tweak baselineOffset in attrs
         let labelHeight = labelText.size(withAttributes: attrs).height + 4
-
+        let maxYPosition = chartHeight - labelHeight
+        let minYPosition:CGFloat = 0
         // place pill above the marker, centered along x
         var rectangle = CGRect(x: point.x, y: point.y, width: labelWidth, height: labelHeight)
-        rectangle.origin.x -= rectangle.width / 2.0
-        let spacing: CGFloat = 20
+        print(UIScreen.main.bounds.size.width)
+        if point.x > chartWidth * 0.5 {
+            rectangle.origin.x -= rectangle.width + 8
+        } else {
+            rectangle.origin.x = point.x + 8
+        }
+        let spacing: CGFloat = 8
         rectangle.origin.y -= rectangle.height + spacing
-
+        rectangle.origin.y = min(maxYPosition, rectangle.origin.y)
+        rectangle.origin.y = max(minYPosition, rectangle.origin.y)
         // rounded rect
         let clipPath = UIBezierPath(roundedRect: rectangle, cornerRadius: 6.0).cgPath
         context.addPath(clipPath)
@@ -58,6 +67,12 @@ class PillMarker: MarkerImage {
     }
 
     override func refreshContent(entry: ChartDataEntry, highlight: Highlight) {
-        labelText = String(entry.y)
+        let candleEntry = entry as? CandleChartDataEntry
+        let formatedOpen = String(format: "%.2f", candleEntry?.open ?? 0)
+        let formatedClose = String(format: "%.2f", candleEntry?.close ?? 0)
+        let formatedHigh = String(format: "%.2f", candleEntry?.high ?? 0)
+        let formatedLow = String(format: "%.2f", candleEntry?.low ?? 0)
+        
+        labelText = "Open: \(formatedOpen)\nClose: \(formatedClose)\nHigh: \(formatedHigh)\nLow: \(formatedLow)"
     }
 }

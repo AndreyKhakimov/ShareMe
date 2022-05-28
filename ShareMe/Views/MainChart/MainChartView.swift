@@ -26,7 +26,6 @@ class MainChartView: LineChartView {
         let chartEntries = chartData.enumerated().map { index, value -> ChartDataEntry in
             let xPosition = (Double(index) / Double(chartLastIndex))
             let yPosition = value.data
-            // TODO: - Create a struct
             return ChartDataEntry(x: xPosition, y: yPosition, data: value.date)
         }
         return chartEntries
@@ -35,7 +34,8 @@ class MainChartView: LineChartView {
     
     func setData() {
         let entries = prepareEntriesFromData()
-        let set = LineChartDataSet(entries: entries, label: "Asset info")
+        let set = LineChartDataSet(entries: entries)
+        set.label = nil
         set.mode = .cubicBezier
         set.lineWidth = 2
         set.drawValuesEnabled = false

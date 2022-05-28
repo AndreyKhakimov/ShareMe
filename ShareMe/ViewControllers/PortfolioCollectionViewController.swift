@@ -82,9 +82,26 @@ extension PortfolioCollectionViewController: UICollectionViewDataSource, UIColle
             pricePercentChange: asset.priceChangePercent)
         return cell
     }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 16
+    }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: collectionView.frame.size.width, height: 48)
     }
     
+// MARK: - CollectionView Delegate Methods
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let asset = portfolioAssets[indexPath.row]
+        let assetVC = AssetViewController()
+        assetVC.code = asset.code
+        assetVC.assetName = asset.name
+        assetVC.exchange = asset.exchange
+        assetVC.currency = asset.currency
+        assetVC.type = assets?[indexPath.row].type ?? .stock
+        assetVC.logoURL = asset.logo
+        present(assetVC, animated: true, completion: nil)
+        collectionView.deselectItem(at: indexPath, animated: true)
+    }
 }

@@ -10,13 +10,16 @@ import Foundation
 struct HistoricalIntradayDataResponse: Codable {
     let unixTimestamp: Int
     let dateTime: String
-    let close: Double
-    let volume: Int
+    let open, close, high, low: Double
+    let volume: Int?
 
     enum CodingKeys: String, CodingKey {
         case unixTimestamp = "timestamp"
         case dateTime = "datetime"
+        case open
         case close
+        case high
+        case low
         case volume
     }
 }

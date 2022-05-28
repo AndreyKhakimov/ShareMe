@@ -11,6 +11,7 @@ import Charts
 import Kingfisher
 
 class AssetViewController: UIViewController {
+    
     var code: String?
     var assetName: String?
     lazy var isFavourite: Bool = StorageManager.shared.checkAssetIsFavourite(code: code ?? "", exchange: exchange ?? "") {
@@ -19,6 +20,13 @@ class AssetViewController: UIViewController {
             configureRightBarButton()
         }
     }
+    
+    fileprivate var chartState: chartState = .line {
+            didSet {
+                updateView()
+            }
+        }
+    
     var exchange: String?
     var currency: String?
     var type: AssetType?
@@ -36,12 +44,24 @@ class AssetViewController: UIViewController {
     
     private lazy var mainChart: MainChartView = {
         let mainChart =  MainChartView()
-        
+        mainChart.setScaleEnabled(false)
+        mainChart.pinchZoomEnabled = false
         mainChart.xAxis.enabled = false
         mainChart.rightAxis.enabled = false
         mainChart.leftAxis.enabled = false
-        
+        mainChart.legend.enabled = false
         return mainChart
+    }()
+    
+    private lazy var mainCandleChart: CandleChartView = {
+        let candleChart =  CandleChartView()
+        candleChart.setScaleEnabled(false)
+        candleChart.pinchZoomEnabled = false
+        candleChart.xAxis.enabled = false
+        candleChart.rightAxis.enabled = false
+        candleChart.leftAxis.enabled = false
+        candleChart.legend.enabled = false
+        return candleChart
     }()
     
     private lazy var chartSegmentedControl: CustomSegmentedControl = {
@@ -51,6 +71,14 @@ class AssetViewController: UIViewController {
         segmentedControl.selectedSegmentIndex = 2
         segmentedControl.addTarget(self, action: #selector(timeIntervalDidChange(_:)), for: .valueChanged)
         return segmentedControl
+    }()
+    
+    private lazy var chartSelectionButton: UIButton = {
+        let chartSelectionButton = UIButton()
+        chartSelectionButton.addTarget(self, action: #selector(configureChart), for: .touchUpInside)
+        chartSelectionButton.backgroundColor = .green
+        chartSelectionButton.layer.cornerRadius = 10
+        return chartSelectionButton
     }()
     
     private lazy var barButtonView: BarButtonView = {
@@ -77,9 +105,11 @@ class AssetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        updateView()
         fetchPrice(for: code ?? "", and: exchange ?? "")
         fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "")
         mainChart.delegate = self
+        mainCandleChart.delegate = self
         configureLeftBarButton()
         configureRightBarButton()
     }
@@ -88,7 +118,9 @@ class AssetViewController: UIViewController {
         view.backgroundColor = .white
         view.addSubview(assetInfoView)
         view.addSubview(mainChart)
+        view.addSubview(mainCandleChart)
         view.addSubview(chartSegmentedControl)
+        view.addSubview(chartSelectionButton)
         
         assetInfoView.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(16)
@@ -104,12 +136,41 @@ class AssetViewController: UIViewController {
             make.top.equalTo(assetInfoView.snp.bottom).offset(8)
         }
         
+        mainCandleChart.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(16)
+            make.right.equalToSuperview().offset(-16)
+            make.height.equalTo(view.snp.width).multipliedBy(0.8)
+            make.top.equalTo(assetInfoView.snp.bottom).offset(8)
+        }
+        
+        chartSelectionButton.snp.makeConstraints { make in
+            make.left.equalTo(mainChart.snp.left).offset(8)
+            make.top.equalTo(mainChart.snp.top).offset(8)
+            make.height.width.equalTo(20)
+        }
+        
         chartSegmentedControl.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.9)
             make.height.equalTo(16)
             make.centerX.equalToSuperview()
             make.top.equalTo(mainChart.snp.bottom).offset(8)
         }
+    }
+    
+    private func updateView() {
+        switch chartState {
+        case .line:
+            mainCandleChart.isHidden = true
+            mainChart.isHidden = false
+        case .candle:
+            mainCandleChart.isHidden = false
+            mainChart.isHidden = true
+        }
+    }
+    
+    @objc private func configureChart() {
+        chartState = chartState == .line ? .candle : .line
+        updateView()
     }
     
     private func configureLeftBarButton() {
@@ -158,6 +219,7 @@ class AssetViewController: UIViewController {
                 }
             }
         }
+        
     }
     
     
@@ -175,7 +237,9 @@ class AssetViewController: UIViewController {
                     switch result {
                     case .success(let data):
                         let chartData = data.map { ChartEntryData(data: $0.close, date: $0.date)}
+                        let candleChartData = data.map { CandleChartEntry(date: $0.date, open: $0.open, high: $0.high, low: $0.low, close: $0.close, volume: $0.volume) }
                         self.mainChart.chartData = chartData
+                        self.mainCandleChart.chartData = candleChartData
                     case .failure(let error):
                         self.showAlert(title: error.title, message: error.description)
                     }
@@ -195,9 +259,10 @@ class AssetViewController: UIViewController {
                     
                     switch result {
                     case .success(let data):
-                        // TODO: - Transform dateTime format for the label
                         let chartData = data.map { ChartEntryData(data: $0.close, date: $0.dateTime) }
+                        let candleChartData = data.map { CandleChartEntry(date: $0.dateTime, open: $0.open, high: $0.high, low: $0.low, close: $0.close, volume: $0.volume ?? 0) }
                         self.mainChart.chartData = chartData
+                        self.mainCandleChart.chartData = candleChartData
                     case .failure(let error):
                         self.showAlert(title: error.title, message: error.description)
                     }
@@ -208,15 +273,15 @@ class AssetViewController: UIViewController {
     @objc private func timeIntervalDidChange(_ segmentedControl: CustomSegmentedControl) {
         switch segmentedControl.selectedSegmentIndex {
         case 0:
-            fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getPreviousWeekDate().shortFormatString, to: Date().shortFormatString, period: .day)
+            fetchIntradayHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getPreviousWeekDate().timeIntervalSince1970 , to: Date().timeIntervalSince1970, interval: .hour)
         case 1:
-            fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getPreviousMonthDate().shortFormatString, to: Date().shortFormatString, period: .day)
+            fetchIntradayHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getPreviousMonthDate().timeIntervalSince1970 , to: Date().timeIntervalSince1970, interval: .hour)
         case 2:
-            fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getHalfYearAgoDate().shortFormatString, to: Date().shortFormatString, period: .day)
+            fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getHalfYearAgoDate().shortFormatString, to: Date().shortFormatString, period: .week)
         case 3:
-            fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getYearAgoDate().shortFormatString, to: Date().shortFormatString, period: .day)
+            fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getYearAgoDate().shortFormatString, to: Date().shortFormatString, period: .week)
         default:
-            fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getTwoYearsAgoDate().shortFormatString, to: Date().shortFormatString, period: .day)
+            fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getTwoYearsAgoDate().shortFormatString, to: Date().shortFormatString, period: .month)
         }
         
     }
@@ -226,6 +291,11 @@ extension AssetViewController: ChartViewDelegate {
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
         let marker = CircleMarker(color: .lightGray)
         mainChart.marker = marker
+        let candleMarker = PillMarker(color: .systemRed, font: .systemFont(ofSize: 14), textColor: .brown)
+        candleMarker.chartView = mainCandleChart
+        mainCandleChart.marker = candleMarker
+        //        mainChart.highlightValue(highlight)
+        //        mainChart.highlightValue(x: entry.x, y: entry.y, dataSetIndex: highlight.dataSetIndex)
         
         assetInfoView.state = .tracking(price: entry.y, currency: currency ?? "", descriptionText: entry.data as? String ?? "")
     }
@@ -236,4 +306,9 @@ extension AssetViewController: ChartViewDelegate {
         assetInfoView.state = .staticPrice(price: quote?.currentPrice ?? 0, currency: currency ?? "", priceChange: quote?.priceChange ?? 0, pricePercentChange: quote?.changePercent ?? 0)
     }
     
+}
+
+fileprivate enum chartState {
+    case line
+    case candle
 }

@@ -33,7 +33,7 @@ extension Date {
     }
     
     func getTwoYearsAgoDate() -> Date {
-        Calendar.current.date(byAdding: .year, value: -2, to: self) ?? self
+        Calendar.current.date(byAdding: .year, value: -5, to: self) ?? self
     }
     
 }
