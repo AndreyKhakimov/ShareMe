@@ -1,5 +1,7 @@
-Pods
 ShareMe/Services/Network/API.swift
 ShareMe/Services/Network/APIFinnHub.swift
 *.xcuserstate
 *.xcbkptlist
+*.xcuserdata
+/Pods
+.DS_Store
