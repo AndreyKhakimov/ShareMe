@@ -38,13 +38,12 @@ class PillMarker: MarkerImage {
         let chartHeight = chartView?.bounds.height ?? 0
         // custom padding around text
         let labelWidth = labelText.size(withAttributes: attrs).width + 8
-        // if you modify labelHeigh you will have to tweak baselineOffset in attrs
         let labelHeight = labelText.size(withAttributes: attrs).height + 4
+        
         let maxYPosition = chartHeight - labelHeight
-        let minYPosition:CGFloat = 0
-        // place pill above the marker, centered along x
+        let minYPosition: CGFloat = 0
+        // place pill above the marker along x depends on panning position
         var rectangle = CGRect(x: point.x, y: point.y, width: labelWidth, height: labelHeight)
-        print(UIScreen.main.bounds.size.width)
         if point.x > chartWidth * 0.5 {
             rectangle.origin.x -= rectangle.width + 8
         } else {
@@ -52,8 +51,7 @@ class PillMarker: MarkerImage {
         }
         let spacing: CGFloat = 8
         rectangle.origin.y -= rectangle.height + spacing
-        rectangle.origin.y = min(maxYPosition, rectangle.origin.y)
-        rectangle.origin.y = max(minYPosition, rectangle.origin.y)
+        rectangle.origin.y = rectangle.origin.y.clamped(to: minYPosition...maxYPosition)
         // rounded rect
         let clipPath = UIBezierPath(roundedRect: rectangle, cornerRadius: 6.0).cgPath
         context.addPath(clipPath)
