@@ -8,7 +8,7 @@
 import Foundation
 
 @objc
-public enum AssetType: Int16 {
+public enum AssetType: Int16, CaseIterable {
     case stock
     case crypto
     
@@ -18,6 +18,15 @@ public enum AssetType: Int16 {
             return "stock"
         case .crypto:
             return "crypto"
+        }
+    }
+    
+    var assetName: String {
+        switch self {
+        case .stock:
+            return "Stocks"
+        case .crypto:
+            return "Crypto Currencies"
         }
     }
 }

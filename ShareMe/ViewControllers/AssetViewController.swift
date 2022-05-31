@@ -46,6 +46,7 @@ class AssetViewController: UIViewController {
         let mainChart =  MainChartView()
         mainChart.setScaleEnabled(false)
         mainChart.pinchZoomEnabled = false
+        mainChart.highlightPerTapEnabled = false
         mainChart.xAxis.enabled = false
         mainChart.rightAxis.enabled = false
         mainChart.leftAxis.enabled = false
@@ -76,7 +77,7 @@ class AssetViewController: UIViewController {
     private lazy var chartSelectionButton: UIButton = {
         let chartSelectionButton = UIButton()
         chartSelectionButton.addTarget(self, action: #selector(configureChart), for: .touchUpInside)
-        chartSelectionButton.backgroundColor = .green
+        chartSelectionButton.backgroundColor = .lightGray.withAlphaComponent(0.2)
         chartSelectionButton.layer.cornerRadius = 10
         return chartSelectionButton
     }()
@@ -162,9 +163,11 @@ class AssetViewController: UIViewController {
         case .line:
             mainCandleChart.isHidden = true
             mainChart.isHidden = false
+            chartSelectionButton.setImage(UIImage(systemName: "chart.xyaxis.line"), for: .normal)
         case .candle:
             mainCandleChart.isHidden = false
             mainChart.isHidden = true
+            chartSelectionButton.setImage(UIImage(systemName: "chart.bar.xaxis"), for: .normal)
         }
     }
     
@@ -176,15 +179,23 @@ class AssetViewController: UIViewController {
     private func configureLeftBarButton() {
         let leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"), style: .plain, target: self, action: #selector(popViewController))
         let assetLogoBarButtonItem = UIBarButtonItem(customView: barButtonView)
-        navigationItem.leftBarButtonItems = [leftBarButtonItem, assetLogoBarButtonItem]
+        let isFirst = navigationController?.viewControllers.count == 1
+        navigationItem.leftBarButtonItems = isFirst ? [assetLogoBarButtonItem] : [leftBarButtonItem, assetLogoBarButtonItem]
     }
     
     private func configureRightBarButton() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: isFavourite ? "star.fill" : "star"), style: .plain, target: self, action: #selector(toggleFavourite))
+        let rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(closeViewController))
+        let favoriteBarButtonItem = UIBarButtonItem(image: UIImage(systemName: isFavourite ? "star.fill" : "star"), style: .plain, target: self, action: #selector(toggleFavourite))
+        let isFirst = navigationController?.viewControllers.count == 1
+        navigationItem.rightBarButtonItems = isFirst ? [rightBarButtonItem, favoriteBarButtonItem] : [favoriteBarButtonItem]
     }
     
     @objc private func popViewController() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc private func closeViewController() {
+        navigationController?.dismiss(animated: true, completion: nil)
     }
     
     @objc private func toggleFavourite() {
@@ -294,16 +305,31 @@ extension AssetViewController: ChartViewDelegate {
         let candleMarker = PillMarker(color: .systemRed, font: .systemFont(ofSize: 14), textColor: .brown)
         candleMarker.chartView = mainCandleChart
         mainCandleChart.marker = candleMarker
-        //        mainChart.highlightValue(highlight)
-        //        mainChart.highlightValue(x: entry.x, y: entry.y, dataSetIndex: highlight.dataSetIndex)
         
-        assetInfoView.state = .tracking(price: entry.y, currency: currency ?? "", descriptionText: entry.data as? String ?? "")
+        chartSelectionButton.isHidden = true
+        
+        switch chartState {
+        case .line:
+            assetInfoView.state = .tracking(price: entry.y, currency: currency ?? "", descriptionText: entry.data as? String ?? "")
+        case .candle:
+            assetInfoView.state = .tracking(price: entry.y, currency: currency ?? "", descriptionText: entry.data as? String ?? "")
+        }
+        
+//        assetInfoView.state = .tracking(price: entry.y, currency: currency ?? "", descriptionText: entry.data as? String ?? "")
     }
     
     func chartViewDidEndPanning(_ chartView: ChartViewBase) {
         chartView.highlightValues(nil)
         
-        assetInfoView.state = .staticPrice(price: quote?.currentPrice ?? 0, currency: currency ?? "", priceChange: quote?.priceChange ?? 0, pricePercentChange: quote?.changePercent ?? 0)
+        chartSelectionButton.isHidden = false
+        
+        switch chartState {
+        case .line:
+            assetInfoView.state = .staticPrice(price: quote?.currentPrice ?? 0, currency: currency ?? "", priceChange: quote?.priceChange ?? 0, pricePercentChange: quote?.changePercent ?? 0)
+        case .candle:
+            assetInfoView.state = .staticPrice(price: quote?.currentPrice ?? 0, currency: currency ?? "", priceChange: quote?.priceChange ?? 0, pricePercentChange: quote?.changePercent ?? 0)
+        }
+//        assetInfoView.state = .staticPrice(price: quote?.currentPrice ?? 0, currency: currency ?? "", priceChange: quote?.priceChange ?? 0, pricePercentChange: quote?.changePercent ?? 0)
     }
     
 }

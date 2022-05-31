@@ -24,7 +24,6 @@
 		424AE4A9283930A200AD6002 /* Asset+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424AE4A7283930A200AD6002 /* Asset+CoreDataClass.swift */; };
 		424AE4AA283930A200AD6002 /* Asset+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424AE4A8283930A200AD6002 /* Asset+CoreDataProperties.swift */; };
 		424AE4AE2839342D00AD6002 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424AE4AD2839342D00AD6002 /* StorageManager.swift */; };
-		424AE4B32839449400AD6002 /* PortfolioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424AE4B22839449400AD6002 /* PortfolioViewController.swift */; };
 		424AE4B7283A194100AD6002 /* Portfolio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424AE4B6283A194100AD6002 /* Portfolio.swift */; };
 		424AE4B9283A1A2500AD6002 /* PortfolioNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424AE4B8283A1A2500AD6002 /* PortfolioNetworkManager.swift */; };
 		427A2A43283BB6820043D1C9 /* AssetMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427A2A42283BB6820043D1C9 /* AssetMapping.swift */; };
@@ -54,6 +53,7 @@
 		42E617B0282AAAEC00101CD0 /* BarButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E617AF282AAAEC00101CD0 /* BarButtonView.swift */; };
 		42E617B2282AAE9000101CD0 /* CircleMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E617B1282AAE9000101CD0 /* CircleMarker.swift */; };
 		42E700D928454F6B000EA87C /* Comparable+Clamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E700D828454F6B000EA87C /* Comparable+Clamp.swift */; };
+		42E700DB2845FCCB000EA87C /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E700DA2845FCCB000EA87C /* SectionHeaderView.swift */; };
 		B88076ED76633FE0EF5EC5DB /* Pods_ShareMe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5773896E19DD619742BA63F /* Pods_ShareMe.framework */; };
 /* End PBXBuildFile section */
 
@@ -76,7 +76,6 @@
 		424AE4A7283930A200AD6002 /* Asset+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataClass.swift"; sourceTree = "<group>"; };
 		424AE4A8283930A200AD6002 /* Asset+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		424AE4AD2839342D00AD6002 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
-		424AE4B22839449400AD6002 /* PortfolioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioViewController.swift; sourceTree = "<group>"; };
 		424AE4B6283A194100AD6002 /* Portfolio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Portfolio.swift; sourceTree = "<group>"; };
 		424AE4B8283A1A2500AD6002 /* PortfolioNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioNetworkManager.swift; sourceTree = "<group>"; };
 		427A2A42283BB6820043D1C9 /* AssetMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetMapping.swift; sourceTree = "<group>"; };
@@ -109,6 +108,7 @@
 		42E617AF282AAAEC00101CD0 /* BarButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarButtonView.swift; sourceTree = "<group>"; };
 		42E617B1282AAE9000101CD0 /* CircleMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleMarker.swift; sourceTree = "<group>"; };
 		42E700D828454F6B000EA87C /* Comparable+Clamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Comparable+Clamp.swift"; sourceTree = "<group>"; };
+		42E700DA2845FCCB000EA87C /* SectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
 		9A83B45E94240348F7A0EDE9 /* Pods-ShareMe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareMe.release.xcconfig"; path = "Target Support Files/Pods-ShareMe/Pods-ShareMe.release.xcconfig"; sourceTree = "<group>"; };
 		E5773896E19DD619742BA63F /* Pods_ShareMe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShareMe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -297,6 +297,7 @@
 				42E07044282445E000A000C2 /* SimpleChart */,
 				422B87E22811726F00A082F0 /* ImageViews */,
 				422B87DD2811650900A082F0 /* Cells */,
+				42E700DC28460188000EA87C /* Headers */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -306,7 +307,6 @@
 			children = (
 				422B87DB2811618300A082F0 /* SearchViewController.swift */,
 				42AD704628033CB200817752 /* AssetViewController.swift */,
-				424AE4B22839449400AD6002 /* PortfolioViewController.swift */,
 				427A2A54283DF4950043D1C9 /* PortfolioCollectionViewController.swift */,
 			);
 			path = ViewControllers;
@@ -389,6 +389,14 @@
 				42E617AF282AAAEC00101CD0 /* BarButtonView.swift */,
 			);
 			path = BarButtonView;
+			sourceTree = "<group>";
+		};
+		42E700DC28460188000EA87C /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				42E700DA2845FCCB000EA87C /* SectionHeaderView.swift */,
+			);
+			path = Headers;
 			sourceTree = "<group>";
 		};
 		68F90F90F4EFFC2AB1A1D57B /* Frameworks */ = {
@@ -531,12 +539,12 @@
 				42E700D928454F6B000EA87C /* Comparable+Clamp.swift in Sources */,
 				421D41BD280F0E4C002E291D /* SearchAssetNetworkManager.swift in Sources */,
 				42AD70562807334B00817752 /* NetworkManager.swift in Sources */,
+				42E700DB2845FCCB000EA87C /* SectionHeaderView.swift in Sources */,
 				42AD705A2807335400817752 /* NetworkError.swift in Sources */,
 				420EA72B2818915D00BA9FD1 /* HistoricalDataNetworkManager.swift in Sources */,
 				421D41B9280DFC9A002E291D /* UIViewController+Alert.swift in Sources */,
 				427A2A43283BB6820043D1C9 /* AssetMapping.swift in Sources */,
 				42E0704D2824463D00A000C2 /* Quote.swift in Sources */,
-				424AE4B32839449400AD6002 /* PortfolioViewController.swift in Sources */,
 				42E0704E2824463D00A000C2 /* QuoteNetworkManager.swift in Sources */,
 				424AE4B7283A194100AD6002 /* Portfolio.swift in Sources */,
 				424AE4B9283A1A2500AD6002 /* PortfolioNetworkManager.swift in Sources */,

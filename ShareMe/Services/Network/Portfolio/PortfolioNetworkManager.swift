@@ -22,6 +22,7 @@ class PortfolioNetworkManager {
             portfolioAssets.append(PortfolioAsset())
             portfolioAssets[index].code = assets[index].code
             portfolioAssets[index].exchange = assets[index].exchange
+            portfolioAssets[index].type = assets[index].type
             
             myGroup.enter()
             assetInfoNetworkManager.getAssetInfo(symbol: assets[index].code) { result in
