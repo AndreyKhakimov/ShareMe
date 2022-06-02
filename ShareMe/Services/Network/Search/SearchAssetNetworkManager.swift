@@ -25,8 +25,9 @@ class SearchAssetNetworkManager {
     private let assetInfoNetworkManager = AssetInfoNetworkManager()
     private let historicalDataNetworkManager = HistoricalDataNetworkManager()
     
-    func getAssetsWithName(name: String, type: AssetType, completion: @escaping (Result<[SearchRespond], NetworkError>) -> Void) {
-        networkManager.sendRequest(
+    @discardableResult
+    func getAssetsWithName(name: String, type: AssetType, completion: @escaping (Result<[SearchRespond], NetworkError>) -> Void) -> URLSessionDataTask {
+         networkManager.sendRequest(
             endpoint: Endpoints.searchAssetWithName(name, type),
             completion: { (result: Result<[SearchRespond], NetworkError>) in
                 switch result {

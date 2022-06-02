@@ -15,13 +15,19 @@ class NetworkManager {
     
     private init() {}
     
-    func sendRequest<Response: Decodable>(endpoint: EndpointProtocol, completion: @escaping (Result<Response, NetworkError>) -> Void) {
+    @discardableResult
+    func sendRequest<Response: Decodable>(endpoint: EndpointProtocol, completion: @escaping (Result<Response, NetworkError>) -> Void) -> URLSessionDataTask {
         var request = URLRequest(url: endpoint.url)
         print(request.url)
         request.httpMethod = endpoint.httpMethod
-        URLSession.shared.dataTask(with: request) { data, _, error in
+        let task = URLSession.shared.dataTask(with: request) { data, _, error in
             if let error = error {
-                completion(.failure(.other(error)))
+                if let rawURLError = error as? URLError,
+                    rawURLError.code == URLError.Code.cancelled {
+                    completion(.failure(.cancelled))
+                } else {
+                    completion(.failure(.other(error)))
+                }
                 return
             }
             
@@ -40,7 +46,9 @@ class NetworkManager {
             } catch {
                 completion(.failure(.decodingError))
             }
-        }.resume()
+        }
+        task.resume()
+        return task
     }
     
 }

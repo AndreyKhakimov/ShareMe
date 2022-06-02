@@ -10,6 +10,7 @@ import Foundation
 enum NetworkError: Error {
     case noData
     case decodingError
+    case cancelled
     case other(Error)
     
     var title: String {
@@ -23,6 +24,9 @@ enum NetworkError: Error {
             
         case .decodingError:
             return "The data can not be decoded"
+            
+        case .cancelled:
+            return "Request has been cancelled"
             
         case .other(let error):
             return error.localizedDescription

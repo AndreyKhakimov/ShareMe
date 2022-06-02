@@ -35,6 +35,7 @@ class SearchViewController: UIViewController {
     private let networkManager = SearchAssetNetworkManager()
     private var assets = [SearchRespond]()
     private var cellHeights = [IndexPath: CGFloat]()
+    private var searchAssetsDataTask: URLSessionDataTask?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,7 +45,8 @@ class SearchViewController: UIViewController {
     }
     
     private func fetchAssets(with name: String, and type: AssetType = .stock) {
-        networkManager.getAssetsWithName(name: name, type: type) { [weak self] result in
+        searchAssetsDataTask?.cancel()
+        searchAssetsDataTask = networkManager.getAssetsWithName(name: name, type: type) { [weak self] result in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 
@@ -54,6 +56,7 @@ class SearchViewController: UIViewController {
                     self.cellHeights.removeAll()
                     self.tableView.reloadData()
                 case .failure(let error):
+                    if case .cancelled = error { break }
                     self.showAlert(title: error.title, message: error.description)
                 }
             }
@@ -123,9 +126,9 @@ extension SearchViewController {
 
 // MARK: - Search Bar Delegate
 extension SearchViewController: UISearchBarDelegate {
-        func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-            searchBar.text = ""
-        }
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        searchBar.text = ""
+    }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let text = searchController.searchBar.text else { return }
@@ -133,6 +136,9 @@ extension SearchViewController: UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if let searchAssetsDataTask = searchAssetsDataTask {
+            searchAssetsDataTask.cancel()
+        }
         guard let assetName = searchController.searchBar.text else { return }
         guard !isSearchBarEmpty() else { return }
         switch searchController.searchBar.selectedScopeButtonIndex {
