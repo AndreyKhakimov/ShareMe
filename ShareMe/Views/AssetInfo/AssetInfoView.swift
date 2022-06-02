@@ -11,6 +11,7 @@ import SnapKit
 enum AssetInfoViewState {
     case staticPrice(price: Double, currency: String, priceChange: Double , pricePercentChange: Double)
     case tracking(price: Double, currency: String, descriptionText: String)
+    case candleTracking(currency: String, priceChange: Double , pricePercentChange: Double, descriptionText: String)
 }
 
 class AssetInfoView: UIView {
@@ -35,9 +36,6 @@ class AssetInfoView: UIView {
         return descriptionLabel
     }()
     
-    //    var staticConstraints = [NSLayoutConstraint]()
-    //    var trackingConstraints = [NSLayoutConstraint]()
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -48,13 +46,14 @@ class AssetInfoView: UIView {
         setupView()
     }
     
-    func configure() {
+    private func configure() {
         switch state {
         case .staticPrice(let price, let currency, let priceChange, let pricePercentChange):
             let formattedPrice = String(format: "%.2f", price)
             let formattedPriceChange = String(format: "%.2f", priceChange)
             let formattedPricePercentChange = String(format: "%.2f", pricePercentChange)
             
+            priceLabel.textColor = .black
             priceLabel.text = "\(formattedPrice) \(currency)"
             
             if priceChange >= 0 {
@@ -70,6 +69,20 @@ class AssetInfoView: UIView {
             priceLabel.text = "\(formattedPrice) \(currency)"
             descriptionLabel.textColor = .lightGray
             descriptionLabel.text = descriptionText
+        case .candleTracking(let currency, let priceChange, let pricePercentChange, let descriptionText):
+            let formattedPriceChange = String(format: "%.2f", priceChange)
+            let formattedPricePercentChange = String(format: "%.2f", pricePercentChange)
+            
+            descriptionLabel.textColor = .lightGray
+            descriptionLabel.text = "\(descriptionText)"
+            
+            if priceChange >= 0 {
+                priceLabel.textColor = .systemGreen
+                priceLabel.text = "+ \(formattedPriceChange) \(currency), (\(formattedPricePercentChange)%)"
+            } else {
+                priceLabel.textColor = .red
+                priceLabel.text = "\(formattedPriceChange) \(currency), (\(formattedPricePercentChange)%)"
+            }
         }
     }
     
@@ -111,7 +124,7 @@ class AssetInfoView: UIView {
             
             descriptionLabel.textAlignment = .left
             priceLabel.textAlignment = .left
-        case .tracking:
+        case .tracking, .candleTracking:
             descriptionLabel.snp.remakeConstraints { make in
                 make.width.equalToSuperview()
                 make.height.equalTo(25)

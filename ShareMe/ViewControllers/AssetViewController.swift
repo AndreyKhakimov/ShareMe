@@ -10,8 +10,13 @@ import SnapKit
 import Charts
 import Kingfisher
 
+protocol AssetViewControllerDelegate: AnyObject {
+    func didToggleFavorite()
+}
+
 class AssetViewController: UIViewController {
     
+    weak var delegate: AssetViewControllerDelegate?
     var code: String?
     var assetName: String?
     lazy var isFavourite: Bool = StorageManager.shared.checkAssetIsFavourite(code: code ?? "", exchange: exchange ?? "") {
@@ -21,7 +26,7 @@ class AssetViewController: UIViewController {
         }
     }
     
-    fileprivate var chartState: chartState = .line {
+    private var chartState: ChartState = .line {
             didSet {
                 updateView()
             }
@@ -206,14 +211,18 @@ class AssetViewController: UIViewController {
         guard let code = code else { return }
         guard let exchange = exchange else { return }
         guard let type = type else { return }
+        
         storageManager.saveAsset(code: code, exchange: exchange, type: type)
+        delegate?.didToggleFavorite()
     }
     
     @objc private func deleteFavourite() {
         guard let code = code else { return }
         guard let exchange = exchange else { return }
         guard let asset = storageManager.getAsset(code: code, exchange: exchange) else { return }
+        
         storageManager.deleteAsset(asset: asset)
+        delegate?.didToggleFavorite()
     }
     
     private func fetchPrice(for code: String, and exchange: String) {
@@ -280,21 +289,28 @@ class AssetViewController: UIViewController {
                 }
             }
     }
-    
+    // TODO: - create array of structs
     @objc private func timeIntervalDidChange(_ segmentedControl: CustomSegmentedControl) {
-        switch segmentedControl.selectedSegmentIndex {
-        case 0:
+        switch (segmentedControl.selectedSegmentIndex, chartState) {
+        case (0, .line):
             fetchIntradayHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getPreviousWeekDate().timeIntervalSince1970 , to: Date().timeIntervalSince1970, interval: .hour)
-        case 1:
+        case (0, .candle):
+            fetchIntradayHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getPreviousWeekDate().timeIntervalSince1970 , to: Date().timeIntervalSince1970, interval: .hour)
+        case (1, .line):
             fetchIntradayHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getPreviousMonthDate().timeIntervalSince1970 , to: Date().timeIntervalSince1970, interval: .hour)
-        case 2:
+        case (1, .candle):
+            fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getHalfYearAgoDate().shortFormatString, to: Date().shortFormatString, period: .day)
+        case (2, .line):
+            fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getHalfYearAgoDate().shortFormatString, to: Date().shortFormatString, period: .day)
+        case (2, .candle):
             fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getHalfYearAgoDate().shortFormatString, to: Date().shortFormatString, period: .week)
-        case 3:
+        case (3, .line):
+            fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getYearAgoDate().shortFormatString, to: Date().shortFormatString, period: .day)
+        case (3, .candle):
             fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getYearAgoDate().shortFormatString, to: Date().shortFormatString, period: .week)
         default:
             fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getTwoYearsAgoDate().shortFormatString, to: Date().shortFormatString, period: .month)
         }
-        
     }
 }
 
@@ -305,17 +321,22 @@ extension AssetViewController: ChartViewDelegate {
         let candleMarker = PillMarker(color: .systemRed, font: .systemFont(ofSize: 14), textColor: .brown)
         candleMarker.chartView = mainCandleChart
         mainCandleChart.marker = candleMarker
-        
+        let CandleChartDataEntry = (entry as? CandleChartDataEntry)?.data as? CandleChartEntry
         chartSelectionButton.isHidden = true
         
         switch chartState {
         case .line:
-            assetInfoView.state = .tracking(price: entry.y, currency: currency ?? "", descriptionText: entry.data as? String ?? "")
+            assetInfoView.state = .tracking(
+                price: entry.y, currency: currency ?? "",
+                descriptionText: entry.data as? String ?? ""
+            )
         case .candle:
-            assetInfoView.state = .tracking(price: entry.y, currency: currency ?? "", descriptionText: entry.data as? String ?? "")
+            assetInfoView.state = .candleTracking(
+                currency: currency ?? "",
+                priceChange: CandleChartDataEntry?.priceChange ?? 0 ,
+                pricePercentChange: CandleChartDataEntry?.pricePercentChange ?? 0,
+                descriptionText: CandleChartDataEntry?.timeIntervalDescription ?? "")
         }
-        
-//        assetInfoView.state = .tracking(price: entry.y, currency: currency ?? "", descriptionText: entry.data as? String ?? "")
     }
     
     func chartViewDidEndPanning(_ chartView: ChartViewBase) {
@@ -329,12 +350,11 @@ extension AssetViewController: ChartViewDelegate {
         case .candle:
             assetInfoView.state = .staticPrice(price: quote?.currentPrice ?? 0, currency: currency ?? "", priceChange: quote?.priceChange ?? 0, pricePercentChange: quote?.changePercent ?? 0)
         }
-//        assetInfoView.state = .staticPrice(price: quote?.currentPrice ?? 0, currency: currency ?? "", priceChange: quote?.priceChange ?? 0, pricePercentChange: quote?.changePercent ?? 0)
     }
     
 }
 
-fileprivate enum chartState {
+fileprivate enum ChartState {
     case line
     case candle
 }

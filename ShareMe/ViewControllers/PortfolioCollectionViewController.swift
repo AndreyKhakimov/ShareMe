@@ -123,6 +123,10 @@ extension PortfolioCollectionViewController: UICollectionViewDataSource, UIColle
         CGSize(width: collectionView.frame.size.width, height: 40)
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
+    }
+    
     // MARK: - CollectionView Delegate Methods
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let asset = sections[indexPath.section].items[indexPath.row]
@@ -133,8 +137,16 @@ extension PortfolioCollectionViewController: UICollectionViewDataSource, UIColle
         assetVC.currency = asset.currency
         assetVC.type = assets?[indexPath.row].type ?? .stock
         assetVC.logoURL = asset.logo
+        assetVC.delegate = self
         let navigationVC = UINavigationController(rootViewController: assetVC)
         present(navigationVC, animated: true, completion: nil)
         collectionView.deselectItem(at: indexPath, animated: true)
+    }
+}
+
+extension PortfolioCollectionViewController: AssetViewControllerDelegate {
+    func didToggleFavorite() {
+            assets = storageManager.getAllAssets()
+            fetchAssets(assets ?? [Asset]())
     }
 }
