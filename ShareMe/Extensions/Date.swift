@@ -16,24 +16,7 @@ extension Date {
         return dateString
     }
     
-    func getPreviousWeekDate() -> Date {
-        Calendar.current.date(byAdding: .weekOfMonth, value: -1, to: self) ?? self
+    func getDateForDaysAgo(_ days: Int) -> Date {
+        Calendar.current.date(byAdding: .day, value: -days, to: self) ?? self
     }
-    
-    func getPreviousMonthDate() -> Date {
-        Calendar.current.date(byAdding: .month, value: -1, to: self) ?? self
-    }
-    
-    func getHalfYearAgoDate() -> Date {
-        Calendar.current.date(byAdding: .month, value: -6, to: self) ?? self
-    }
-    
-    func getYearAgoDate() -> Date {
-        Calendar.current.date(byAdding: .year, value: -1, to: self) ?? self
-    }
-    
-    func getTwoYearsAgoDate() -> Date {
-        Calendar.current.date(byAdding: .year, value: -5, to: self) ?? self
-    }
-    
 }

@@ -16,6 +16,30 @@ class StorageManager {
     
     private init() {}
     
+    var fetchedResultsController: NSFetchedResultsController<Asset> {
+        let fetchRequest: NSFetchRequest<Asset> = Asset.fetchRequest()
+        let sort = NSSortDescriptor(key: #keyPath(Asset.code),
+                                    ascending: true)
+        fetchRequest.sortDescriptors = [sort]
+        
+        let fetchedResultsController = NSFetchedResultsController(
+            fetchRequest: fetchRequest,
+            managedObjectContext: context,
+            sectionNameKeyPath: nil,
+            cacheName: nil)
+        return fetchedResultsController
+    }
+    
+    func performFetch() -> [Asset] {
+        do {
+            try fetchedResultsController.performFetch()
+        } catch let error as NSError {
+            print("Fetching error: \(error), \(error.userInfo)")
+        }
+        return fetchedResultsController.fetchedObjects ?? [Asset]()
+
+    }
+    
     func getAllAssets() -> [Asset] {
         do {
             let assets = try context.fetch(Asset.fetchRequest())

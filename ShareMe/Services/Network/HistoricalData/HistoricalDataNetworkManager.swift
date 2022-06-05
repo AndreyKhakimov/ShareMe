@@ -28,9 +28,9 @@ class HistoricalDataNetworkManager {
     
     private let networkManager = NetworkManager.shared
     
-    func getHistoricalData(assetName: String, exchange: String, from: String, to: String, period: Period, completion: @escaping (Result<[HistoricalDataRespond], NetworkError>) -> Void) {
+    func getHistoricalData(assetName: String, exchange: String, from: String, to: String, period: String, completion: @escaping (Result<[HistoricalDataRespond], NetworkError>) -> Void) {
         networkManager.sendRequest(
-            endpoint: Endpoints.getHistoricalData(assetName, exchange, from, to, period.rawValue),
+            endpoint: Endpoints.getHistoricalData(assetName, exchange, from, to, period),
             completion: { (result: Result<[HistoricalDataRespond], NetworkError>) in
                 switch result {
                 case .success(let historicalData):
@@ -43,9 +43,9 @@ class HistoricalDataNetworkManager {
         )
     }
     
-    func getIntradayHistoricalData(assetName: String, exchange: String, from: Double, to: Double, interval: IntraDayPeriod, completion: @escaping (Result<[HistoricalIntradayDataResponse], NetworkError>) -> Void) {
+    func getIntradayHistoricalData(assetName: String, exchange: String, from: Double, to: Double, interval: String, completion: @escaping (Result<[HistoricalIntradayDataResponse], NetworkError>) -> Void) {
         networkManager.sendRequest(
-            endpoint: Endpoints.getIntradayHistoricalData(assetName, exchange, String(from), String(to), interval.rawValue),
+            endpoint: Endpoints.getIntradayHistoricalData(assetName, exchange, String(from), String(to), interval),
             completion: { (result: Result<[HistoricalIntradayDataResponse], NetworkError>) in
                 switch result {
                 case .success(let historicalData):

@@ -7,14 +7,18 @@
 
 import UIKit
 import SnapKit
+import CoreData
 
 class PortfolioCollectionViewController: UIViewController {
+    
+    var assets: [Asset]?
     
     private struct Section {
         var type: AssetType
         var items: [PortfolioAsset]
     }
     
+    private var fetchedResultsController: NSFetchedResultsController<Asset>?
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -27,7 +31,6 @@ class PortfolioCollectionViewController: UIViewController {
     
     private let networkManager = PortfolioNetworkManager()
     private let storageManager = StorageManager.shared
-    var assets: [Asset]?
     private var portfolioAssets = [PortfolioAsset]() {
         didSet {
             sections = AssetType.allCases.map({ assetType in
@@ -42,7 +45,9 @@ class PortfolioCollectionViewController: UIViewController {
         setupViews()
         collectionView.dataSource = self
         collectionView.delegate = self
-        assets = storageManager.getAllAssets()
+        fetchedResultsController = storageManager.fetchedResultsController
+        fetchedResultsController?.delegate = self
+        assets = storageManager.performFetch()
         fetchAssets(assets ?? [Asset]())
     }
     
@@ -135,18 +140,18 @@ extension PortfolioCollectionViewController: UICollectionViewDataSource, UIColle
         assetVC.assetName = asset.name
         assetVC.exchange = asset.exchange
         assetVC.currency = asset.currency
-        assetVC.type = assets?[indexPath.row].type ?? .stock
+        assetVC.type = asset.type
         assetVC.logoURL = asset.logo
-        assetVC.delegate = self
         let navigationVC = UINavigationController(rootViewController: assetVC)
         present(navigationVC, animated: true, completion: nil)
         collectionView.deselectItem(at: indexPath, animated: true)
     }
 }
 
-extension PortfolioCollectionViewController: AssetViewControllerDelegate {
-    func didToggleFavorite() {
+extension PortfolioCollectionViewController: NSFetchedResultsControllerDelegate {
+        func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+            print("something changes")
             assets = storageManager.getAllAssets()
             fetchAssets(assets ?? [Asset]())
-    }
+        }
 }

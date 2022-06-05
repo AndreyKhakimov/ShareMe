@@ -136,9 +136,7 @@ extension SearchViewController: UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if let searchAssetsDataTask = searchAssetsDataTask {
-            searchAssetsDataTask.cancel()
-        }
+        searchAssetsDataTask?.cancel()
         guard let assetName = searchController.searchBar.text else { return }
         guard !isSearchBarEmpty() else { return }
         switch searchController.searchBar.selectedScopeButtonIndex {

@@ -16,9 +16,20 @@ protocol AssetViewControllerDelegate: AnyObject {
 
 class AssetViewController: UIViewController {
     
-    weak var delegate: AssetViewControllerDelegate?
+    //TODO: - Create activity indicator
+//    enum ChartState {
+//        case loading
+//        case data([Double])
+//    }
+    //TODO: - Create init
     var code: String?
     var assetName: String?
+    var exchange: String?
+    var currency: String?
+    var type: AssetType?
+    var logoURL: URL?
+    var quote: Quote?
+    
     lazy var isFavourite: Bool = StorageManager.shared.checkAssetIsFavourite(code: code ?? "", exchange: exchange ?? "") {
         didSet {
             isFavourite ? setFavourite() : deleteFavourite()
@@ -27,16 +38,26 @@ class AssetViewController: UIViewController {
     }
     
     private var chartState: ChartState = .line {
-            didSet {
-                updateView()
-            }
+        didSet {
+            updateView()
         }
+    }
     
-    var exchange: String?
-    var currency: String?
-    var type: AssetType?
-    var logoURL: URL?
-    var quote: Quote?
+    private var lineChartAssetRequestInfo: [AssetRequestInfo] = [
+        AssetRequestInfo(period: IntraDayPeriod.hour.rawValue, daysAgo: 7),
+        AssetRequestInfo(period: IntraDayPeriod.hour.rawValue, daysAgo: 30),
+        AssetRequestInfo(period: Period.day.rawValue, daysAgo: 180),
+        AssetRequestInfo(period: Period.day.rawValue, daysAgo: 365),
+        AssetRequestInfo(period: Period.month.rawValue, daysAgo: 1095),
+    ]
+    
+    private var candleChartAssetRequestInfo: [AssetRequestInfo] = [
+        AssetRequestInfo(period: IntraDayPeriod.hour.rawValue, daysAgo: 7),
+        AssetRequestInfo(period: Period.day.rawValue, daysAgo: 30),
+        AssetRequestInfo(period: Period.week.rawValue, daysAgo: 180),
+        AssetRequestInfo(period: Period.week.rawValue, daysAgo: 365),
+        AssetRequestInfo(period: Period.month.rawValue, daysAgo: 1095),
+    ]
     
     private let networkManager = QuoteNetworkManager()
     private let historicalDataNetworkManager = HistoricalDataNetworkManager()
@@ -178,6 +199,7 @@ class AssetViewController: UIViewController {
     
     @objc private func configureChart() {
         chartState = chartState == .line ? .candle : .line
+        timeIntervalDidChange(chartSegmentedControl)
         updateView()
     }
     
@@ -211,9 +233,7 @@ class AssetViewController: UIViewController {
         guard let code = code else { return }
         guard let exchange = exchange else { return }
         guard let type = type else { return }
-        
         storageManager.saveAsset(code: code, exchange: exchange, type: type)
-        delegate?.didToggleFavorite()
     }
     
     @objc private func deleteFavourite() {
@@ -222,7 +242,6 @@ class AssetViewController: UIViewController {
         guard let asset = storageManager.getAsset(code: code, exchange: exchange) else { return }
         
         storageManager.deleteAsset(asset: asset)
-        delegate?.didToggleFavorite()
     }
     
     private func fetchPrice(for code: String, and exchange: String) {
@@ -244,7 +263,7 @@ class AssetViewController: UIViewController {
     
     
     
-    private func fetchHistoricalData(assetName: String, exchange: String, from: String = Date().getHalfYearAgoDate().shortFormatString, to: String = Date().shortFormatString, period: Period = .day) {
+    private func fetchHistoricalData(assetName: String, exchange: String, from: String = Date().getDateForDaysAgo(180).shortFormatString, to: String = Date().shortFormatString, period: String = Period.day.rawValue) {
         historicalDataNetworkManager.getHistoricalData(
             assetName: assetName,
             exchange: exchange,
@@ -267,7 +286,7 @@ class AssetViewController: UIViewController {
             }
     }
     
-    private func fetchIntradayHistoricalData(assetName: String, exchange: String, from: Double, to: Double, interval: IntraDayPeriod) {
+    private func fetchIntradayHistoricalData(assetName: String, exchange: String, from: Double, to: Double, interval: String) {
         historicalDataNetworkManager.getIntradayHistoricalData(
             assetName: assetName,
             exchange: exchange,
@@ -289,27 +308,24 @@ class AssetViewController: UIViewController {
                 }
             }
     }
+    // TODO: - Add activity ind, add state property of Enum type(case loading,...)
+    private func fetchData(period: String, daysAgo: Int) {
+        if let _ = IntraDayPeriod(rawValue: period) {
+            fetchIntradayHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getDateForDaysAgo(daysAgo).timeIntervalSince1970, to: Date().timeIntervalSince1970, interval: period)
+        } else {
+            fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getDateForDaysAgo(daysAgo).shortFormatString, to: Date().shortFormatString, period: period)
+        }
+    }
+    
     // TODO: - create array of structs
     @objc private func timeIntervalDidChange(_ segmentedControl: CustomSegmentedControl) {
-        switch (segmentedControl.selectedSegmentIndex, chartState) {
-        case (0, .line):
-            fetchIntradayHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getPreviousWeekDate().timeIntervalSince1970 , to: Date().timeIntervalSince1970, interval: .hour)
-        case (0, .candle):
-            fetchIntradayHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getPreviousWeekDate().timeIntervalSince1970 , to: Date().timeIntervalSince1970, interval: .hour)
-        case (1, .line):
-            fetchIntradayHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getPreviousMonthDate().timeIntervalSince1970 , to: Date().timeIntervalSince1970, interval: .hour)
-        case (1, .candle):
-            fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getHalfYearAgoDate().shortFormatString, to: Date().shortFormatString, period: .day)
-        case (2, .line):
-            fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getHalfYearAgoDate().shortFormatString, to: Date().shortFormatString, period: .day)
-        case (2, .candle):
-            fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getHalfYearAgoDate().shortFormatString, to: Date().shortFormatString, period: .week)
-        case (3, .line):
-            fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getYearAgoDate().shortFormatString, to: Date().shortFormatString, period: .day)
-        case (3, .candle):
-            fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getYearAgoDate().shortFormatString, to: Date().shortFormatString, period: .week)
-        default:
-            fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getTwoYearsAgoDate().shortFormatString, to: Date().shortFormatString, period: .month)
+        switch chartState {
+        case .line:
+            let lineChartRequestInfo = lineChartAssetRequestInfo[segmentedControl.selectedSegmentIndex]
+            fetchData(period: lineChartRequestInfo.period, daysAgo: lineChartRequestInfo.daysAgo)
+        case .candle:
+            let candleChartRequestInfo = candleChartAssetRequestInfo[segmentedControl.selectedSegmentIndex]
+            fetchData(period: candleChartRequestInfo.period, daysAgo: candleChartRequestInfo.daysAgo)
         }
     }
 }
@@ -357,4 +373,9 @@ extension AssetViewController: ChartViewDelegate {
 fileprivate enum ChartState {
     case line
     case candle
+}
+
+fileprivate struct AssetRequestInfo {
+    let period: String
+    let daysAgo: Int
 }

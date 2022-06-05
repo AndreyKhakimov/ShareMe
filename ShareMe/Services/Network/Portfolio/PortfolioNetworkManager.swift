@@ -42,7 +42,7 @@ class PortfolioNetworkManager {
             }
             
             myGroup.enter()
-            historicalDataNetworkManager.getHistoricalData(assetName: assets[index].code, exchange: assets[index].exchange, from: Date().getPreviousMonthDate().shortFormatString, to: Date().shortFormatString, period: .day) { result  in
+            historicalDataNetworkManager.getHistoricalData(assetName: assets[index].code, exchange: assets[index].exchange, from: Date().getDateForDaysAgo(30).shortFormatString, to: Date().shortFormatString, period: Period.day.rawValue) { result  in
                 switch result {
                 case .success(let data):
                     let closePrices = data.map { $0.close }
