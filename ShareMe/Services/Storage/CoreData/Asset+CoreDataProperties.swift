@@ -15,7 +15,7 @@ extension Asset {
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Asset> {
         return NSFetchRequest<Asset>(entityName: "Asset")
     }
-// TODO: - Add hash value
+
     @NSManaged public var uid: String
     @NSManaged public var code: String
     @NSManaged public var exchange: String

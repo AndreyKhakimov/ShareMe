@@ -30,14 +30,13 @@ class StorageManager {
         return fetchedResultsController
     }
     
-    func performFetch() -> [Asset] {
+    func performFetch(fetchedResultsController: NSFetchedResultsController<Asset>) -> [Asset] {
         do {
             try fetchedResultsController.performFetch()
         } catch let error as NSError {
             print("Fetching error: \(error), \(error.userInfo)")
         }
         return fetchedResultsController.fetchedObjects ?? [Asset]()
-
     }
     
     func getAllAssets() -> [Asset] {

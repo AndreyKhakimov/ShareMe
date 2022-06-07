@@ -115,18 +115,16 @@ class AssetViewController: UIViewController {
         return barButtonView
     }()
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    init(code: String, assetName: String, exchange: String, currency: String, type: AssetType, logoURL: URL) {
+        self.code = code
+        self.assetName = assetName
+        self.exchange = exchange
+        self.currency = currency
+        self.type = type
+        self.logoURL = logoURL
+
+        super.init(nibName: nil, bundle: nil)
         commonInit()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        commonInit()
-    }
-    
-    private func commonInit() {
-        hidesBottomBarWhenPushed = true
     }
     
     override func viewDidLoad() {
@@ -140,6 +138,16 @@ class AssetViewController: UIViewController {
         configureLeftBarButton()
         configureRightBarButton()
     }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        commonInit()
+    }
+    
+    private func commonInit() {
+        hidesBottomBarWhenPushed = true
+    }
+    
     
     private func setupViews() {
         view.backgroundColor = .white
@@ -317,7 +325,6 @@ class AssetViewController: UIViewController {
         }
     }
     
-    // TODO: - create array of structs
     @objc private func timeIntervalDidChange(_ segmentedControl: CustomSegmentedControl) {
         switch chartState {
         case .line:
@@ -340,7 +347,7 @@ extension AssetViewController: ChartViewDelegate {
         let CandleChartDataEntry = (entry as? CandleChartDataEntry)?.data as? CandleChartEntry
         chartSelectionButton.isHidden = true
         
-        switch chartState {
+        switch chartType {
         case .line:
             assetInfoView.state = .tracking(
                 price: entry.y, currency: currency ?? "",

@@ -88,13 +88,15 @@ extension SearchViewController: UITableViewDataSource {
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let asset = assets[indexPath.row]
-        let assetVC = AssetViewController()
-        assetVC.code = asset.code
-        assetVC.assetName = asset.name
-        assetVC.exchange = asset.exchange
-        assetVC.currency = asset.currency
-        assetVC.type = type
-        assetVC.logoURL = asset.logo
+        let assetVC = AssetViewController(
+            code: asset.code,
+            assetName: asset.name,
+            exchange: asset.exchange,
+            currency: asset.currency,
+            type: type,
+            logoURL: asset.logo ?? URL(string: "")!
+        )
+       
         navigationController?.pushViewController(assetVC, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
     }

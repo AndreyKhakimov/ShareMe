@@ -101,7 +101,7 @@ class SimpleChartView: UIView {
         let chartLastIndex = chartData.count - 1
         let chartPositions = chartPositions()
         path.move(to: chartPositions.first ?? .zero)
-        // TODO: - Fix Fatal error: Range requires lowerBound <= upperBound when chartLastIndex = 0
+       
         for chartPosition in chartPositions[1...chartLastIndex] {
             path.addLine(to: chartPosition)
         }

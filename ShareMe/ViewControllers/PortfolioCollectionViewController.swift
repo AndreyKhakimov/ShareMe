@@ -47,7 +47,7 @@ class PortfolioCollectionViewController: UIViewController {
         collectionView.delegate = self
         fetchedResultsController = storageManager.fetchedResultsController
         fetchedResultsController?.delegate = self
-        assets = storageManager.performFetch()
+        assets = storageManager.performFetch(fetchedResultsController: fetchedResultsController!)
         fetchAssets(assets ?? [Asset]())
     }
     
@@ -135,13 +135,15 @@ extension PortfolioCollectionViewController: UICollectionViewDataSource, UIColle
     // MARK: - CollectionView Delegate Methods
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let asset = sections[indexPath.section].items[indexPath.row]
-        let assetVC = AssetViewController()
-        assetVC.code = asset.code
-        assetVC.assetName = asset.name
-        assetVC.exchange = asset.exchange
-        assetVC.currency = asset.currency
-        assetVC.type = asset.type
-        assetVC.logoURL = asset.logo
+        let assetVC = AssetViewController(
+            code: asset.code,
+            assetName: asset.name,
+            exchange: asset.exchange,
+            currency: asset.currency,
+            type: asset.type,
+            logoURL: asset.logo ?? URL(string: "")!
+        )
+
         let navigationVC = UINavigationController(rootViewController: assetVC)
         present(navigationVC, animated: true, completion: nil)
         collectionView.deselectItem(at: indexPath, animated: true)

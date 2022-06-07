@@ -48,7 +48,6 @@ class SearchResultCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // TODO: - Change offsets to 8
     private func setupViews() {
         contentView.addSubview(logoImageView)
         contentView.addSubview(searchResultLabel)
