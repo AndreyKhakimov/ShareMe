@@ -16,12 +16,21 @@ protocol AssetViewControllerDelegate: AnyObject {
 
 class AssetViewController: UIViewController {
     
-    //TODO: - Create activity indicator
-//    enum ChartState {
-//        case loading
-//        case data([Double])
-//    }
-    //TODO: - Create init
+    private enum ChartType {
+        case line
+        case candle
+    }
+
+    private struct AssetRequestInfo {
+        let period: String
+        let daysAgo: Int
+    }
+    
+    private enum ChartState {
+        case loading
+        case data
+    }
+
     var code: String?
     var assetName: String?
     var exchange: String?
@@ -37,9 +46,15 @@ class AssetViewController: UIViewController {
         }
     }
     
-    private var chartState: ChartState = .line {
+    private var chartType: ChartType = .line {
         didSet {
             updateView()
+        }
+    }
+    
+    private var chartState: ChartState = .loading {
+        didSet {
+            updateIndicatorView()
         }
     }
     
@@ -66,6 +81,14 @@ class AssetViewController: UIViewController {
     private lazy var assetInfoView: AssetInfoView = {
         let assetInfoView = AssetInfoView()
         return assetInfoView
+    }()
+    
+    private lazy var indicatorView: UIActivityIndicatorView = {
+        let indicatorView = UIActivityIndicatorView(style: .large)
+        indicatorView.color = .systemGray
+        // same result without hidesWhenStopped = true
+        indicatorView.hidesWhenStopped = true
+        return indicatorView
     }()
     
     private lazy var mainChart: MainChartView = {
@@ -144,6 +167,15 @@ class AssetViewController: UIViewController {
         commonInit()
     }
     
+    private func updateIndicatorView() {
+        switch chartState {
+        case .loading:
+            indicatorView.startAnimating()
+        case .data:
+            indicatorView.stopAnimating()
+        }
+    }
+    
     private func commonInit() {
         hidesBottomBarWhenPushed = true
     }
@@ -156,6 +188,7 @@ class AssetViewController: UIViewController {
         view.addSubview(mainCandleChart)
         view.addSubview(chartSegmentedControl)
         view.addSubview(chartSelectionButton)
+        view.addSubview(indicatorView)
         
         assetInfoView.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(16)
@@ -178,6 +211,10 @@ class AssetViewController: UIViewController {
             make.top.equalTo(assetInfoView.snp.bottom).offset(8)
         }
         
+        indicatorView.snp.makeConstraints { make in
+            make.center.equalTo(mainChart)
+        }
+        
         chartSelectionButton.snp.makeConstraints { make in
             make.left.equalTo(mainChart.snp.left).offset(8)
             make.top.equalTo(mainChart.snp.top).offset(8)
@@ -193,7 +230,7 @@ class AssetViewController: UIViewController {
     }
     
     private func updateView() {
-        switch chartState {
+        switch chartType {
         case .line:
             mainCandleChart.isHidden = true
             mainChart.isHidden = false
@@ -206,7 +243,7 @@ class AssetViewController: UIViewController {
     }
     
     @objc private func configureChart() {
-        chartState = chartState == .line ? .candle : .line
+        chartType = chartType == .line ? .candle : .line
         timeIntervalDidChange(chartSegmentedControl)
         updateView()
     }
@@ -272,6 +309,7 @@ class AssetViewController: UIViewController {
     
     
     private func fetchHistoricalData(assetName: String, exchange: String, from: String = Date().getDateForDaysAgo(180).shortFormatString, to: String = Date().shortFormatString, period: String = Period.day.rawValue) {
+        chartState = .loading
         historicalDataNetworkManager.getHistoricalData(
             assetName: assetName,
             exchange: exchange,
@@ -287,6 +325,7 @@ class AssetViewController: UIViewController {
                         let candleChartData = data.map { CandleChartEntry(date: $0.date, open: $0.open, high: $0.high, low: $0.low, close: $0.close, volume: $0.volume) }
                         self.mainChart.chartData = chartData
                         self.mainCandleChart.chartData = candleChartData
+                        self.chartState = .data
                     case .failure(let error):
                         self.showAlert(title: error.title, message: error.description)
                     }
@@ -295,6 +334,7 @@ class AssetViewController: UIViewController {
     }
     
     private func fetchIntradayHistoricalData(assetName: String, exchange: String, from: Double, to: Double, interval: String) {
+        chartState = .loading
         historicalDataNetworkManager.getIntradayHistoricalData(
             assetName: assetName,
             exchange: exchange,
@@ -310,6 +350,7 @@ class AssetViewController: UIViewController {
                         let candleChartData = data.map { CandleChartEntry(date: $0.dateTime, open: $0.open, high: $0.high, low: $0.low, close: $0.close, volume: $0.volume ?? 0) }
                         self.mainChart.chartData = chartData
                         self.mainCandleChart.chartData = candleChartData
+                        self.chartState = .data
                     case .failure(let error):
                         self.showAlert(title: error.title, message: error.description)
                     }
@@ -326,7 +367,7 @@ class AssetViewController: UIViewController {
     }
     
     @objc private func timeIntervalDidChange(_ segmentedControl: CustomSegmentedControl) {
-        switch chartState {
+        switch chartType {
         case .line:
             let lineChartRequestInfo = lineChartAssetRequestInfo[segmentedControl.selectedSegmentIndex]
             fetchData(period: lineChartRequestInfo.period, daysAgo: lineChartRequestInfo.daysAgo)
@@ -367,7 +408,7 @@ extension AssetViewController: ChartViewDelegate {
         
         chartSelectionButton.isHidden = false
         
-        switch chartState {
+        switch chartType {
         case .line:
             assetInfoView.state = .staticPrice(price: quote?.currentPrice ?? 0, currency: currency ?? "", priceChange: quote?.priceChange ?? 0, pricePercentChange: quote?.changePercent ?? 0)
         case .candle:
@@ -375,14 +416,4 @@ extension AssetViewController: ChartViewDelegate {
         }
     }
     
-}
-
-fileprivate enum ChartState {
-    case line
-    case candle
-}
-
-fileprivate struct AssetRequestInfo {
-    let period: String
-    let daysAgo: Int
 }

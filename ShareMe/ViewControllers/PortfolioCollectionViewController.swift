@@ -141,7 +141,7 @@ extension PortfolioCollectionViewController: UICollectionViewDataSource, UIColle
             exchange: asset.exchange,
             currency: asset.currency,
             type: asset.type,
-            logoURL: asset.logo ?? URL(string: "")!
+            logoURL: asset.logo ?? URL(string: "h")!
         )
 
         let navigationVC = UINavigationController(rootViewController: assetVC)
