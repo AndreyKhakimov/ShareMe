@@ -21,6 +21,7 @@
 		422B87F7281322F300A082F0 /* AssetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B87F6281322F300A082F0 /* AssetType.swift */; };
 		422B87F92813241600A082F0 /* Logo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B87F82813241600A082F0 /* Logo.swift */; };
 		422B87FB2813253300A082F0 /* AssetInfoNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B87FA2813253300A082F0 /* AssetInfoNetworkManager.swift */; };
+		423F92B928567BED00FCA7F2 /* GrayscaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423F92B828567BED00FCA7F2 /* GrayscaleView.swift */; };
 		424AE4A9283930A200AD6002 /* Asset+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424AE4A7283930A200AD6002 /* Asset+CoreDataClass.swift */; };
 		424AE4AA283930A200AD6002 /* Asset+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424AE4A8283930A200AD6002 /* Asset+CoreDataProperties.swift */; };
 		424AE4AE2839342D00AD6002 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424AE4AD2839342D00AD6002 /* StorageManager.swift */; };
@@ -41,6 +42,7 @@
 		42AD70562807334B00817752 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD70542807334B00817752 /* NetworkManager.swift */; };
 		42AD705A2807335400817752 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD70582807335400817752 /* NetworkError.swift */; };
 		42C0224928157515003FF14A /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C0224828157515003FF14A /* SearchTableViewCell.swift */; };
+		42D28D2628528B2E005A090A /* ShimmerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D28D2528528B2E005A090A /* ShimmerView.swift */; };
 		42E07046282445E000A000C2 /* SimpleChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E07045282445E000A000C2 /* SimpleChartView.swift */; };
 		42E070482824461000A000C2 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E070472824461000A000C2 /* Date.swift */; };
 		42E0704D2824463D00A000C2 /* Quote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0704B2824463D00A000C2 /* Quote.swift */; };
@@ -73,6 +75,7 @@
 		422B87F6281322F300A082F0 /* AssetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetType.swift; sourceTree = "<group>"; };
 		422B87F82813241600A082F0 /* Logo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logo.swift; sourceTree = "<group>"; };
 		422B87FA2813253300A082F0 /* AssetInfoNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetInfoNetworkManager.swift; sourceTree = "<group>"; };
+		423F92B828567BED00FCA7F2 /* GrayscaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrayscaleView.swift; sourceTree = "<group>"; };
 		424AE4A7283930A200AD6002 /* Asset+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataClass.swift"; sourceTree = "<group>"; };
 		424AE4A8283930A200AD6002 /* Asset+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		424AE4AD2839342D00AD6002 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
@@ -96,6 +99,7 @@
 		42AD70542807334B00817752 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		42AD70582807335400817752 /* NetworkError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		42C0224828157515003FF14A /* SearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
+		42D28D2528528B2E005A090A /* ShimmerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerView.swift; sourceTree = "<group>"; };
 		42E07045282445E000A000C2 /* SimpleChartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleChartView.swift; sourceTree = "<group>"; };
 		42E070472824461000A000C2 /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		42E0704B2824463D00A000C2 /* Quote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Quote.swift; sourceTree = "<group>"; };
@@ -289,6 +293,7 @@
 		42AD7043280325AB00817752 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				42D28D2428528B03005A090A /* ShimmerView */,
 				42AD703828031D4200817752 /* LaunchScreen.storyboard */,
 				427BA7712830447500D5FC81 /* AssetInfo */,
 				42E617AE282AAAC800101CD0 /* BarButtonView */,
@@ -336,6 +341,15 @@
 				42E070492824463D00A000C2 /* Quote */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		42D28D2428528B03005A090A /* ShimmerView */ = {
+			isa = PBXGroup;
+			children = (
+				42D28D2528528B2E005A090A /* ShimmerView.swift */,
+				423F92B828567BED00FCA7F2 /* GrayscaleView.swift */,
+			);
+			path = ShimmerView;
 			sourceTree = "<group>";
 		};
 		42E07044282445E000A000C2 /* SimpleChart */ = {
@@ -538,9 +552,11 @@
 				424AE4AE2839342D00AD6002 /* StorageManager.swift in Sources */,
 				42E700D928454F6B000EA87C /* Comparable+Clamp.swift in Sources */,
 				421D41BD280F0E4C002E291D /* SearchAssetNetworkManager.swift in Sources */,
+				42D28D2628528B2E005A090A /* ShimmerView.swift in Sources */,
 				42AD70562807334B00817752 /* NetworkManager.swift in Sources */,
 				42E700DB2845FCCB000EA87C /* SectionHeaderView.swift in Sources */,
 				42AD705A2807335400817752 /* NetworkError.swift in Sources */,
+				423F92B928567BED00FCA7F2 /* GrayscaleView.swift in Sources */,
 				420EA72B2818915D00BA9FD1 /* HistoricalDataNetworkManager.swift in Sources */,
 				421D41B9280DFC9A002E291D /* UIViewController+Alert.swift in Sources */,
 				427A2A43283BB6820043D1C9 /* AssetMapping.swift in Sources */,

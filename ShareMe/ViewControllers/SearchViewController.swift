@@ -94,7 +94,7 @@ extension SearchViewController: UITableViewDelegate {
             exchange: asset.exchange,
             currency: asset.currency,
             type: type,
-            logoURL: asset.logo ?? URL(string: "")!
+            logoURL: asset.logo
         )
        
         navigationController?.pushViewController(assetVC, animated: true)
