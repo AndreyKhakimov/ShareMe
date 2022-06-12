@@ -20,7 +20,7 @@ class AssetViewController: UIViewController {
         case line
         case candle
     }
-
+    
     private struct AssetRequestInfo {
         let period: String
         let daysAgo: Int
@@ -30,7 +30,7 @@ class AssetViewController: UIViewController {
         case loading
         case data
     }
-
+    
     var code: String?
     var assetName: String?
     var exchange: String?
@@ -63,7 +63,7 @@ class AssetViewController: UIViewController {
         AssetRequestInfo(period: IntraDayPeriod.hour.rawValue, daysAgo: 30),
         AssetRequestInfo(period: Period.day.rawValue, daysAgo: 180),
         AssetRequestInfo(period: Period.day.rawValue, daysAgo: 365),
-        AssetRequestInfo(period: Period.month.rawValue, daysAgo: 1095),
+        AssetRequestInfo(period: Period.month.rawValue, daysAgo: 1460),
     ]
     
     private var candleChartAssetRequestInfo: [AssetRequestInfo] = [
@@ -71,7 +71,7 @@ class AssetViewController: UIViewController {
         AssetRequestInfo(period: Period.day.rawValue, daysAgo: 30),
         AssetRequestInfo(period: Period.week.rawValue, daysAgo: 180),
         AssetRequestInfo(period: Period.week.rawValue, daysAgo: 365),
-        AssetRequestInfo(period: Period.month.rawValue, daysAgo: 1095),
+        AssetRequestInfo(period: Period.month.rawValue, daysAgo: 1460),
     ]
     
     private let networkManager = QuoteNetworkManager()
@@ -83,12 +83,14 @@ class AssetViewController: UIViewController {
         return assetInfoView
     }()
     
-    private lazy var indicatorView: UIActivityIndicatorView = {
-        let indicatorView = UIActivityIndicatorView(style: .large)
-        indicatorView.color = .systemGray
-        // same result without hidesWhenStopped = true
-        indicatorView.hidesWhenStopped = true
-        return indicatorView
+    private lazy var shimmerView: ShimmerView = {
+        let shimmerView = ShimmerView()
+        return shimmerView
+    }()
+    
+    private lazy var grayscaleView: GrayscaleView = {
+        let grayscaleView = GrayscaleView()
+        return grayscaleView
     }()
     
     private lazy var mainChart: MainChartView = {
@@ -138,28 +140,16 @@ class AssetViewController: UIViewController {
         return barButtonView
     }()
     
-    init(code: String, assetName: String, exchange: String, currency: String, type: AssetType, logoURL: URL) {
+    init(code: String, assetName: String, exchange: String, currency: String, type: AssetType, logoURL: URL?) {
         self.code = code
         self.assetName = assetName
         self.exchange = exchange
         self.currency = currency
         self.type = type
         self.logoURL = logoURL
-
+        
         super.init(nibName: nil, bundle: nil)
         commonInit()
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupViews()
-        updateView()
-        fetchPrice(for: code ?? "", and: exchange ?? "")
-        fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "")
-        mainChart.delegate = self
-        mainCandleChart.delegate = self
-        configureLeftBarButton()
-        configureRightBarButton()
     }
     
     required init?(coder: NSCoder) {
@@ -167,19 +157,34 @@ class AssetViewController: UIViewController {
         commonInit()
     }
     
-    private func updateIndicatorView() {
-        switch chartState {
-        case .loading:
-            indicatorView.startAnimating()
-        case .data:
-            indicatorView.stopAnimating()
-        }
-    }
-    
     private func commonInit() {
         hidesBottomBarWhenPushed = true
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupViews()
+        updateView()
+        fetchPrice(for: code ?? "", and: exchange ?? "")
+        fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getDateForDaysAgo(180).shortFormatString, to: Date().shortFormatString, period: Period.day.rawValue)
+        mainChart.delegate = self
+        mainCandleChart.delegate = self
+        configureLeftBarButton()
+        configureRightBarButton()
+    }
+    
+    private func updateIndicatorView() {
+        switch chartState {
+        case .loading:
+            shimmerView.isHidden = false
+            grayscaleView.isHidden = false
+            shimmerView.startAnimating()
+        case .data:
+            shimmerView.stopAnimating()
+            shimmerView.isHidden = true
+            grayscaleView.isHidden = true
+        }
+    }
     
     private func setupViews() {
         view.backgroundColor = .white
@@ -188,13 +193,20 @@ class AssetViewController: UIViewController {
         view.addSubview(mainCandleChart)
         view.addSubview(chartSegmentedControl)
         view.addSubview(chartSelectionButton)
-        view.addSubview(indicatorView)
+        view.addSubview(shimmerView)
+        view.addSubview(grayscaleView)
         
         assetInfoView.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(16)
             make.right.equalToSuperview().offset(-16)
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(8)
             make.height.equalTo(40)
+        }
+        
+        chartSelectionButton.snp.makeConstraints { make in
+            make.left.equalTo(mainChart.snp.left).offset(8)
+            make.top.equalTo(mainChart.snp.top).offset(8)
+            make.height.width.equalTo(20)
         }
         
         mainChart.snp.makeConstraints { make in
@@ -211,14 +223,18 @@ class AssetViewController: UIViewController {
             make.top.equalTo(assetInfoView.snp.bottom).offset(8)
         }
         
-        indicatorView.snp.makeConstraints { make in
-            make.center.equalTo(mainChart)
+        shimmerView.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(16)
+            make.right.equalToSuperview().offset(-16)
+            make.top.equalTo(chartSelectionButton.snp.bottom)
+            make.bottom.equalTo(mainChart)
         }
         
-        chartSelectionButton.snp.makeConstraints { make in
-            make.left.equalTo(mainChart.snp.left).offset(8)
-            make.top.equalTo(mainChart.snp.top).offset(8)
-            make.height.width.equalTo(20)
+        grayscaleView.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(16)
+            make.right.equalToSuperview().offset(-16)
+            make.top.equalTo(chartSelectionButton.snp.bottom)
+            make.bottom.equalTo(mainChart)
         }
         
         chartSegmentedControl.snp.makeConstraints { make in
@@ -308,7 +324,7 @@ class AssetViewController: UIViewController {
     
     
     
-    private func fetchHistoricalData(assetName: String, exchange: String, from: String = Date().getDateForDaysAgo(180).shortFormatString, to: String = Date().shortFormatString, period: String = Period.day.rawValue) {
+    private func fetchHistoricalData(assetName: String, exchange: String, from: String, to: String, period: String) {
         chartState = .loading
         historicalDataNetworkManager.getHistoricalData(
             assetName: assetName,

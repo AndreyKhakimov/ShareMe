@@ -8,14 +8,16 @@
 import UIKit
 import SnapKit
 import CoreData
+import SwiftUI
 
 class PortfolioCollectionViewController: UIViewController {
     
-    var assets: [Asset]?
+    
+    private var ops: [BlockOperation] = []
     
     private struct Section {
         var type: AssetType
-        var items: [PortfolioAsset]
+        var items: [Asset]
     }
     
     private var fetchedResultsController: NSFetchedResultsController<Asset>?
@@ -31,14 +33,14 @@ class PortfolioCollectionViewController: UIViewController {
     
     private let networkManager = PortfolioNetworkManager()
     private let storageManager = StorageManager.shared
-    private var portfolioAssets = [PortfolioAsset]() {
-        didSet {
-            sections = AssetType.allCases.map({ assetType in
-                Section(type: assetType, items: portfolioAssets.filter { $0.type == assetType })
-            }).filter { !$0.items.isEmpty }
-        }
-    }
-    private var sections = [Section]()
+    //    private var portfolioAssets = [Asset]() {
+    //        didSet {
+    //            sections = AssetType.allCases.map({ assetType in
+    //                Section(type: assetType, items: portfolioAssets.filter { $0.type == assetType })
+    //            }).filter { !$0.items.isEmpty }
+    //        }
+    //    }
+    //    private var sections = [Section]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,8 +49,8 @@ class PortfolioCollectionViewController: UIViewController {
         collectionView.delegate = self
         fetchedResultsController = storageManager.fetchedResultsController
         fetchedResultsController?.delegate = self
-        assets = storageManager.performFetch(fetchedResultsController: fetchedResultsController!)
-        fetchAssets(assets ?? [Asset]())
+        storageManager.performFetch(fetchedResultsController: fetchedResultsController!)
+        fetchAssets(fetchedResultsController?.fetchedObjects ?? [Asset]())
     }
     
     private func fetchAssets(_ assets: [Asset]) {
@@ -57,14 +59,19 @@ class PortfolioCollectionViewController: UIViewController {
                 guard let self = self else { return }
                 
                 switch result {
-                case .success(let portfolioAssets):
-                    self.portfolioAssets = portfolioAssets
+                case .success:
+                    //                    self.portfolioAssets = portfolioAssets
                     self.collectionView.reloadData()
                 case .failure(let error):
                     self.showAlert(title: error.title, message: error.description)
                 }
             }
         }
+    }
+    
+    deinit {
+        for o in ops { o.cancel() }
+        ops.removeAll()
     }
     
 }
@@ -84,19 +91,24 @@ extension PortfolioCollectionViewController {
 extension PortfolioCollectionViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        sections.count
+        guard let sections = fetchedResultsController?.sections else { return 1 }
+        return sections.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        sections[section].items.count
+        guard let sections = fetchedResultsController?.sections else { return 0 }
+        let sectionInfo = sections[section]
+        return sectionInfo.numberOfObjects
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PortfolioCollectionViewCell.identifier, for: indexPath) as! PortfolioCollectionViewCell
-        let asset = sections[indexPath.section].items[indexPath.row]
-        
+        //        let asset = sections[indexPath.section].items[indexPath.row]
+        guard let asset = fetchedResultsController?.object(at: indexPath) else { return cell }
+        //        let asset = fetchedResultsController!.object(at: indexPath)
+        let url = URL(string: asset.logo)
         cell.configure(
-            logo: asset.logo,
+            logo: url,
             assetName: asset.code,
             assetDescription: asset.name,
             chartData: asset.chartData,
@@ -115,14 +127,15 @@ extension PortfolioCollectionViewController: UICollectionViewDataSource, UIColle
         CGSize(width: collectionView.frame.size.width, height: 48)
     }
     
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
-        if let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as? SectionHeaderView {
-            sectionHeader.label.text = sections[indexPath.section].type.assetName
-            return sectionHeader
+        func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+            if let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as? SectionHeaderView {
+                guard let sections = fetchedResultsController?.sections else { return sectionHeader }
+                let asset = AssetType(rawValue: Int16(sections[indexPath.section].name) ?? 0)
+                sectionHeader.label.text = asset?.assetName
+                return sectionHeader
+            }
+            return UICollectionReusableView()
         }
-        return UICollectionReusableView()
-    }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         CGSize(width: collectionView.frame.size.width, height: 40)
@@ -134,16 +147,17 @@ extension PortfolioCollectionViewController: UICollectionViewDataSource, UIColle
     
     // MARK: - CollectionView Delegate Methods
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let asset = sections[indexPath.section].items[indexPath.row]
+        //        let asset = sections[indexPath.section].items[indexPath.row]
+        let asset = fetchedResultsController!.object(at: indexPath)
         let assetVC = AssetViewController(
             code: asset.code,
             assetName: asset.name,
             exchange: asset.exchange,
             currency: asset.currency,
             type: asset.type,
-            logoURL: asset.logo ?? URL(string: "h")!
+            logoURL: URL(string: asset.logo)
         )
-
+        
         let navigationVC = UINavigationController(rootViewController: assetVC)
         present(navigationVC, animated: true, completion: nil)
         collectionView.deselectItem(at: indexPath, animated: true)
@@ -151,9 +165,60 @@ extension PortfolioCollectionViewController: UICollectionViewDataSource, UIColle
 }
 
 extension PortfolioCollectionViewController: NSFetchedResultsControllerDelegate {
-        func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-            print("something changes")
-            assets = storageManager.getAllAssets()
-            fetchAssets(assets ?? [Asset]())
+
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            if let newAsset = fetchedResultsController?.object(at: newIndexPath!) {
+                fetchAssets([newAsset])
+            }
+            ops.append(BlockOperation(block: { [weak self] in
+                self?.collectionView.insertItems(at: [newIndexPath!])
+            }))
+        case .delete:
+            ops.append(BlockOperation(block: { [weak self] in
+                self?.collectionView.deleteItems(at: [indexPath!])
+            }))
+        case .update:
+            ops.append(BlockOperation(block: { [weak self] in
+                self?.collectionView.reloadItems(at: [indexPath!])
+            }))
+        case .move:
+            ops.append(BlockOperation(block: { [weak self] in
+                self?.collectionView.moveItem(at: indexPath!, to: newIndexPath!)
+            }))
+        @unknown default:
+            break
         }
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        let indexSection = IndexSet(integer: sectionIndex)
+        switch type {
+        case .insert:
+            ops.append(BlockOperation(block: { [weak self] in
+                self?.collectionView.insertSections(indexSection)
+            }))
+            break
+        case .delete:
+            ops.append(BlockOperation(block: { [weak self] in
+                self?.collectionView.deleteSections(indexSection)
+            }))
+        case .move:
+            break
+        case .update:
+            ops.append(BlockOperation(block: { [weak self] in
+                self?.collectionView.reloadSections(indexSection)
+            }))
+        @unknown default:
+            break
+        }
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        collectionView.performBatchUpdates({ () -> Void in
+            for op: BlockOperation in self.ops { op.start() }
+        }, completion: { (finished) -> Void in self.ops.removeAll() })
+    }
+        
 }

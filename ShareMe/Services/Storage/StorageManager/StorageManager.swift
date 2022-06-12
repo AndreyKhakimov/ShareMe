@@ -18,25 +18,25 @@ class StorageManager {
     
     var fetchedResultsController: NSFetchedResultsController<Asset> {
         let fetchRequest: NSFetchRequest<Asset> = Asset.fetchRequest()
-        let sort = NSSortDescriptor(key: #keyPath(Asset.code),
+        let sort = NSSortDescriptor(key: #keyPath(Asset.type),
                                     ascending: true)
         fetchRequest.sortDescriptors = [sort]
         
         let fetchedResultsController = NSFetchedResultsController(
             fetchRequest: fetchRequest,
             managedObjectContext: context,
-            sectionNameKeyPath: nil,
+            sectionNameKeyPath: "type",
             cacheName: nil)
         return fetchedResultsController
     }
     
-    func performFetch(fetchedResultsController: NSFetchedResultsController<Asset>) -> [Asset] {
+    func performFetch(fetchedResultsController: NSFetchedResultsController<Asset>) {
         do {
             try fetchedResultsController.performFetch()
         } catch let error as NSError {
             print("Fetching error: \(error), \(error.userInfo)")
         }
-        return fetchedResultsController.fetchedObjects ?? [Asset]()
+//        return fetchedResultsController.fetchedObjects ?? [Asset]()
     }
     
     func getAllAssets() -> [Asset] {
@@ -63,6 +63,28 @@ class StorageManager {
         }
     }
     
+    func saveAllAssetData(code: String, exchange: String, type: AssetType, currentPrice: Double, priceChange: Double, priceChangePercent: Double, name: String, logo: String, currency: String, country: String, chartData: [Double]) {
+        let asset = Asset(context: context)
+        asset.uid = [code, exchange].joined(separator: ":")
+        asset.code = code
+        asset.exchange = exchange
+        asset.type = type
+        asset.currentPrice = currentPrice
+        asset.priceChange = priceChange
+        asset.priceChangePercent = priceChangePercent
+        asset.name = name
+        asset.logo = logo
+        asset.currency = currency
+        asset.country = country
+        asset.chartData = chartData
+        
+        do {
+            try context.save()
+        } catch {
+            print("Could not save. \(error.localizedDescription).")
+        }
+    }
+
     func getAsset(code: String, exchange: String) -> Asset? {
         let request: NSFetchRequest<Asset> = Asset.fetchRequest()
         let uid = [code, exchange].joined(separator: ":")

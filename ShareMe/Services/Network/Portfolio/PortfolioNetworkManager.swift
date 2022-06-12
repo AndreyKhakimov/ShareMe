@@ -14,27 +14,26 @@ class PortfolioNetworkManager {
     private let historicalDataNetworkManager = HistoricalDataNetworkManager()
     private let quoteNetworkManager = QuoteNetworkManager()
     
-    func getAssets(assets: [Asset], completion: @escaping (Result<[PortfolioAsset], NetworkError>) -> Void) {
+    func getAssets(assets: [Asset], completion: @escaping (Result<Bool, NetworkError>) -> Void) {
         let myGroup = DispatchGroup()
-        var portfolioAssets = [PortfolioAsset]()
+//        var portfolioAssets = [Asset]()
         
         for index in 0..<assets.count {
-            portfolioAssets.append(PortfolioAsset())
-            portfolioAssets[index].code = assets[index].code
-            portfolioAssets[index].exchange = assets[index].exchange
-            portfolioAssets[index].type = assets[index].type
+//            portfolioAssets.append(Asset())
+//            portfolioAssets[index].code = assets[index].code
+//            portfolioAssets[index].exchange = assets[index].exchange
+//            portfolioAssets[index].type = assets[index].type
             
             myGroup.enter()
             assetInfoNetworkManager.getAssetInfo(symbol: assets[index].code) { result in
                 switch result {
-                case .success(let logo):
-                    guard let currency = logo.currency else { break }
-                    guard let name = logo.name else { break }
-                    guard let logo = logo.logo else { break }
-                    guard let url = URL(string: logo) else { break }
-                    portfolioAssets[index].logo = url
-                    portfolioAssets[index].name = name
-                    portfolioAssets[index].currency = currency
+                case .success(let info):
+                    guard let currency = info.currency else { break }
+                    guard let name = info.name else { break }
+                    guard let logo = info.logo else { break }
+                    assets[index].logo = logo
+                    assets[index].name = name
+                    assets[index].currency = currency
                 case .failure:
                     break
                 }
@@ -42,11 +41,11 @@ class PortfolioNetworkManager {
             }
             
             myGroup.enter()
-            historicalDataNetworkManager.getHistoricalData(assetName: assets[index].code, exchange: assets[index].exchange, from: Date().getDateForDaysAgo(30).shortFormatString, to: Date().shortFormatString, period: Period.day.rawValue) { result  in
+            historicalDataNetworkManager.getHistoricalData(assetName: assets[index].code, exchange: assets[index].exchange, from: Date().getDateForDaysAgo(30) .shortFormatString, to: Date().shortFormatString, period: Period.day.rawValue) { result  in
                 switch result {
                 case .success(let data):
                     let closePrices = data.map { $0.close }
-                    portfolioAssets[index].chartData = closePrices
+                    assets[index].chartData = closePrices
                 case .failure:
                     break
                 }
@@ -60,9 +59,9 @@ class PortfolioNetworkManager {
                     let currentPrice = quote.currentPrice
                     let priceChange = quote.priceChange
                     let priceChangePercent = quote.changePercent
-                    portfolioAssets[index].currentPrice = currentPrice
-                    portfolioAssets[index].priceChange = priceChange
-                    portfolioAssets[index].priceChangePercent = priceChangePercent
+                    assets[index].currentPrice = currentPrice
+                    assets[index].priceChange = priceChange
+                    assets[index].priceChangePercent = priceChangePercent
                 case .failure:
                     break
                 }
@@ -71,7 +70,7 @@ class PortfolioNetworkManager {
         }
         
         myGroup.notify(queue: .main) {
-            completion(.success(portfolioAssets))
+            completion(.success(true))
         }
     }
     

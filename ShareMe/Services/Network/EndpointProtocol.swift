@@ -12,16 +12,16 @@ protocol EndpointProtocol {
     static var apiKey: String { get }
     
     var query: String { get }
-    var url: URL { get }
+    var url: URL? { get }
     var httpMethod: String { get }
 }
 
 extension EndpointProtocol {
     static var hostURL: String { NetworkManager.hostUrl }
     static var apiKey: String { API.apiKey }
-    var url: URL {
+    var url: URL? {
         let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        return URL(string: Self.hostURL + encodedQuery) ?? URL(string: "")!
+        return URL(string: Self.hostURL + encodedQuery)
     }
     var httpMethod: String { "GET" }
 }

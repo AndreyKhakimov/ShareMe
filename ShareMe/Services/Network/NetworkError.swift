@@ -12,6 +12,7 @@ enum NetworkError: Error {
     case decodingError
     case cancelled
     case other(Error)
+    case badURL
     
     var title: String {
         "Error"
@@ -30,6 +31,9 @@ enum NetworkError: Error {
             
         case .other(let error):
             return error.localizedDescription
+            
+        case .badURL:
+            return "Failed to initialize URL"
         }
     }
 }

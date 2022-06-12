@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19461" systemVersion="20E241" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Asset" representedClassName=".Asset" syncable="YES">
+        <attribute name="chartData" optional="YES" attributeType="Transformable"/>
         <attribute name="code" attributeType="String"/>
+        <attribute name="country" optional="YES" attributeType="String"/>
+        <attribute name="currency" optional="YES" attributeType="String"/>
+        <attribute name="currentPrice" optional="YES" attributeType="Double" usesScalarValueType="YES"/>
         <attribute name="exchange" attributeType="String"/>
+        <attribute name="logo" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="priceChange" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="priceChangePercent" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="type" attributeType="Integer 16" usesScalarValueType="YES"/>
         <attribute name="uid" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="Asset" positionX="-63" positionY="-18" width="128" height="89"/>
+        <element name="Asset" positionX="-63" positionY="-18" width="128" height="209"/>
     </elements>
 </model>
