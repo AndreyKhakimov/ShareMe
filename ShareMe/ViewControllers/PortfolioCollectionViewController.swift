@@ -12,7 +12,6 @@ import SwiftUI
 
 class PortfolioCollectionViewController: UIViewController {
     
-    
     private var ops: [BlockOperation] = []
     
     private struct Section {
@@ -33,14 +32,7 @@ class PortfolioCollectionViewController: UIViewController {
     
     private let networkManager = PortfolioNetworkManager()
     private let storageManager = StorageManager.shared
-    //    private var portfolioAssets = [Asset]() {
-    //        didSet {
-    //            sections = AssetType.allCases.map({ assetType in
-    //                Section(type: assetType, items: portfolioAssets.filter { $0.type == assetType })
-    //            }).filter { !$0.items.isEmpty }
-    //        }
-    //    }
-    //    private var sections = [Section]()
+    private let webSocketManager = WebSocketManager.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,6 +43,9 @@ class PortfolioCollectionViewController: UIViewController {
         fetchedResultsController?.delegate = self
         storageManager.performFetch(fetchedResultsController: fetchedResultsController!)
         fetchAssets(fetchedResultsController?.fetchedObjects ?? [Asset]())
+        webSocketManager.createSession(delegate: self, url: .getQuoteRealTimeData)
+        webSocketManager.subscribe(assetSymbols: ["AAPL", "TSLA"])
+        webSocketManager.receive()
     }
     
     private func fetchAssets(_ assets: [Asset]) {
@@ -60,7 +55,6 @@ class PortfolioCollectionViewController: UIViewController {
                 
                 switch result {
                 case .success:
-                    //                    self.portfolioAssets = portfolioAssets
                     self.collectionView.reloadData()
                 case .failure(let error):
                     self.showAlert(title: error.title, message: error.description)
@@ -91,7 +85,7 @@ extension PortfolioCollectionViewController {
 extension PortfolioCollectionViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        guard let sections = fetchedResultsController?.sections else { return 1 }
+        guard let sections = fetchedResultsController?.sections else { return 0 }
         return sections.count
     }
     
@@ -103,9 +97,7 @@ extension PortfolioCollectionViewController: UICollectionViewDataSource, UIColle
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PortfolioCollectionViewCell.identifier, for: indexPath) as! PortfolioCollectionViewCell
-        //        let asset = sections[indexPath.section].items[indexPath.row]
         guard let asset = fetchedResultsController?.object(at: indexPath) else { return cell }
-        //        let asset = fetchedResultsController!.object(at: indexPath)
         let url = URL(string: asset.logo)
         cell.configure(
             logo: url,
@@ -221,4 +213,14 @@ extension PortfolioCollectionViewController: NSFetchedResultsControllerDelegate 
         }, completion: { (finished) -> Void in self.ops.removeAll() })
     }
         
+}
+
+extension PortfolioCollectionViewController: URLSessionWebSocketDelegate{
+    func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
+        print("Did connect to socket")
+    }
+    func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
+        print("Did close connection with reason")
+    }
+
 }

@@ -16,14 +16,8 @@ class PortfolioNetworkManager {
     
     func getAssets(assets: [Asset], completion: @escaping (Result<Bool, NetworkError>) -> Void) {
         let myGroup = DispatchGroup()
-//        var portfolioAssets = [Asset]()
         
         for index in 0..<assets.count {
-//            portfolioAssets.append(Asset())
-//            portfolioAssets[index].code = assets[index].code
-//            portfolioAssets[index].exchange = assets[index].exchange
-//            portfolioAssets[index].type = assets[index].type
-            
             myGroup.enter()
             assetInfoNetworkManager.getAssetInfo(symbol: assets[index].code) { result in
                 switch result {

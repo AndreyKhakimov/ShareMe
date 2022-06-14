@@ -36,7 +36,6 @@ class StorageManager {
         } catch let error as NSError {
             print("Fetching error: \(error), \(error.userInfo)")
         }
-//        return fetchedResultsController.fetchedObjects ?? [Asset]()
     }
     
     func getAllAssets() -> [Asset] {

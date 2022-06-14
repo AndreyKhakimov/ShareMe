@@ -22,6 +22,8 @@
 		422B87F92813241600A082F0 /* Logo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B87F82813241600A082F0 /* Logo.swift */; };
 		422B87FB2813253300A082F0 /* AssetInfoNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B87FA2813253300A082F0 /* AssetInfoNetworkManager.swift */; };
 		423F92B928567BED00FCA7F2 /* GrayscaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423F92B828567BED00FCA7F2 /* GrayscaleView.swift */; };
+		423F92BB2857C03D00FCA7F2 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423F92BA2857C03D00FCA7F2 /* WebSocketManager.swift */; };
+		423F92BE2858A17800FCA7F2 /* WebSocketEndpointProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423F92BD2858A17800FCA7F2 /* WebSocketEndpointProtocol.swift */; };
 		424AE4A9283930A200AD6002 /* Asset+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424AE4A7283930A200AD6002 /* Asset+CoreDataClass.swift */; };
 		424AE4AA283930A200AD6002 /* Asset+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424AE4A8283930A200AD6002 /* Asset+CoreDataProperties.swift */; };
 		424AE4AE2839342D00AD6002 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424AE4AD2839342D00AD6002 /* StorageManager.swift */; };
@@ -76,6 +78,8 @@
 		422B87F82813241600A082F0 /* Logo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logo.swift; sourceTree = "<group>"; };
 		422B87FA2813253300A082F0 /* AssetInfoNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetInfoNetworkManager.swift; sourceTree = "<group>"; };
 		423F92B828567BED00FCA7F2 /* GrayscaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrayscaleView.swift; sourceTree = "<group>"; };
+		423F92BA2857C03D00FCA7F2 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
+		423F92BD2858A17800FCA7F2 /* WebSocketEndpointProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketEndpointProtocol.swift; sourceTree = "<group>"; };
 		424AE4A7283930A200AD6002 /* Asset+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataClass.swift"; sourceTree = "<group>"; };
 		424AE4A8283930A200AD6002 /* Asset+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		424AE4AD2839342D00AD6002 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
@@ -203,6 +207,15 @@
 				422B87F82813241600A082F0 /* Logo.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		423F92BC2858A14B00FCA7F2 /* WebSocket */ = {
+			isa = PBXGroup;
+			children = (
+				423F92BA2857C03D00FCA7F2 /* WebSocketManager.swift */,
+				423F92BD2858A17800FCA7F2 /* WebSocketEndpointProtocol.swift */,
+			);
+			path = WebSocket;
 			sourceTree = "<group>";
 		};
 		424AE4AB2839319300AD6002 /* CoreData */ = {
@@ -335,6 +348,7 @@
 				422B87F6281322F300A082F0 /* AssetType.swift */,
 				42001C9B283E8CAB008F9953 /* API.swift */,
 				42001C9D283E8CFA008F9953 /* APIFinnHub.swift */,
+				423F92BC2858A14B00FCA7F2 /* WebSocket */,
 				424AE4B4283A150A00AD6002 /* Portfolio */,
 				421D41BB280F0E24002E291D /* Search */,
 				420EA7292818902300BA9FD1 /* HistoricalData */,
@@ -544,6 +558,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				423F92BE2858A17800FCA7F2 /* WebSocketEndpointProtocol.swift in Sources */,
 				42E617A928298C0B00101CD0 /* CustomSegmentedControl.swift in Sources */,
 				422B87F92813241600A082F0 /* Logo.swift in Sources */,
 				424AE4AA283930A200AD6002 /* Asset+CoreDataProperties.swift in Sources */,
@@ -579,6 +594,7 @@
 				42AD703028031D4000817752 /* SceneDelegate.swift in Sources */,
 				42E617AB2829AF0D00101CD0 /* IntraDayPeriod.swift in Sources */,
 				42E617B2282AAE9000101CD0 /* CircleMarker.swift in Sources */,
+				423F92BB2857C03D00FCA7F2 /* WebSocketManager.swift in Sources */,
 				427BA773283044A100D5FC81 /* AssetInfoView.swift in Sources */,
 				420EA73228199B6300BA9FD1 /* Period.swift in Sources */,
 				42E07046282445E000A000C2 /* SimpleChartView.swift in Sources */,
