@@ -24,6 +24,8 @@
 		423F92B928567BED00FCA7F2 /* GrayscaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423F92B828567BED00FCA7F2 /* GrayscaleView.swift */; };
 		423F92BB2857C03D00FCA7F2 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423F92BA2857C03D00FCA7F2 /* WebSocketManager.swift */; };
 		423F92BE2858A17800FCA7F2 /* WebSocketEndpointProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423F92BD2858A17800FCA7F2 /* WebSocketEndpointProtocol.swift */; };
+		423F92C1285A48AD00FCA7F2 /* QuoteWebSocketResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423F92C0285A48AC00FCA7F2 /* QuoteWebSocketResponse.swift */; };
+		423F92C3285A48CE00FCA7F2 /* CryptoWebSocketResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423F92C2285A48CE00FCA7F2 /* CryptoWebSocketResponse.swift */; };
 		424AE4A9283930A200AD6002 /* Asset+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424AE4A7283930A200AD6002 /* Asset+CoreDataClass.swift */; };
 		424AE4AA283930A200AD6002 /* Asset+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424AE4A8283930A200AD6002 /* Asset+CoreDataProperties.swift */; };
 		424AE4AE2839342D00AD6002 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424AE4AD2839342D00AD6002 /* StorageManager.swift */; };
@@ -80,6 +82,8 @@
 		423F92B828567BED00FCA7F2 /* GrayscaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrayscaleView.swift; sourceTree = "<group>"; };
 		423F92BA2857C03D00FCA7F2 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		423F92BD2858A17800FCA7F2 /* WebSocketEndpointProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketEndpointProtocol.swift; sourceTree = "<group>"; };
+		423F92C0285A48AC00FCA7F2 /* QuoteWebSocketResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteWebSocketResponse.swift; sourceTree = "<group>"; };
+		423F92C2285A48CE00FCA7F2 /* CryptoWebSocketResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoWebSocketResponse.swift; sourceTree = "<group>"; };
 		424AE4A7283930A200AD6002 /* Asset+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataClass.swift"; sourceTree = "<group>"; };
 		424AE4A8283930A200AD6002 /* Asset+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		424AE4AD2839342D00AD6002 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
@@ -214,8 +218,18 @@
 			children = (
 				423F92BA2857C03D00FCA7F2 /* WebSocketManager.swift */,
 				423F92BD2858A17800FCA7F2 /* WebSocketEndpointProtocol.swift */,
+				423F92BF285A487900FCA7F2 /* Models */,
 			);
 			path = WebSocket;
+			sourceTree = "<group>";
+		};
+		423F92BF285A487900FCA7F2 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				423F92C0285A48AC00FCA7F2 /* QuoteWebSocketResponse.swift */,
+				423F92C2285A48CE00FCA7F2 /* CryptoWebSocketResponse.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		424AE4AB2839319300AD6002 /* CoreData */ = {
@@ -559,10 +573,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				423F92BE2858A17800FCA7F2 /* WebSocketEndpointProtocol.swift in Sources */,
+				423F92C1285A48AD00FCA7F2 /* QuoteWebSocketResponse.swift in Sources */,
 				42E617A928298C0B00101CD0 /* CustomSegmentedControl.swift in Sources */,
 				422B87F92813241600A082F0 /* Logo.swift in Sources */,
 				424AE4AA283930A200AD6002 /* Asset+CoreDataProperties.swift in Sources */,
 				427A2A55283DF4950043D1C9 /* PortfolioCollectionViewController.swift in Sources */,
+				423F92C3285A48CE00FCA7F2 /* CryptoWebSocketResponse.swift in Sources */,
 				42001C9E283E8CFA008F9953 /* APIFinnHub.swift in Sources */,
 				424AE4AE2839342D00AD6002 /* StorageManager.swift in Sources */,
 				42E700D928454F6B000EA87C /* Comparable+Clamp.swift in Sources */,

@@ -32,7 +32,9 @@ class PortfolioCollectionViewController: UIViewController {
     
     private let networkManager = PortfolioNetworkManager()
     private let storageManager = StorageManager.shared
-    private let webSocketManager = WebSocketManager.shared
+    private let stockWebSocketManager = WebSocketManager(webSocketType: .getQuoteRealTimeData)
+    private let cryptoWebSocketManager = WebSocketManager(webSocketType: .getCryptoRealTimeData)
+    private var webSocketStockUpdates = [String:QuoteWebSocketResponse]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,9 +45,28 @@ class PortfolioCollectionViewController: UIViewController {
         fetchedResultsController?.delegate = self
         storageManager.performFetch(fetchedResultsController: fetchedResultsController!)
         fetchAssets(fetchedResultsController?.fetchedObjects ?? [Asset]())
-        webSocketManager.createSession(delegate: self, url: .getQuoteRealTimeData)
-        webSocketManager.subscribe(assetSymbols: ["AAPL", "TSLA"])
-        webSocketManager.receive()
+        createWebSocketSessions()
+        subscribe()
+        stockWebSocketManager.receive(
+            stockCompletion: { [weak self] value in
+                let storedObject = self?.storageManager.getAsset(code: value.code, exchange: "US")
+                storedObject?.currentPrice = value.price
+//                self?.webSocketStockUpdates[value.code] = value
+            
+        }, cryptoCompletion: { _ in
+            
+        })
+//        for key in webSocketStockUpdates.keys {
+//            guard let element = webSocketStockUpdates[key] else { continue }
+//            let storedObject = storageManager.getAsset(code: element.code, exchange: "US")
+//            storedObject?.currentPrice = Double(element.price) ?? 0
+//        }
+        cryptoWebSocketManager.receive(
+            stockCompletion: { _ in
+        }, cryptoCompletion: { _ in
+            
+        })
+
     }
     
     private func fetchAssets(_ assets: [Asset]) {
@@ -119,15 +140,15 @@ extension PortfolioCollectionViewController: UICollectionViewDataSource, UIColle
         CGSize(width: collectionView.frame.size.width, height: 48)
     }
     
-        func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-            if let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as? SectionHeaderView {
-                guard let sections = fetchedResultsController?.sections else { return sectionHeader }
-                let asset = AssetType(rawValue: Int16(sections[indexPath.section].name) ?? 0)
-                sectionHeader.label.text = asset?.assetName
-                return sectionHeader
-            }
-            return UICollectionReusableView()
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as? SectionHeaderView {
+            guard let sections = fetchedResultsController?.sections else { return sectionHeader }
+            let asset = AssetType(rawValue: Int16(sections[indexPath.section].name) ?? 0)
+            sectionHeader.label.text = asset?.assetName
+            return sectionHeader
         }
+        return UICollectionReusableView()
+    }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         CGSize(width: collectionView.frame.size.width, height: 40)
@@ -139,7 +160,6 @@ extension PortfolioCollectionViewController: UICollectionViewDataSource, UIColle
     
     // MARK: - CollectionView Delegate Methods
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //        let asset = sections[indexPath.section].items[indexPath.row]
         let asset = fetchedResultsController!.object(at: indexPath)
         let assetVC = AssetViewController(
             code: asset.code,
@@ -156,8 +176,9 @@ extension PortfolioCollectionViewController: UICollectionViewDataSource, UIColle
     }
 }
 
+// MARK: - NSFetchedResultsController Delegate Methods
 extension PortfolioCollectionViewController: NSFetchedResultsControllerDelegate {
-
+    
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .insert:
@@ -212,15 +233,39 @@ extension PortfolioCollectionViewController: NSFetchedResultsControllerDelegate 
             for op: BlockOperation in self.ops { op.start() }
         }, completion: { (finished) -> Void in self.ops.removeAll() })
     }
-        
+    
 }
 
-extension PortfolioCollectionViewController: URLSessionWebSocketDelegate{
+// MARK: - URLSessionWebSocket Delegate Methods
+extension PortfolioCollectionViewController: URLSessionWebSocketDelegate {
+    
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
         print("Did connect to socket")
     }
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
         print("Did close connection with reason")
     }
-
+    
+    func createWebSocketSessions() {
+        if let _ = fetchedResultsController?.fetchedObjects?.filter({ $0.type == .stock && $0.exchange == "US"}) {
+            stockWebSocketManager.createSession(delegate: self, url: .getQuoteRealTimeData)
+        }
+        
+        if let _ = fetchedResultsController?.fetchedObjects?.filter({ $0.type == .crypto}) {
+            cryptoWebSocketManager.createSession(delegate: self, url: .getCryptoRealTimeData)
+        }
+    }
+    
+    func subscribe() {
+        if let stocks = fetchedResultsController?.fetchedObjects?.filter({ $0.type == .stock && $0.exchange == "US"}) {
+            let stockTickers = stocks.compactMap({ $0.code })
+            stockWebSocketManager.subscribe(assetSymbols: stockTickers)
+        }
+        
+        if let cryptos = fetchedResultsController?.fetchedObjects?.filter({ $0.type == .crypto}) {
+            let cryptoTickers = cryptos.compactMap({ $0.code })
+            cryptoWebSocketManager.subscribe(assetSymbols: cryptoTickers)
+        }
+    }
+    
 }

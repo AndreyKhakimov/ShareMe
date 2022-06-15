@@ -48,6 +48,14 @@ class StorageManager {
         }
     }
     
+    func getUSStockAssets() -> [Asset] {
+        fetchedResultsController.fetchedObjects?.filter({ $0.type == .stock && $0.exchange == "US"}) ?? [Asset]()
+    }
+    
+    func getCryptoAssets() -> [Asset] {
+        fetchedResultsController.fetchedObjects?.filter({ $0.type == .crypto}) ?? [Asset]()
+    }
+    
     func saveAsset(code: String, exchange: String, type: AssetType) {
         let asset = Asset(context: context)
         asset.uid = [code, exchange].joined(separator: ":")
@@ -124,7 +132,7 @@ class StorageManager {
                 return false
             }
         } catch {
-            print("Could not check for favourite. \(error.localizedDescription).")        }
+            print("Could not check for favorite. \(error.localizedDescription).")        }
         return false
     }
     

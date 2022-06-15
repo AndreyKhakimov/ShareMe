@@ -9,6 +9,8 @@ import Foundation
 
 class WebSocketManager {
     
+    let webSocketType: WebSocketEndpoints
+    
     enum Action: String {
         case subscribe
         case unsubscribe
@@ -25,9 +27,9 @@ class WebSocketManager {
             case .getQuoteRealTimeData:
                 return "/us-quote?api_token=\(WebSocketEndpoints.apiKey)"
             case .getCryptoRealTimeData:
-                return "/us-quote?api_token=\(WebSocketEndpoints.apiKey)"
+                return "/crypto?api_token=\(WebSocketEndpoints.apiKey)"
             case .getForexRealTimeData:
-                return "/us-quote?api_token=\(WebSocketEndpoints.apiKey)"
+                return "/forex?api_token=\(WebSocketEndpoints.apiKey)"
             }
         }
     }
@@ -36,9 +38,9 @@ class WebSocketManager {
     
     private var webSocket: URLSessionWebSocketTask?
     
-    static let shared = WebSocketManager()
-    
-    private init() {}
+    init(webSocketType: WebSocketEndpoints) {
+        self.webSocketType = webSocketType
+    }
     
     func createSession(delegate: URLSessionDelegate, url: WebSocketEndpoints) {
         let session = URLSession(
@@ -83,23 +85,57 @@ class WebSocketManager {
         send(message: message, action: .unsubscribe)
     }
     
-    func receive() {
-        webSocket?.receive(completionHandler: { [ weak self ]result in
+    func receive(
+        stockCompletion: @escaping (QuoteWebSocketResponse) -> Void,
+        cryptoCompletion: @escaping (CryptoWebSocketResponse) -> Void)
+    {
+        webSocket?.receive(completionHandler: { [ weak self ] result in
+            guard let self = self else { return }
             switch result {
             case .success(let message):
                 switch message {
                 case .data(let data):
+                    self.onReceiveData(
+                        data,
+                        stockCompletion: stockCompletion,
+                        cryptoCompletion: cryptoCompletion
+                    )
                     print("Data: \(data)")
                 case .string(let message):
+                    if let data = message.data(using: .utf8) {
+                        self.onReceiveData(
+                            data,
+                            stockCompletion: stockCompletion,
+                            cryptoCompletion: cryptoCompletion
+                        )
+                    }
                     print("Got string: \(message)")
                 @unknown default:
                     break
                 }
             case .failure(let error):
-                print("Received error: \(error)")
+                print("Failed to receive message: \(error.localizedDescription)")
             }
-            self?.receive()
+            DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
+                self.receive(
+                    stockCompletion: stockCompletion,
+                    cryptoCompletion: cryptoCompletion
+                )
+            }
         })
+    }
+    
+    private func onReceiveData(
+        _ data: Data,
+        stockCompletion: @escaping (QuoteWebSocketResponse) -> Void,
+        cryptoCompletion: @escaping (CryptoWebSocketResponse) -> Void)
+    {
+        let decoder = JSONDecoder()
+        if let socketData = try? decoder.decode(QuoteWebSocketResponse.self, from: data) {
+            stockCompletion(socketData)
+        } else if let socketData = try? decoder.decode(CryptoWebSocketResponse.self, from: data) {
+            cryptoCompletion(socketData)
+        }
     }
     
 }
