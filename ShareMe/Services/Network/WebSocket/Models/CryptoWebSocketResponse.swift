@@ -11,7 +11,7 @@ struct CryptoWebSocketResponse: Codable {
     let code: String
     let price: String
     let dailyChangePercentage: String
-    let dailyDifferencePrice: Int
+    let dailyDifferencePrice: String
 
     enum CodingKeys: String, CodingKey {
         case code = "s"

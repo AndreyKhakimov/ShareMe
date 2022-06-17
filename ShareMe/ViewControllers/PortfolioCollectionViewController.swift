@@ -32,9 +32,10 @@ class PortfolioCollectionViewController: UIViewController {
     
     private let networkManager = PortfolioNetworkManager()
     private let storageManager = StorageManager.shared
-    private let stockWebSocketManager = WebSocketManager(webSocketType: .getQuoteRealTimeData)
-    private let cryptoWebSocketManager = WebSocketManager(webSocketType: .getCryptoRealTimeData)
+    private let webSocketManager = WebSocketManager()
     private var webSocketStockUpdates = [String:QuoteWebSocketResponse]()
+    private var webSocketCryptoUpdates = [String:CryptoWebSocketResponse]()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,25 +48,23 @@ class PortfolioCollectionViewController: UIViewController {
         fetchAssets(fetchedResultsController?.fetchedObjects ?? [Asset]())
         createWebSocketSessions()
         subscribe()
-        stockWebSocketManager.receive(
-            stockCompletion: { [weak self] value in
+        webSocketManager.stockReceive { [weak self] value in
                 let storedObject = self?.storageManager.getAsset(code: value.code, exchange: "US")
                 storedObject?.currentPrice = value.price
-//                self?.webSocketStockUpdates[value.code] = value
-            
-        }, cryptoCompletion: { _ in
-            
-        })
+        }
+        
+        webSocketManager.cryptoReceive { [weak self] value in
+                let storedObject = self?.storageManager.getAsset(code: value.code, exchange: "CC")
+            storedObject?.currentPrice = Double(value.price) ?? 0
+            storedObject?.priceChangePercent = Double(value.dailyChangePercentage) ?? 0
+            storedObject?.priceChange = Double(value.dailyDifferencePrice) ?? 0
+        }
 //        for key in webSocketStockUpdates.keys {
 //            guard let element = webSocketStockUpdates[key] else { continue }
 //            let storedObject = storageManager.getAsset(code: element.code, exchange: "US")
 //            storedObject?.currentPrice = Double(element.price) ?? 0
 //        }
-        cryptoWebSocketManager.receive(
-            stockCompletion: { _ in
-        }, cryptoCompletion: { _ in
-            
-        })
+
 
     }
     
@@ -184,11 +183,34 @@ extension PortfolioCollectionViewController: NSFetchedResultsControllerDelegate 
         case .insert:
             if let newAsset = fetchedResultsController?.object(at: newIndexPath!) {
                 fetchAssets([newAsset])
+                if newAsset.type == .stock {
+                    if webSocketManager.stockWebSocket == nil {
+                        webSocketManager.createStockSession(delegate: self)
+                        webSocketManager.subscribe(stockSymbols: [newAsset.code])
+                    } else {
+                        webSocketManager.subscribe(stockSymbols: [newAsset.code])
+                    }
+                } else {
+                    if webSocketManager.cryptoWebSocket == nil {
+                        webSocketManager.createCryptoSession(delegate: self)
+                        webSocketManager.subscribe(cryptoSymbols: [newAsset.code])
+                    } else {
+                        webSocketManager.subscribe(cryptoSymbols: [newAsset.code])
+                    }
+                }
             }
             ops.append(BlockOperation(block: { [weak self] in
                 self?.collectionView.insertItems(at: [newIndexPath!])
             }))
         case .delete:
+// TODO: - Process deletions properly
+//            if let assetToDelete = fetchedResultsController?.object(at: indexPath!) {
+//                if assetToDelete.type == .stock {
+//                    webSocketManager.unsubscribe(stockSymbols: [assetToDelete.code])
+//                } else {
+//                    webSocketManager.unsubscribe(cryptoSymbols: [assetToDelete.code])
+//                }
+//            }
             ops.append(BlockOperation(block: { [weak self] in
                 self?.collectionView.deleteItems(at: [indexPath!])
             }))
@@ -248,23 +270,23 @@ extension PortfolioCollectionViewController: URLSessionWebSocketDelegate {
     
     func createWebSocketSessions() {
         if let _ = fetchedResultsController?.fetchedObjects?.filter({ $0.type == .stock && $0.exchange == "US"}) {
-            stockWebSocketManager.createSession(delegate: self, url: .getQuoteRealTimeData)
+            webSocketManager.createStockSession(delegate: self)
         }
         
         if let _ = fetchedResultsController?.fetchedObjects?.filter({ $0.type == .crypto}) {
-            cryptoWebSocketManager.createSession(delegate: self, url: .getCryptoRealTimeData)
+            webSocketManager.createCryptoSession(delegate: self)
         }
     }
     
     func subscribe() {
         if let stocks = fetchedResultsController?.fetchedObjects?.filter({ $0.type == .stock && $0.exchange == "US"}) {
             let stockTickers = stocks.compactMap({ $0.code })
-            stockWebSocketManager.subscribe(assetSymbols: stockTickers)
+            webSocketManager.subscribe(stockSymbols: stockTickers)
         }
         
         if let cryptos = fetchedResultsController?.fetchedObjects?.filter({ $0.type == .crypto}) {
             let cryptoTickers = cryptos.compactMap({ $0.code })
-            cryptoWebSocketManager.subscribe(assetSymbols: cryptoTickers)
+            webSocketManager.subscribe(cryptoSymbols: cryptoTickers)
         }
     }
     
