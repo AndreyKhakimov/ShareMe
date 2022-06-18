@@ -167,6 +167,7 @@ class AssetViewController: UIViewController {
         updateView()
         fetchPrice(for: code ?? "", and: exchange ?? "")
         fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getDateForDaysAgo(180).shortFormatString, to: Date().shortFormatString, period: Period.day.rawValue)
+        fetchNews(for: code ?? "", and: exchange ?? "")
         mainChart.delegate = self
         mainCandleChart.delegate = self
         configureLeftBarButton()
@@ -373,6 +374,22 @@ class AssetViewController: UIViewController {
                 }
             }
     }
+    
+    private func fetchNews(for code: String, and exchange: String) {
+        historicalDataNetworkManager.getNewsForAsset(assetName: code, exchange: exchange) { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                switch result {
+                case .success(let news):
+                    print(news)
+                case .failure(let error):
+                    self.showAlert(title: error.title, message: error.description)
+                }
+            }
+        }
+        
+    }
+    
     // TODO: - Add activity ind, add state property of Enum type(case loading,...)
     private func fetchData(period: String, daysAgo: Int) {
         if let _ = IntraDayPeriod(rawValue: period) {

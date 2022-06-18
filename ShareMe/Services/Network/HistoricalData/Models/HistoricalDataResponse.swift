@@ -1,5 +1,5 @@
 //
-//  HistoricalDataRespond.swift
+//  HistoricalDataResponse.swift
 //  ShareMe
 //
 //  Created by Andrey Khakimov on 27.04.2022.
