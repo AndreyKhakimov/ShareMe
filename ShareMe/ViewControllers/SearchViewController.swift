@@ -14,7 +14,6 @@ class SearchViewController: UIViewController {
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(SearchResultCell.self, forCellReuseIdentifier: SearchResultCell.identifier)
         return tableView
     }()

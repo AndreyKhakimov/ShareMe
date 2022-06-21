@@ -27,6 +27,8 @@
 		423F92C1285A48AD00FCA7F2 /* QuoteWebSocketResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423F92C0285A48AC00FCA7F2 /* QuoteWebSocketResponse.swift */; };
 		423F92C3285A48CE00FCA7F2 /* CryptoWebSocketResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423F92C2285A48CE00FCA7F2 /* CryptoWebSocketResponse.swift */; };
 		423F92C5285E79C200FCA7F2 /* NewsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423F92C4285E79C100FCA7F2 /* NewsResponse.swift */; };
+		423F92C7285F235A00FCA7F2 /* NewsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423F92C6285F235A00FCA7F2 /* NewsTableViewCell.swift */; };
+		423F92C9285F489200FCA7F2 /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423F92C8285F489200FCA7F2 /* WebViewViewController.swift */; };
 		424AE4A9283930A200AD6002 /* Asset+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424AE4A7283930A200AD6002 /* Asset+CoreDataClass.swift */; };
 		424AE4AA283930A200AD6002 /* Asset+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424AE4A8283930A200AD6002 /* Asset+CoreDataProperties.swift */; };
 		424AE4AE2839342D00AD6002 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424AE4AD2839342D00AD6002 /* StorageManager.swift */; };
@@ -86,6 +88,8 @@
 		423F92C0285A48AC00FCA7F2 /* QuoteWebSocketResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteWebSocketResponse.swift; sourceTree = "<group>"; };
 		423F92C2285A48CE00FCA7F2 /* CryptoWebSocketResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoWebSocketResponse.swift; sourceTree = "<group>"; };
 		423F92C4285E79C100FCA7F2 /* NewsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsResponse.swift; sourceTree = "<group>"; };
+		423F92C6285F235A00FCA7F2 /* NewsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCell.swift; sourceTree = "<group>"; };
+		423F92C8285F489200FCA7F2 /* WebViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
 		424AE4A7283930A200AD6002 /* Asset+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataClass.swift"; sourceTree = "<group>"; };
 		424AE4A8283930A200AD6002 /* Asset+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Asset+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		424AE4AD2839342D00AD6002 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
@@ -195,6 +199,7 @@
 			children = (
 				42C0224828157515003FF14A /* SearchTableViewCell.swift */,
 				427A2A56283DF91F0043D1C9 /* PortfolioCollectionViewCell.swift */,
+				423F92C6285F235A00FCA7F2 /* NewsTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -323,8 +328,8 @@
 		42AD7043280325AB00817752 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				42D28D2428528B03005A090A /* ShimmerView */,
 				42AD703828031D4200817752 /* LaunchScreen.storyboard */,
+				42D28D2428528B03005A090A /* ShimmerView */,
 				427BA7712830447500D5FC81 /* AssetInfo */,
 				42E617AE282AAAC800101CD0 /* BarButtonView */,
 				42E617A728298BE900101CD0 /* CustomSegmentedControl */,
@@ -343,6 +348,7 @@
 				422B87DB2811618300A082F0 /* SearchViewController.swift */,
 				42AD704628033CB200817752 /* AssetViewController.swift */,
 				427A2A54283DF4950043D1C9 /* PortfolioCollectionViewController.swift */,
+				423F92C8285F489200FCA7F2 /* WebViewViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -591,6 +597,8 @@
 				42E700DB2845FCCB000EA87C /* SectionHeaderView.swift in Sources */,
 				42AD705A2807335400817752 /* NetworkError.swift in Sources */,
 				423F92B928567BED00FCA7F2 /* GrayscaleView.swift in Sources */,
+				423F92C9285F489200FCA7F2 /* WebViewViewController.swift in Sources */,
+				423F92C7285F235A00FCA7F2 /* NewsTableViewCell.swift in Sources */,
 				420EA72B2818915D00BA9FD1 /* HistoricalDataNetworkManager.swift in Sources */,
 				421D41B9280DFC9A002E291D /* UIViewController+Alert.swift in Sources */,
 				427A2A43283BB6820043D1C9 /* AssetMapping.swift in Sources */,
@@ -695,7 +703,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -750,7 +758,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

@@ -170,7 +170,7 @@ class WebSocketManager {
             case .failure(let error):
                 print("Failed to receive message: \(error.localizedDescription)")
             }
-            DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
+            DispatchQueue.global().asyncAfter(deadline: .now() + 1) {
                 self.cryptoReceive(
                     cryptoCompletion: cryptoCompletion
                 )

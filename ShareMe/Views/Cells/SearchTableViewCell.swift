@@ -11,7 +11,7 @@ import Kingfisher
 
 class SearchResultCell: UITableViewCell {
     
-    static let identifier = "SearchResultSnpTableViewCell"
+    static let identifier = "SearchResultTableViewCell"
     
     private let logoImageView: RoundedImageView = {
         let imageView = RoundedImageView(frame: CGRect())

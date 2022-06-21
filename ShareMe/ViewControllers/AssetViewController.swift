@@ -38,6 +38,7 @@ class AssetViewController: UIViewController {
     var type: AssetType?
     var logoURL: URL?
     var quote: Quote?
+    var news = [NewsResponse]()
     
     lazy var isFavourite: Bool = StorageManager.shared.checkAssetIsFavourite(code: code ?? "", exchange: exchange ?? "") {
         didSet {
@@ -77,6 +78,9 @@ class AssetViewController: UIViewController {
     private let networkManager = QuoteNetworkManager()
     private let historicalDataNetworkManager = HistoricalDataNetworkManager()
     private let storageManager = StorageManager.shared
+    
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
     
     private lazy var assetInfoView: AssetInfoView = {
         let assetInfoView = AssetInfoView()
@@ -140,6 +144,13 @@ class AssetViewController: UIViewController {
         return barButtonView
     }()
     
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.estimatedRowHeight = 100
+        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsTableViewCell.identifier)
+        return tableView
+    }()
+    
     init(code: String, assetName: String, exchange: String, currency: String, type: AssetType, logoURL: URL?) {
         self.code = code
         self.assetName = assetName
@@ -170,6 +181,8 @@ class AssetViewController: UIViewController {
         fetchNews(for: code ?? "", and: exchange ?? "")
         mainChart.delegate = self
         mainCandleChart.delegate = self
+        tableView.delegate = self
+        tableView.dataSource = self
         configureLeftBarButton()
         configureRightBarButton()
     }
@@ -196,6 +209,7 @@ class AssetViewController: UIViewController {
         view.addSubview(chartSelectionButton)
         view.addSubview(shimmerView)
         view.addSubview(grayscaleView)
+        view.addSubview(tableView)
         
         assetInfoView.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(16)
@@ -243,6 +257,11 @@ class AssetViewController: UIViewController {
             make.height.equalTo(16)
             make.centerX.equalToSuperview()
             make.top.equalTo(mainChart.snp.bottom).offset(8)
+        }
+        
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(chartSegmentedControl.snp.bottom).offset(8)
+            make.left.right.bottom.equalToSuperview()
         }
     }
     
@@ -295,7 +314,8 @@ class AssetViewController: UIViewController {
         guard let code = code else { return }
         guard let exchange = exchange else { return }
         guard let type = type else { return }
-        storageManager.saveAsset(code: code, exchange: exchange, type: type)
+        guard let name = assetName else { return }
+        storageManager.saveAsset(code: code, exchange: exchange, type: type, name: name)
     }
     
     @objc private func deleteFavourite() {
@@ -322,8 +342,6 @@ class AssetViewController: UIViewController {
         }
         
     }
-    
-    
     
     private func fetchHistoricalData(assetName: String, exchange: String, from: String, to: String, period: String) {
         chartState = .loading
@@ -381,7 +399,8 @@ class AssetViewController: UIViewController {
                 guard let self = self else { return }
                 switch result {
                 case .success(let news):
-                    print(news)
+                    self.news = news
+                    self.tableView.reloadData()
                 case .failure(let error):
                     self.showAlert(title: error.title, message: error.description)
                 }
@@ -390,7 +409,6 @@ class AssetViewController: UIViewController {
         
     }
     
-    // TODO: - Add activity ind, add state property of Enum type(case loading,...)
     private func fetchData(period: String, daysAgo: Int) {
         if let _ = IntraDayPeriod(rawValue: period) {
             fetchIntradayHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getDateForDaysAgo(daysAgo).timeIntervalSince1970, to: Date().timeIntervalSince1970, interval: period)
@@ -411,6 +429,7 @@ class AssetViewController: UIViewController {
     }
 }
 
+// MARK: - ChartView Delegate methods
 extension AssetViewController: ChartViewDelegate {
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
         let marker = CircleMarker(color: .lightGray)
@@ -447,6 +466,38 @@ extension AssetViewController: ChartViewDelegate {
         case .candle:
             assetInfoView.state = .staticPrice(price: quote?.currentPrice ?? 0, currency: currency ?? "", priceChange: quote?.priceChange ?? 0, pricePercentChange: quote?.changePercent ?? 0)
         }
+    }
+    
+}
+
+// MARK: - UITableViewDelegate, UITableViewDataSource methods
+extension AssetViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        news.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier, for: indexPath) as! NewsTableViewCell
+        let pieceOfNews = news[indexPath.row]
+        cell.configure(title: pieceOfNews.title, description: pieceOfNews.content)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return (UITableView.automaticDimension < 100) ? UITableView.automaticDimension : 100
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        "Associated news"
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let pieceOfNews = news[indexPath.row]
+        guard let url = URL(string: pieceOfNews.link) else { return }
+        let vc = WebViewViewController(url: url)
+        let navVC = UINavigationController(rootViewController: vc)
+        present(navVC, animated: true)
     }
     
 }

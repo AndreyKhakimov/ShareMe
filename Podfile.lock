@@ -3,7 +3,7 @@ PODS:
     - Charts/Core (= 4.0.3)
   - Charts/Core (4.0.3):
     - SwiftAlgorithms (~> 1.0)
-  - Kingfisher (7.2.2)
+  - Kingfisher (7.2.4)
   - SnapKit (5.0.1)
   - SwiftAlgorithms (1.0.0)
 
@@ -30,7 +30,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Charts: d959d6723c8eedfdd0735dfc28cb0a71762ac4d9
-  Kingfisher: 184d4d1a8c36666e663caf8e08abe87898595c53
+  Kingfisher: 2457be2121734e69e54a2312ecc0150eb9ae70b3
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SwiftAlgorithms: 38dda4731d19027fdeee1125f973111bf3386b53
 

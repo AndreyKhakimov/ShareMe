@@ -25,14 +25,12 @@ class AssetInfoView: UIView {
     
     private lazy var priceLabel: UILabel = {
         let priceLabel = UILabel()
-        priceLabel.translatesAutoresizingMaskIntoConstraints = false
         return priceLabel
     }()
     
     private lazy var descriptionLabel: UILabel = {
         let descriptionLabel = UILabel()
         descriptionLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         return descriptionLabel
     }()
     
@@ -58,10 +56,10 @@ class AssetInfoView: UIView {
             
             if priceChange >= 0 {
                 descriptionLabel.textColor = .systemGreen
-                descriptionLabel.text = "+ \(formattedPriceChange) \(currency), (\(formattedPricePercentChange)%)"
+                descriptionLabel.text = "+ \(formattedPriceChange) \(currency) (\(formattedPricePercentChange)%)"
             } else {
                 descriptionLabel.textColor = .red
-                descriptionLabel.text = "\(formattedPriceChange) \(currency), (\(formattedPricePercentChange)%)"
+                descriptionLabel.text = "\(formattedPriceChange) \(currency) (\(formattedPricePercentChange)%)"
             }
         case .tracking(let price, let currency, let descriptionText):
             let formattedPrice = String(format: "%.2f", price)
@@ -78,10 +76,10 @@ class AssetInfoView: UIView {
             
             if priceChange >= 0 {
                 priceLabel.textColor = .systemGreen
-                priceLabel.text = "+ \(formattedPriceChange) \(currency), (\(formattedPricePercentChange)%)"
+                priceLabel.text = "+ \(formattedPriceChange) \(currency) (\(formattedPricePercentChange)%)"
             } else {
                 priceLabel.textColor = .red
-                priceLabel.text = "\(formattedPriceChange) \(currency), (\(formattedPricePercentChange)%)"
+                priceLabel.text = "\(formattedPriceChange) \(currency) (\(formattedPricePercentChange)%)"
             }
         }
     }

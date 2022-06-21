@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19461" systemVersion="20E241" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Asset" representedClassName=".Asset" syncable="YES">
-        <attribute name="chartData" optional="YES" attributeType="Transformable"/>
+        <attribute name="chartData" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData"/>
         <attribute name="code" attributeType="String"/>
         <attribute name="country" optional="YES" attributeType="String"/>
         <attribute name="currency" optional="YES" attributeType="String"/>
