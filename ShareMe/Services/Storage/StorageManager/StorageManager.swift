@@ -108,6 +108,14 @@ class StorageManager {
         return nil
     }
     
+    private let modifyAssetsQueue = DispatchQueue(label: "modifyAssetsQueue")
+    func modifyAsset(code: String, exchange: String, block: @escaping (Asset?) -> Void) {
+        modifyAssetsQueue.async { [weak self] in
+            let asset = self?.getAsset(code: code, exchange: exchange)
+            block(asset)
+        }
+    }
+    
     func deleteAsset(asset: Asset) {
         context.delete(asset)
         

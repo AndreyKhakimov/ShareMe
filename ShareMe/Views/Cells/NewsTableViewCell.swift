@@ -19,12 +19,12 @@ class NewsTableViewCell: UITableViewCell {
         label.textAlignment = .justified
         return label
     }()
-    
+
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.textColor = .lightGray
         label.font = .systemFont(ofSize: 12)
-        label.numberOfLines = 0
+        label.numberOfLines = 6
         label.textAlignment = .left
         return label
     }()
@@ -48,7 +48,6 @@ class NewsTableViewCell: UITableViewCell {
             make.right.equalToSuperview().offset(-8)
             make.top.equalToSuperview().offset(2)
             make.bottom.equalTo(descriptionLabel.snp.top).offset(-2)
-//            make.height.equalTo(20)
         }
         
         descriptionLabel.snp.makeConstraints { make in
@@ -56,12 +55,7 @@ class NewsTableViewCell: UITableViewCell {
             make.right.equalToSuperview().offset(-8)
             make.top.equalTo(titleLabel.snp.bottom).offset(2)
             make.bottom.equalToSuperview()
-            make.height.lessThanOrEqualTo(100)
         }
-        
-//        contentView.snp.makeConstraints { make in
-//            make.height.lessThanOrEqualTo(100)
-//        }
     }
     
     //TODO: - prepareForReuse

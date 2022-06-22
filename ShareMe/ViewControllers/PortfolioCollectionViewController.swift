@@ -49,15 +49,17 @@ class PortfolioCollectionViewController: UIViewController {
         createWebSocketSessions()
         subscribe()
         webSocketManager.stockReceive { [weak self] value in
-            let storedObject = self?.storageManager.getAsset(code: value.code, exchange: "US")
-            storedObject?.currentPrice = value.price
+            self?.storageManager.modifyAsset(code: value.code, exchange: "US") {
+                $0?.currentPrice = value.price
+            }
         }
         
         webSocketManager.cryptoReceive { [weak self] value in
-            let storedObject = self?.storageManager.getAsset(code: value.code, exchange: "CC")
-            storedObject?.currentPrice = Double(value.price) ?? 0
-            storedObject?.priceChangePercent = Double(value.dailyChangePercentage) ?? 0
-            storedObject?.priceChange = Double(value.dailyDifferencePrice) ?? 0
+            self?.storageManager.modifyAsset(code: value.code, exchange: "CC") {
+                $0?.currentPrice = Double(value.price) ?? 0
+                $0?.priceChangePercent = Double(value.dailyChangePercentage) ?? 0
+                $0?.priceChange = Double(value.dailyDifferencePrice) ?? 0
+            }
         }
         //        for key in webSocketStockUpdates.keys {
         //            guard let element = webSocketStockUpdates[key] else { continue }
@@ -181,7 +183,7 @@ extension PortfolioCollectionViewController: NSFetchedResultsControllerDelegate 
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .insert:
-            if let newAsset = fetchedResultsController?.object(at: newIndexPath!) {
+            if let newAsset = anObject as? Asset {
                 fetchAssets([newAsset])
                 if newAsset.type == .stock {
                     if webSocketManager.stockWebSocket == nil {
@@ -206,15 +208,13 @@ extension PortfolioCollectionViewController: NSFetchedResultsControllerDelegate 
             // TODO: - Process deletions properly
             if let indexPath = indexPath {
                 ops.append(BlockOperation(block: { [weak self] in
-                    guard let self = self else { return }
-//                    if let assetToDelete = self.fetchedResultsController?.object(at: indexPath) {
-//                        if assetToDelete.type == .stock {
-//                            self.webSocketManager.unsubscribe(stockSymbols: [assetToDelete.code])
-//                        } else {
-//                            self.webSocketManager.unsubscribe(cryptoSymbols: [assetToDelete.code])
-//                        }
-                        self.collectionView.deleteItems(at: [indexPath])
-//                    }
+                    guard let self = self, let asset = anObject as? Asset else { return }
+                    if asset.type == .stock {
+                        self.webSocketManager.unsubscribe(stockSymbols: [asset.code])
+                    } else {
+                        self.webSocketManager.unsubscribe(cryptoSymbols: [asset.code])
+                    }
+                    self.collectionView.deleteItems(at: [indexPath])
                 }))
             }
         case .update:
@@ -253,11 +253,11 @@ extension PortfolioCollectionViewController: NSFetchedResultsControllerDelegate 
         }
     }
     
-//    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-//        collectionView.performBatchUpdates({ () -> Void in
-//            for op: BlockOperation in self.ops { op.start() }
-//        }, completion: { (finished) -> Void in self.ops.removeAll() })
-//    }
+    //    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+    //        collectionView.performBatchUpdates({ () -> Void in
+    //            for op: BlockOperation in self.ops { op.start() }
+    //        }, completion: { (finished) -> Void in self.ops.removeAll() })
+    //    }
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         collectionView.performBatchUpdates({ () -> Void in
             for op: BlockOperation in self.ops { op.start() }

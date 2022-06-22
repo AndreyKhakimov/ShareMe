@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class WebSocketManager {
         
@@ -13,12 +14,11 @@ class WebSocketManager {
         case subscribe
         case unsubscribe
     }
-    
+
     enum WebSocketEndpoints: WebSocketEndpointProtocol {
         case getQuoteRealTimeData
         case getCryptoRealTimeData
         case getForexRealTimeData
-        
         
         var query: String {
             switch self {
@@ -36,6 +36,26 @@ class WebSocketManager {
     
     var stockWebSocket: URLSessionWebSocketTask?
     var cryptoWebSocket: URLSessionWebSocketTask?
+    
+    init() {
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackgroundNotification), name: UIApplication.didEnterBackgroundNotification, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
+    }
+    
+    // TODO: - Process appWillEnterForeground and appDidEnterBackgroundNotification conditions
+    @objc private func appWillEnterForeground() {
+        print("appWillEnterForeground")
+    }
+    
+    @objc private func appDidEnterBackgroundNotification() {
+        print("appDidEnterBackgroundNotification")
+        close()
+    }
     
     func createStockSession(delegate: URLSessionDelegate) {
         let session = URLSession(
