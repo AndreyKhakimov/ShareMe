@@ -61,13 +61,6 @@ class PortfolioCollectionViewController: UIViewController {
                 $0?.priceChange = Double(value.dailyDifferencePrice) ?? 0
             }
         }
-        //        for key in webSocketStockUpdates.keys {
-        //            guard let element = webSocketStockUpdates[key] else { continue }
-        //            let storedObject = storageManager.getAsset(code: element.code, exchange: "US")
-        //            storedObject?.currentPrice = Double(element.price) ?? 0
-        //        }
-        
-        
     }
     
     private func fetchAssets(_ assets: [Asset]) {
@@ -205,7 +198,6 @@ extension PortfolioCollectionViewController: NSFetchedResultsControllerDelegate 
                 self?.collectionView.insertItems(at: [newIndexPath!])
             }))
         case .delete:
-            // TODO: - Process deletions properly
             if let indexPath = indexPath {
                 ops.append(BlockOperation(block: { [weak self] in
                     guard let self = self, let asset = anObject as? Asset else { return }

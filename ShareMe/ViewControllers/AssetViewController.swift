@@ -10,25 +10,10 @@ import SnapKit
 import Charts
 import Kingfisher
 
-protocol AssetViewControllerDelegate: AnyObject {
-    func didToggleFavorite()
-}
-
 class AssetViewController: UIViewController {
     
-    private enum ChartType {
-        case line
-        case candle
-    }
-    
-    private struct AssetRequestInfo {
-        let period: String
-        let daysAgo: Int
-    }
-    
-    private enum ChartState {
-        case loading
-        case data
+    private enum Section {
+        case chart, news
     }
     
     var code: String?
@@ -39,6 +24,9 @@ class AssetViewController: UIViewController {
     var logoURL: URL?
     var quote: Quote?
     var news = [NewsResponse]()
+    let chartTableViewCell = ChartTableViewCell()
+    
+    private let sections: [Section] = [.chart, .news]
     
     lazy var isFavourite: Bool = StorageManager.shared.checkAssetIsFavourite(code: code ?? "", exchange: exchange ?? "") {
         didSet {
@@ -47,16 +35,9 @@ class AssetViewController: UIViewController {
         }
     }
     
-    private var chartType: ChartType = .line {
-        didSet {
-            updateView()
-        }
-    }
-    
-    private var chartState: ChartState = .loading {
-        didSet {
-            updateIndicatorView()
-        }
+    private struct AssetRequestInfo {
+        let period: String
+        let daysAgo: Int
     }
     
     private var lineChartAssetRequestInfo: [AssetRequestInfo] = [
@@ -78,64 +59,6 @@ class AssetViewController: UIViewController {
     private let networkManager = QuoteNetworkManager()
     private let historicalDataNetworkManager = HistoricalDataNetworkManager()
     private let storageManager = StorageManager.shared
-    
-    private let scrollView = UIScrollView()
-    private let contentView = UIView()
-    
-    private lazy var assetInfoView: AssetInfoView = {
-        let assetInfoView = AssetInfoView()
-        return assetInfoView
-    }()
-    
-    private lazy var shimmerView: ShimmerView = {
-        let shimmerView = ShimmerView()
-        return shimmerView
-    }()
-    
-    private lazy var grayscaleView: GrayscaleView = {
-        let grayscaleView = GrayscaleView()
-        return grayscaleView
-    }()
-    
-    private lazy var mainChart: MainChartView = {
-        let mainChart =  MainChartView()
-        mainChart.setScaleEnabled(false)
-        mainChart.pinchZoomEnabled = false
-        mainChart.highlightPerTapEnabled = false
-        mainChart.xAxis.enabled = false
-        mainChart.rightAxis.enabled = false
-        mainChart.leftAxis.enabled = false
-        mainChart.legend.enabled = false
-        return mainChart
-    }()
-    
-    private lazy var mainCandleChart: CandleChartView = {
-        let candleChart =  CandleChartView()
-        candleChart.setScaleEnabled(false)
-        candleChart.pinchZoomEnabled = false
-        candleChart.xAxis.enabled = false
-        candleChart.rightAxis.enabled = false
-        candleChart.leftAxis.enabled = false
-        candleChart.legend.enabled = false
-        return candleChart
-    }()
-    
-    private lazy var chartSegmentedControl: CustomSegmentedControl = {
-        let items = ["W" ,"M", "6M", "1Y", "All"]
-        let segmentedControl = CustomSegmentedControl()
-        segmentedControl.items = items
-        segmentedControl.selectedSegmentIndex = 2
-        segmentedControl.addTarget(self, action: #selector(timeIntervalDidChange(_:)), for: .valueChanged)
-        return segmentedControl
-    }()
-    
-    private lazy var chartSelectionButton: UIButton = {
-        let chartSelectionButton = UIButton()
-        chartSelectionButton.addTarget(self, action: #selector(configureChart), for: .touchUpInside)
-        chartSelectionButton.backgroundColor = .lightGray.withAlphaComponent(0.2)
-        chartSelectionButton.layer.cornerRadius = 10
-        return chartSelectionButton
-    }()
     
     private lazy var barButtonView: BarButtonView = {
         let barButtonView = BarButtonView()
@@ -175,113 +98,29 @@ class AssetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-        updateView()
+        //        updateView()
         fetchPrice(for: code ?? "", and: exchange ?? "")
         fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getDateForDaysAgo(180).shortFormatString, to: Date().shortFormatString, period: Period.day.rawValue)
         fetchNews(for: code ?? "", and: exchange ?? "")
-        mainChart.delegate = self
-        mainCandleChart.delegate = self
+        //        mainChart.delegate = self
+        //        mainCandleChart.delegate = self
+        chartTableViewCell.mainChart.delegate = self
+        chartTableViewCell.mainCandleChart.delegate = self
+        chartTableViewCell.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
         configureLeftBarButton()
         configureRightBarButton()
     }
     
-    private func updateIndicatorView() {
-        switch chartState {
-        case .loading:
-            shimmerView.isHidden = false
-            grayscaleView.isHidden = false
-            shimmerView.startAnimating()
-        case .data:
-            shimmerView.stopAnimating()
-            shimmerView.isHidden = true
-            grayscaleView.isHidden = true
-        }
-    }
-    
     private func setupViews() {
         view.backgroundColor = .white
-        view.addSubview(assetInfoView)
-        view.addSubview(mainChart)
-        view.addSubview(mainCandleChart)
-        view.addSubview(chartSegmentedControl)
-        view.addSubview(chartSelectionButton)
-        view.addSubview(shimmerView)
-        view.addSubview(grayscaleView)
         view.addSubview(tableView)
         
-        assetInfoView.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(16)
-            make.right.equalToSuperview().offset(-16)
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(8)
-            make.height.equalTo(40)
-        }
-        
-        chartSelectionButton.snp.makeConstraints { make in
-            make.left.equalTo(mainChart.snp.left).offset(8)
-            make.top.equalTo(mainChart.snp.top).offset(8)
-            make.height.width.equalTo(20)
-        }
-        
-        mainChart.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(16)
-            make.right.equalToSuperview().offset(-16)
-            make.height.equalTo(view.snp.width).multipliedBy(0.8)
-            make.top.equalTo(assetInfoView.snp.bottom).offset(8)
-        }
-        
-        mainCandleChart.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(16)
-            make.right.equalToSuperview().offset(-16)
-            make.height.equalTo(view.snp.width).multipliedBy(0.8)
-            make.top.equalTo(assetInfoView.snp.bottom).offset(8)
-        }
-        
-        shimmerView.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(16)
-            make.right.equalToSuperview().offset(-16)
-            make.top.equalTo(chartSelectionButton.snp.bottom)
-            make.bottom.equalTo(mainChart)
-        }
-        
-        grayscaleView.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(16)
-            make.right.equalToSuperview().offset(-16)
-            make.top.equalTo(chartSelectionButton.snp.bottom)
-            make.bottom.equalTo(mainChart)
-        }
-        
-        chartSegmentedControl.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.9)
-            make.height.equalTo(16)
-            make.centerX.equalToSuperview()
-            make.top.equalTo(mainChart.snp.bottom).offset(8)
-        }
-        
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(chartSegmentedControl.snp.bottom).offset(8)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(8)
             make.left.right.bottom.equalToSuperview()
         }
-    }
-    
-    private func updateView() {
-        switch chartType {
-        case .line:
-            mainCandleChart.isHidden = true
-            mainChart.isHidden = false
-            chartSelectionButton.setImage(UIImage(systemName: "chart.xyaxis.line"), for: .normal)
-        case .candle:
-            mainCandleChart.isHidden = false
-            mainChart.isHidden = true
-            chartSelectionButton.setImage(UIImage(systemName: "chart.bar.xaxis"), for: .normal)
-        }
-    }
-    
-    @objc private func configureChart() {
-        chartType = chartType == .line ? .candle : .line
-        timeIntervalDidChange(chartSegmentedControl)
-        updateView()
     }
     
     private func configureLeftBarButton() {
@@ -333,7 +172,7 @@ class AssetViewController: UIViewController {
                 
                 switch result {
                 case .success(let quote):
-                    self.assetInfoView.state = .staticPrice(price: quote.currentPrice, currency: self.currency ?? "", priceChange: quote.priceChange, pricePercentChange: quote.changePercent)
+                    self.chartTableViewCell.assetInfoView.state = .staticPrice(price: quote.currentPrice, currency: self.currency ?? "", priceChange: quote.priceChange, pricePercentChange: quote.changePercent)
                     self.quote = quote
                 case .failure(let error):
                     self.showAlert(title: error.title, message: error.description)
@@ -344,7 +183,7 @@ class AssetViewController: UIViewController {
     }
     
     private func fetchHistoricalData(assetName: String, exchange: String, from: String, to: String, period: String) {
-        chartState = .loading
+        chartTableViewCell.chartState = .loading
         historicalDataNetworkManager.getHistoricalData(
             assetName: assetName,
             exchange: exchange,
@@ -358,9 +197,9 @@ class AssetViewController: UIViewController {
                     case .success(let data):
                         let chartData = data.map { ChartEntryData(data: $0.close, date: $0.date)}
                         let candleChartData = data.map { CandleChartEntry(date: $0.date, open: $0.open, high: $0.high, low: $0.low, close: $0.close, volume: $0.volume) }
-                        self.mainChart.chartData = chartData
-                        self.mainCandleChart.chartData = candleChartData
-                        self.chartState = .data
+                        self.chartTableViewCell.mainChart.chartData = chartData
+                        self.chartTableViewCell.mainCandleChart.chartData = candleChartData
+                        self.chartTableViewCell.chartState = .data
                     case .failure(let error):
                         self.showAlert(title: error.title, message: error.description)
                     }
@@ -369,7 +208,7 @@ class AssetViewController: UIViewController {
     }
     
     private func fetchIntradayHistoricalData(assetName: String, exchange: String, from: Double, to: Double, interval: String) {
-        chartState = .loading
+        chartTableViewCell.chartState = .loading
         historicalDataNetworkManager.getIntradayHistoricalData(
             assetName: assetName,
             exchange: exchange,
@@ -383,9 +222,9 @@ class AssetViewController: UIViewController {
                     case .success(let data):
                         let chartData = data.map { ChartEntryData(data: $0.close, date: $0.dateTime) }
                         let candleChartData = data.map { CandleChartEntry(date: $0.dateTime, open: $0.open, high: $0.high, low: $0.low, close: $0.close, volume: $0.volume ?? 0) }
-                        self.mainChart.chartData = chartData
-                        self.mainCandleChart.chartData = candleChartData
-                        self.chartState = .data
+                        self.chartTableViewCell.mainChart.chartData = chartData
+                        self.chartTableViewCell.mainCandleChart.chartData = candleChartData
+                        self.chartTableViewCell.chartState = .data
                     case .failure(let error):
                         self.showAlert(title: error.title, message: error.description)
                     }
@@ -417,37 +256,27 @@ class AssetViewController: UIViewController {
         }
     }
     
-    @objc private func timeIntervalDidChange(_ segmentedControl: CustomSegmentedControl) {
-        switch chartType {
-        case .line:
-            let lineChartRequestInfo = lineChartAssetRequestInfo[segmentedControl.selectedSegmentIndex]
-            fetchData(period: lineChartRequestInfo.period, daysAgo: lineChartRequestInfo.daysAgo)
-        case .candle:
-            let candleChartRequestInfo = candleChartAssetRequestInfo[segmentedControl.selectedSegmentIndex]
-            fetchData(period: candleChartRequestInfo.period, daysAgo: candleChartRequestInfo.daysAgo)
-        }
-    }
 }
 
 // MARK: - ChartView Delegate methods
 extension AssetViewController: ChartViewDelegate {
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
         let marker = CircleMarker(color: .lightGray)
-        mainChart.marker = marker
+        chartTableViewCell.mainChart.marker = marker
         let candleMarker = PillMarker(color: .systemRed, font: .systemFont(ofSize: 14), textColor: .brown)
-        candleMarker.chartView = mainCandleChart
-        mainCandleChart.marker = candleMarker
+        candleMarker.chartView = chartTableViewCell.mainCandleChart
+        chartTableViewCell.mainCandleChart.marker = candleMarker
         let CandleChartDataEntry = (entry as? CandleChartDataEntry)?.data as? CandleChartEntry
-        chartSelectionButton.isHidden = true
+        chartTableViewCell.chartSelectionButton.isHidden = true
         
-        switch chartType {
+        switch chartTableViewCell.chartType {
         case .line:
-            assetInfoView.state = .tracking(
+            chartTableViewCell.assetInfoView.state = .tracking(
                 price: entry.y, currency: currency ?? "",
                 descriptionText: entry.data as? String ?? ""
             )
         case .candle:
-            assetInfoView.state = .candleTracking(
+            chartTableViewCell.assetInfoView.state = .candleTracking(
                 currency: currency ?? "",
                 priceChange: CandleChartDataEntry?.priceChange ?? 0 ,
                 pricePercentChange: CandleChartDataEntry?.pricePercentChange ?? 0,
@@ -458,13 +287,13 @@ extension AssetViewController: ChartViewDelegate {
     func chartViewDidEndPanning(_ chartView: ChartViewBase) {
         chartView.highlightValues(nil)
         
-        chartSelectionButton.isHidden = false
+        chartTableViewCell.chartSelectionButton.isHidden = false
         
-        switch chartType {
+        switch chartTableViewCell.chartType {
         case .line:
-            assetInfoView.state = .staticPrice(price: quote?.currentPrice ?? 0, currency: currency ?? "", priceChange: quote?.priceChange ?? 0, pricePercentChange: quote?.changePercent ?? 0)
+            chartTableViewCell.assetInfoView.state = .staticPrice(price: quote?.currentPrice ?? 0, currency: currency ?? "", priceChange: quote?.priceChange ?? 0, pricePercentChange: quote?.changePercent ?? 0)
         case .candle:
-            assetInfoView.state = .staticPrice(price: quote?.currentPrice ?? 0, currency: currency ?? "", priceChange: quote?.priceChange ?? 0, pricePercentChange: quote?.changePercent ?? 0)
+            chartTableViewCell.assetInfoView.state = .staticPrice(price: quote?.currentPrice ?? 0, currency: currency ?? "", priceChange: quote?.priceChange ?? 0, pricePercentChange: quote?.changePercent ?? 0)
         }
     }
     
@@ -473,15 +302,31 @@ extension AssetViewController: ChartViewDelegate {
 // MARK: - UITableViewDelegate, UITableViewDataSource methods
 extension AssetViewController: UITableViewDelegate, UITableViewDataSource {
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return sections.count
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        news.count
+        let sectionItem = sections[section]
+        switch sectionItem {
+        case .chart:
+            return 1
+        case .news:
+            return news.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier, for: indexPath) as! NewsTableViewCell
-        let pieceOfNews = news[indexPath.row]
-        cell.configure(title: pieceOfNews.title, description: pieceOfNews.content)
-        return cell
+        let sectionItem = sections[indexPath.section]
+        switch sectionItem {
+        case .chart:
+            return chartTableViewCell
+        case .news:
+            let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier, for: indexPath) as! NewsTableViewCell
+            let pieceOfNews = news[indexPath.row]
+            cell.configure(title: pieceOfNews.title, description: pieceOfNews.content)
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -489,15 +334,41 @@ extension AssetViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        "\(assetName ?? "") news"
+        let sectionItem = sections[section]
+        switch sectionItem {
+        case .chart:
+            return nil
+        case .news:
+            return "\(assetName ?? "") news"
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let pieceOfNews = news[indexPath.row]
-        guard let url = URL(string: pieceOfNews.link) else { return }
-        let vc = WebViewViewController(url: url)
-        let navVC = UINavigationController(rootViewController: vc)
-        present(navVC, animated: true)
+        let sectionItem = sections[indexPath.section]
+        switch sectionItem {
+        case .chart:
+            return
+        case .news:
+            let pieceOfNews = news[indexPath.row]
+            guard let url = URL(string: pieceOfNews.link) else { return }
+            let vc = WebViewViewController(url: url)
+            let navVC = UINavigationController(rootViewController: vc)
+            present(navVC, animated: true)
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
     }
-    
+}
+
+// MARK: - ChartTableViewCellDelegate
+extension AssetViewController: ChartTableViewCellDelegate {
+    func timeIntervalDidChange(_ segmentedControl: CustomSegmentedControl) {
+        switch chartTableViewCell.chartType {
+        case .line:
+            let lineChartRequestInfo = lineChartAssetRequestInfo[segmentedControl.selectedSegmentIndex]
+            fetchData(period: lineChartRequestInfo.period, daysAgo: lineChartRequestInfo.daysAgo)
+        case .candle:
+            let candleChartRequestInfo = candleChartAssetRequestInfo[segmentedControl.selectedSegmentIndex]
+            fetchData(period: candleChartRequestInfo.period, daysAgo: candleChartRequestInfo.daysAgo)
+        }
+    }
 }

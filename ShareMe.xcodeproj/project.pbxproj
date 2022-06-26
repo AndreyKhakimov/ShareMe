@@ -21,6 +21,7 @@
 		422B87F7281322F300A082F0 /* AssetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B87F6281322F300A082F0 /* AssetType.swift */; };
 		422B87F92813241600A082F0 /* Logo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B87F82813241600A082F0 /* Logo.swift */; };
 		422B87FB2813253300A082F0 /* AssetInfoNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B87FA2813253300A082F0 /* AssetInfoNetworkManager.swift */; };
+		422B9DEF2864FAC20067A5DD /* ChartTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B9DEE2864FAC20067A5DD /* ChartTableViewCell.swift */; };
 		423F92B928567BED00FCA7F2 /* GrayscaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423F92B828567BED00FCA7F2 /* GrayscaleView.swift */; };
 		423F92BB2857C03D00FCA7F2 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423F92BA2857C03D00FCA7F2 /* WebSocketManager.swift */; };
 		423F92BE2858A17800FCA7F2 /* WebSocketEndpointProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423F92BD2858A17800FCA7F2 /* WebSocketEndpointProtocol.swift */; };
@@ -82,6 +83,7 @@
 		422B87F6281322F300A082F0 /* AssetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetType.swift; sourceTree = "<group>"; };
 		422B87F82813241600A082F0 /* Logo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logo.swift; sourceTree = "<group>"; };
 		422B87FA2813253300A082F0 /* AssetInfoNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetInfoNetworkManager.swift; sourceTree = "<group>"; };
+		422B9DEE2864FAC20067A5DD /* ChartTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartTableViewCell.swift; sourceTree = "<group>"; };
 		423F92B828567BED00FCA7F2 /* GrayscaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrayscaleView.swift; sourceTree = "<group>"; };
 		423F92BA2857C03D00FCA7F2 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		423F92BD2858A17800FCA7F2 /* WebSocketEndpointProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketEndpointProtocol.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				42C0224828157515003FF14A /* SearchTableViewCell.swift */,
 				427A2A56283DF91F0043D1C9 /* PortfolioCollectionViewCell.swift */,
 				423F92C6285F235A00FCA7F2 /* NewsTableViewCell.swift */,
+				422B9DEE2864FAC20067A5DD /* ChartTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -610,6 +613,7 @@
 				427A2A57283DF91F0043D1C9 /* PortfolioCollectionViewCell.swift in Sources */,
 				42AD702E28031D4000817752 /* AppDelegate.swift in Sources */,
 				424AE4A9283930A200AD6002 /* Asset+CoreDataClass.swift in Sources */,
+				422B9DEF2864FAC20067A5DD /* ChartTableViewCell.swift in Sources */,
 				42001CA0283FB1E2008F9953 /* CandleChart.swift in Sources */,
 				427A2A4D283C0E810043D1C9 /* AssetModel.xcdatamodeld in Sources */,
 				42E617A62828F59100101CD0 /* PillMarker.swift in Sources */,
