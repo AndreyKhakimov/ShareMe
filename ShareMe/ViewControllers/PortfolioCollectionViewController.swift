@@ -18,7 +18,7 @@ class PortfolioCollectionViewController: UIViewController {
         var type: AssetType
         var items: [Asset]
     }
-    
+        
     private var fetchedResultsController: NSFetchedResultsController<Asset>?
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -245,11 +245,6 @@ extension PortfolioCollectionViewController: NSFetchedResultsControllerDelegate 
         }
     }
     
-    //    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    //        collectionView.performBatchUpdates({ () -> Void in
-    //            for op: BlockOperation in self.ops { op.start() }
-    //        }, completion: { (finished) -> Void in self.ops.removeAll() })
-    //    }
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         collectionView.performBatchUpdates({ () -> Void in
             for op: BlockOperation in self.ops { op.start() }
@@ -264,16 +259,17 @@ extension PortfolioCollectionViewController: URLSessionWebSocketDelegate {
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
         print("Did connect to socket")
     }
+    
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
         print("Did close connection with reason")
     }
     
     func createWebSocketSessions() {
-        if let _ = fetchedResultsController?.fetchedObjects?.filter({ $0.type == .stock && $0.exchange == "US"}) {
+        if let _ = fetchedResultsController?.fetchedObjects?.filter({ $0.type == .stock && $0.exchange == "US"}).first {
             webSocketManager.createStockSession(delegate: self)
         }
         
-        if let _ = fetchedResultsController?.fetchedObjects?.filter({ $0.type == .crypto}) {
+        if let _ = fetchedResultsController?.fetchedObjects?.filter({ $0.type == .crypto}).first {
             webSocketManager.createCryptoSession(delegate: self)
         }
     }
