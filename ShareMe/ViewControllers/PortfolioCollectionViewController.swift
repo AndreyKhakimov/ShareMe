@@ -211,7 +211,9 @@ extension PortfolioCollectionViewController: NSFetchedResultsControllerDelegate 
             }
         case .update:
             ops.append(BlockOperation(block: { [weak self] in
-                self?.collectionView.reloadItems(at: [indexPath!])
+                UIView.performWithoutAnimation({
+                    self?.collectionView.reloadItems(at: [indexPath!])
+                })
             }))
         case .move:
             ops.append(BlockOperation(block: { [weak self] in

@@ -17,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
              print(urls[urls.count-1] as URL)
+        UITableView.appearance().tableHeaderView = .init(frame: .init(x: 0, y: 0, width: 0, height: CGFloat.leastNonzeroMagnitude))
 
         return true
     }

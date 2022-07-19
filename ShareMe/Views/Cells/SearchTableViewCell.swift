@@ -94,4 +94,10 @@ class SearchResultCell: UITableViewCell {
         }
     }
     
+    override func prepareForReuse() {
+        logoImageView.image = nil
+        searchResultLabel.text = nil
+        descriptionLabel.text = nil
+    }
+    
 }

@@ -68,12 +68,16 @@ class AssetViewController: UIViewController {
     }()
     
     private lazy var tableView: UITableView = {
-        let tableView = UITableView()
+        let tableView = UITableView(frame: .zero, style: .plain)
         tableView.estimatedRowHeight = 100
+        tableView.estimatedSectionHeaderHeight = 30
+        tableView.contentInsetAdjustmentBehavior = .never
+        tableView.sectionHeaderHeight = UITableView.automaticDimension
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsTableViewCell.identifier)
         return tableView
     }()
     
+    // MARK: - Init
     init(code: String, assetName: String, exchange: String, currency: String, type: AssetType, logoURL: URL?) {
         self.code = code
         self.assetName = assetName
@@ -95,18 +99,35 @@ class AssetViewController: UIViewController {
         hidesBottomBarWhenPushed = true
     }
     
+    // MARK: - Override
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-        //        updateView()
+        navigationController?.navigationBar.backgroundColor = .systemBackground
+    // TODO: - Remove gap between navBar and section
+        tableView.tableHeaderView = UIView(frame: CGRect(x: .zero, y: .zero, width: .zero, height: CGFloat.leastNonzeroMagnitude))
         fetchPrice(for: code ?? "", and: exchange ?? "")
         fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getDateForDaysAgo(180).shortFormatString, to: Date().shortFormatString, period: Period.day.rawValue)
         fetchNews(for: code ?? "", and: exchange ?? "")
-        //        mainChart.delegate = self
-        //        mainCandleChart.delegate = self
         chartTableViewCell.mainChart.delegate = self
         chartTableViewCell.mainCandleChart.delegate = self
-        chartTableViewCell.delegate = self
+        chartTableViewCell.callback = { [weak self] segmentedControl in
+            guard let self = self else { return }
+            switch self.chartTableViewCell.chartType {
+                case .line:
+                let lineChartRequestInfo = self.lineChartAssetRequestInfo[segmentedControl.selectedSegmentIndex]
+                    self.fetchData(
+                        period: lineChartRequestInfo.period,
+                        daysAgo: lineChartRequestInfo.daysAgo
+                    )
+                case .candle:
+                let candleChartRequestInfo = self.candleChartAssetRequestInfo[segmentedControl.selectedSegmentIndex]
+                    self.fetchData(
+                        period: candleChartRequestInfo.period,
+                        daysAgo: candleChartRequestInfo.daysAgo
+                    )
+            }
+        }
         tableView.delegate = self
         tableView.dataSource = self
         configureLeftBarButton()
@@ -118,7 +139,7 @@ class AssetViewController: UIViewController {
         view.addSubview(tableView)
         
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(8)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.left.right.bottom.equalToSuperview()
         }
     }
@@ -165,6 +186,7 @@ class AssetViewController: UIViewController {
         storageManager.deleteAsset(asset: asset)
     }
     
+    // MARK: - Fetch methods
     private func fetchPrice(for code: String, and exchange: String) {
         networkManager.getQuote(name: code, exchange: exchange) { [weak self] result in
             DispatchQueue.main.async {
@@ -179,7 +201,6 @@ class AssetViewController: UIViewController {
                 }
             }
         }
-        
     }
     
     private func fetchHistoricalData(assetName: String, exchange: String, from: String, to: String, period: String) {
@@ -357,18 +378,29 @@ extension AssetViewController: UITableViewDelegate, UITableViewDataSource {
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
-}
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        let sectionItem = sections[section]
 
-// MARK: - ChartTableViewCellDelegate
-extension AssetViewController: ChartTableViewCellDelegate {
-    func timeIntervalDidChange(_ segmentedControl: CustomSegmentedControl) {
-        switch chartTableViewCell.chartType {
-        case .line:
-            let lineChartRequestInfo = lineChartAssetRequestInfo[segmentedControl.selectedSegmentIndex]
-            fetchData(period: lineChartRequestInfo.period, daysAgo: lineChartRequestInfo.daysAgo)
-        case .candle:
-            let candleChartRequestInfo = candleChartAssetRequestInfo[segmentedControl.selectedSegmentIndex]
-            fetchData(period: candleChartRequestInfo.period, daysAgo: candleChartRequestInfo.daysAgo)
+        switch sectionItem {
+        case .chart:
+            return CGFloat.leastNormalMagnitude
+        case .news:
+            return 30
         }
     }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let sectionItem = sections[section]
+
+        switch sectionItem {
+        case .chart:
+            return nil
+        case .news:
+            let headerView = SmallSectionHeaderView()
+            headerView.label.text = "News"
+            return headerView
+        }
+    }
+    
 }

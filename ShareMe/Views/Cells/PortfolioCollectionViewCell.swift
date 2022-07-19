@@ -150,4 +150,13 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        logoImageView.image = nil
+        assetNameLabel.text = nil
+        descriptionLabel.text = nil
+        priceLabel.text = nil
+        priceChangeLabel.text = nil
+    }
+    
 }

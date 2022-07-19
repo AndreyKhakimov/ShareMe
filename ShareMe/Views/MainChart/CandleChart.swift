@@ -56,7 +56,7 @@ class CandleChartView: CandleStickChartView {
     func setData() {
         let entries = prepareEntriesFromData()
         let set = CandleChartDataSet(entries: entries, label: "Candles")
-        set.highlightColor = .black
+        set.highlightColor = .label
         set.increasingColor = .systemGreen
         set.decreasingColor = .systemRed
         set.increasingFilled = true

@@ -41,8 +41,8 @@ class MainChartView: LineChartView {
         set.drawValuesEnabled = false
         set.drawCirclesEnabled = false
         set.drawHorizontalHighlightIndicatorEnabled = false
-        set.highlightColor = .black
-        set.setColor(.black)
+        set.highlightColor = .label
+        set.setColor(.label)
         
         let data = LineChartData(dataSet: set)
         self.data = data

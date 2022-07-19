@@ -1,19 +1,19 @@
 //
-//  SectionHeaderView.swift
+//  SmallSectionHeaderView.swift
 //  ShareMe
 //
-//  Created by Andrey Khakimov on 31.05.2022.
+//  Created by Andrey Khakimov on 19.07.2022.
 //
 
 import UIKit
 import SnapKit
 
-class SectionHeaderView: UICollectionReusableView {
+class SmallSectionHeaderView: UICollectionReusableView {
     
     var label: UILabel = {
         let label = UILabel()
         label.textColor = .label
-        label.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.sizeToFit()
         return label
     }()
@@ -33,7 +33,7 @@ class SectionHeaderView: UICollectionReusableView {
         
         label.snp.makeConstraints { make in
             make.width.equalToSuperview()
-            make.left.equalToSuperview().offset(16)
+            make.left.equalToSuperview().offset(8)
             make.top.equalToSuperview()
         }
     }

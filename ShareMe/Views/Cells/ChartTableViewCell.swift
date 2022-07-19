@@ -6,26 +6,23 @@
 //
 
 import UIKit
-
-protocol ChartTableViewCellDelegate: AnyObject {
-    func timeIntervalDidChange(_ segmentedControl: CustomSegmentedControl)
-}
-
-enum ChartState {
-        case loading
-        case data
-    }
+import SnapKit
 
 class ChartTableViewCell: UITableViewCell {
     
-    weak var delegate: ChartTableViewCellDelegate?
-    
     static let identifier = "ChartTableViewCell"
+    
+    enum ChartState {
+            case loading
+            case data
+        }
     
     enum ChartType {
         case line
         case candle
     }
+    
+    var callback: ((CustomSegmentedControl) -> Void)?
     
     var chartType: ChartType = .line {
         didSet {
@@ -49,6 +46,7 @@ class ChartTableViewCell: UITableViewCell {
         return shimmerView
     }()
     
+    // TODO: - Check dark mode color of grayscaleView
     private lazy var grayscaleView: GrayscaleView = {
         let grayscaleView = GrayscaleView()
         return grayscaleView
@@ -128,39 +126,38 @@ class ChartTableViewCell: UITableViewCell {
         }
         
         mainChart.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(16)
-            make.right.equalToSuperview().offset(-16)
+            make.left.equalToSuperview().offset(8)
+            make.right.equalToSuperview().offset(-8)
             make.height.equalTo(contentView.snp.width).multipliedBy(0.8)
             make.top.equalTo(assetInfoView.snp.bottom).offset(8)
         }
         
         mainCandleChart.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(16)
-            make.right.equalToSuperview().offset(-16)
+            make.left.equalToSuperview().offset(8)
+            make.right.equalToSuperview().offset(-8)
             make.height.equalTo(contentView.snp.width).multipliedBy(0.8)
             make.top.equalTo(assetInfoView.snp.bottom).offset(8)
         }
         
         shimmerView.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(16)
-            make.right.equalToSuperview().offset(-16)
+            make.left.equalToSuperview().offset(8)
+            make.right.equalToSuperview().offset(-8)
             make.top.equalTo(chartSelectionButton.snp.bottom)
             make.bottom.equalTo(mainChart)
         }
         
         grayscaleView.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(16)
-            make.right.equalToSuperview().offset(-16)
+            make.left.equalToSuperview().offset(8)
+            make.right.equalToSuperview().offset(-8)
             make.top.equalTo(chartSelectionButton.snp.bottom)
             make.bottom.equalTo(mainChart)
         }
         
         chartSegmentedControl.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.9)
-            make.height.equalTo(16)
-            make.centerX.equalToSuperview()
+            make.left.equalToSuperview().offset(16)
+            make.right.equalToSuperview().offset(-16)
             make.top.equalTo(mainChart.snp.bottom).offset(8)
-            make.bottom.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-8)
         }
     }
     
@@ -181,11 +178,6 @@ class ChartTableViewCell: UITableViewCell {
         }
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-    
     @objc private func configureChart() {
         chartType = chartType == .line ? .candle : .line
         timeIntervalDidChange(chartSegmentedControl)
@@ -193,7 +185,7 @@ class ChartTableViewCell: UITableViewCell {
     }
     
     @objc private func timeIntervalDidChange(_ segmentedControl: CustomSegmentedControl) {
-        delegate?.timeIntervalDidChange(segmentedControl)
+        callback?(segmentedControl)
     }
     
     private func updateIndicatorView() {
@@ -207,12 +199,6 @@ class ChartTableViewCell: UITableViewCell {
             shimmerView.isHidden = true
             grayscaleView.isHidden = true
         }
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 
 }

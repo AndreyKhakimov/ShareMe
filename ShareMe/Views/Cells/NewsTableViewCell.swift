@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SnapKit
 
 class NewsTableViewCell: UITableViewCell {
     
@@ -58,14 +59,15 @@ class NewsTableViewCell: UITableViewCell {
         }
     }
     
-    //TODO: - prepareForReuse
-    override func prepareForReuse() {
-        super.prepareForReuse()
-    }
-    
     func configure(title: String, description: String) {
         titleLabel.text = title
         descriptionLabel.text = description
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        titleLabel.text = nil
+        descriptionLabel.text = nil
     }
     
 }

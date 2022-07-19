@@ -51,14 +51,14 @@ class AssetInfoView: UIView {
             let formattedPriceChange = String(format: "%.2f", priceChange)
             let formattedPricePercentChange = String(format: "%.2f", pricePercentChange)
             
-            priceLabel.textColor = .black
+            priceLabel.textColor = .label
             priceLabel.text = "\(formattedPrice) \(currency)"
             
             if priceChange >= 0 {
                 descriptionLabel.textColor = .systemGreen
                 descriptionLabel.text = "+ \(formattedPriceChange) \(currency) (\(formattedPricePercentChange)%)"
             } else {
-                descriptionLabel.textColor = .red
+                descriptionLabel.textColor = .systemRed
                 descriptionLabel.text = "\(formattedPriceChange) \(currency) (\(formattedPricePercentChange)%)"
             }
         case .tracking(let price, let currency, let descriptionText):
@@ -78,7 +78,7 @@ class AssetInfoView: UIView {
                 priceLabel.textColor = .systemGreen
                 priceLabel.text = "+ \(formattedPriceChange) \(currency) (\(formattedPricePercentChange)%)"
             } else {
-                priceLabel.textColor = .red
+                priceLabel.textColor = .systemRed
                 priceLabel.text = "\(formattedPriceChange) \(currency) (\(formattedPricePercentChange)%)"
             }
         }
