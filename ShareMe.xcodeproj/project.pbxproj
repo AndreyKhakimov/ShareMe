@@ -350,9 +350,9 @@
 		42AD7044280325B700817752 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				427A2A54283DF4950043D1C9 /* PortfolioCollectionViewController.swift */,
 				422B87DB2811618300A082F0 /* SearchViewController.swift */,
 				42AD704628033CB200817752 /* AssetViewController.swift */,
-				427A2A54283DF4950043D1C9 /* PortfolioCollectionViewController.swift */,
 				423F92C8285F489200FCA7F2 /* WebViewViewController.swift */,
 			);
 			path = ViewControllers;

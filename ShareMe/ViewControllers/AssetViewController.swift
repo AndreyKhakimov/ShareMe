@@ -175,7 +175,9 @@ class AssetViewController: UIViewController {
         guard let exchange = exchange else { return }
         guard let type = type else { return }
         guard let name = assetName else { return }
-        storageManager.saveAsset(code: code, exchange: exchange, type: type, name: name)
+        guard let currency = currency else { return }
+ 
+        storageManager.saveAsset(code: code, exchange: exchange, type: type, name: name, currency: currency)
     }
     
     @objc private func deleteFavourite() {

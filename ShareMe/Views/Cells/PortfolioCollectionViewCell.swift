@@ -92,13 +92,13 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
         }
         
         simpleChartView.snp.makeConstraints { make in
-            make.height.equalToSuperview()
-            make.left.equalTo(assetNameLabel.snp.right).offset(8)
-            make.right.equalTo(priceLabel.snp.left).offset(-8)
+            make.top.bottom.equalToSuperview()
+            make.left.equalTo(assetNameLabel.snp.right)
+            make.right.equalTo(priceLabel.snp.left)
         }
         
         priceLabel.snp.makeConstraints { make in
-            make.left.equalTo(simpleChartView.snp.right).offset(8)
+            make.left.equalTo(simpleChartView.snp.right)
             make.right.equalToSuperview().offset(-8)
             make.top.equalToSuperview()
             make.height.equalTo(28)
@@ -106,7 +106,7 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
         }
         
         priceChangeLabel.snp.makeConstraints { make in
-            make.left.equalTo(simpleChartView.snp.right).offset(8)
+            make.left.equalTo(simpleChartView.snp.right)
             make.right.equalToSuperview().offset(-8)
             make.top.equalTo(priceLabel.snp.bottom).offset(4)
             make.height.equalTo(16)

@@ -9,14 +9,14 @@ import UIKit
 
 class SimpleChartView: UIView {
     
-    var contentInsetX: CGFloat = 8 {
+    var contentInsetX: CGFloat = 4 {
         didSet {
             setNeedsLayout()
             layoutIfNeeded()
         }
     }
     
-    var contentInsetY: CGFloat = 8 {
+    var contentInsetY: CGFloat = 4 {
         didSet {
             setNeedsLayout()
             layoutIfNeeded()

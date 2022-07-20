@@ -56,14 +56,14 @@ class StorageManager {
         fetchedResultsController.fetchedObjects?.filter({ $0.type == .crypto}) ?? [Asset]()
     }
     
-    func saveAsset(code: String, exchange: String, type: AssetType, name: String) {
+    func saveAsset(code: String, exchange: String, type: AssetType, name: String, currency: String) {
         let asset = Asset(context: context)
         asset.uid = [code, exchange].joined(separator: ":")
         asset.code = code
         asset.exchange = exchange
         asset.type = type
         asset.name = name
-        
+        asset.currency = currency
         do {
             try context.save()
         } catch {

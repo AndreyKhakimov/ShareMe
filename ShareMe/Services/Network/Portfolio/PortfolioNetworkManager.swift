@@ -22,12 +22,10 @@ class PortfolioNetworkManager {
             assetInfoNetworkManager.getAssetInfo(symbol: assets[index].code) { result in
                 switch result {
                 case .success(let info):
-                    guard let currency = info.currency else { break }
                     guard let name = info.name else { break }
                     guard let logo = info.logo else { break }
                     assets[index].logo = logo
                     assets[index].name = name
-                    assets[index].currency = currency
                 case .failure:
                     break
                 }
