@@ -42,7 +42,7 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
     private let priceLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .right
-        label.font = .systemFont(ofSize: 16, weight: .bold)
+        label.font = .systemFont(ofSize: 14, weight: .bold)
         return label
     }()
     
@@ -50,7 +50,7 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.textAlignment = .right
         label.textColor = .lightGray
-        label.font = .systemFont(ofSize: 14)
+        label.font = .systemFont(ofSize: 12)
         return label
     }()
     
@@ -118,7 +118,14 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
         if let logo = logo {
             logoImageView.kf.setImage(with: logo)
         } else {
-            logoImageView.image = UIImage(systemName: "photo.artframe")
+            logoImageView.setImageForName(
+                assetName,
+                substringEndUp: "-USD",
+                backgroundColor: nil,
+                circular: true,
+                textAttributes: nil,
+                gradientColors: nil
+            )
         }
         assetNameLabel.text = assetName
         descriptionLabel.text = assetDescription

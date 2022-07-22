@@ -65,6 +65,7 @@
 		42E700D928454F6B000EA87C /* Comparable+Clamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E700D828454F6B000EA87C /* Comparable+Clamp.swift */; };
 		42E700DB2845FCCB000EA87C /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E700DA2845FCCB000EA87C /* SectionHeaderView.swift */; };
 		42EBE6012886D9C9004E4107 /* SmallSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42EBE6002886D9C9004E4107 /* SmallSectionHeaderView.swift */; };
+		42EBE605288ADD8A004E4107 /* InitialsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42EBE604288ADD8A004E4107 /* InitialsView.swift */; };
 		B88076ED76633FE0EF5EC5DB /* Pods_ShareMe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5773896E19DD619742BA63F /* Pods_ShareMe.framework */; };
 /* End PBXBuildFile section */
 
@@ -131,6 +132,7 @@
 		42E700D828454F6B000EA87C /* Comparable+Clamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Comparable+Clamp.swift"; sourceTree = "<group>"; };
 		42E700DA2845FCCB000EA87C /* SectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
 		42EBE6002886D9C9004E4107 /* SmallSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallSectionHeaderView.swift; sourceTree = "<group>"; };
+		42EBE604288ADD8A004E4107 /* InitialsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialsView.swift; sourceTree = "<group>"; };
 		9A83B45E94240348F7A0EDE9 /* Pods-ShareMe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareMe.release.xcconfig"; path = "Target Support Files/Pods-ShareMe/Pods-ShareMe.release.xcconfig"; sourceTree = "<group>"; };
 		E5773896E19DD619742BA63F /* Pods_ShareMe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShareMe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -333,8 +335,8 @@
 		42AD7043280325AB00817752 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				42AD703828031D4200817752 /* LaunchScreen.storyboard */,
-				42D28D2428528B03005A090A /* ShimmerView */,
+				42EBE603288ADD58004E4107 /* Storyboards */,
+				42EBE602288ADD50004E4107 /* Other */,
 				427BA7712830447500D5FC81 /* AssetInfo */,
 				42E617AE282AAAC800101CD0 /* BarButtonView */,
 				42E617A728298BE900101CD0 /* CustomSegmentedControl */,
@@ -383,15 +385,6 @@
 				42E070492824463D00A000C2 /* Quote */,
 			);
 			path = Network;
-			sourceTree = "<group>";
-		};
-		42D28D2428528B03005A090A /* ShimmerView */ = {
-			isa = PBXGroup;
-			children = (
-				42D28D2528528B2E005A090A /* ShimmerView.swift */,
-				423F92B828567BED00FCA7F2 /* GrayscaleView.swift */,
-			);
-			path = ShimmerView;
 			sourceTree = "<group>";
 		};
 		42E07044282445E000A000C2 /* SimpleChart */ = {
@@ -454,6 +447,24 @@
 				42EBE6002886D9C9004E4107 /* SmallSectionHeaderView.swift */,
 			);
 			path = Headers;
+			sourceTree = "<group>";
+		};
+		42EBE602288ADD50004E4107 /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				423F92B828567BED00FCA7F2 /* GrayscaleView.swift */,
+				42D28D2528528B2E005A090A /* ShimmerView.swift */,
+				42EBE604288ADD8A004E4107 /* InitialsView.swift */,
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
+		42EBE603288ADD58004E4107 /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				42AD703828031D4200817752 /* LaunchScreen.storyboard */,
+			);
+			path = Storyboards;
 			sourceTree = "<group>";
 		};
 		68F90F90F4EFFC2AB1A1D57B /* Frameworks */ = {
@@ -609,6 +620,7 @@
 				421D41B9280DFC9A002E291D /* UIViewController+Alert.swift in Sources */,
 				427A2A43283BB6820043D1C9 /* AssetMapping.swift in Sources */,
 				42E0704D2824463D00A000C2 /* Quote.swift in Sources */,
+				42EBE605288ADD8A004E4107 /* InitialsView.swift in Sources */,
 				42E0704E2824463D00A000C2 /* QuoteNetworkManager.swift in Sources */,
 				424AE4B7283A194100AD6002 /* Portfolio.swift in Sources */,
 				424AE4B9283A1A2500AD6002 /* PortfolioNetworkManager.swift in Sources */,

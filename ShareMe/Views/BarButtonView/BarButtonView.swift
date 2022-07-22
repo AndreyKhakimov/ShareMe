@@ -12,7 +12,6 @@ class BarButtonView: UIView {
     
     lazy var logoImageView: RoundedImageView = {
         let contentView = RoundedImageView(frame: .zero)
-        contentView.translatesAutoresizingMaskIntoConstraints = false
         return contentView
     }()
     
@@ -22,7 +21,6 @@ class BarButtonView: UIView {
         descriptionLabel.textColor = .label
         descriptionLabel.textAlignment = .center
         descriptionLabel.numberOfLines = 0
-        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         return descriptionLabel
     }()
     

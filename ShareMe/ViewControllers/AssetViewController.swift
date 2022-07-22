@@ -62,7 +62,18 @@ class AssetViewController: UIViewController {
     
     private lazy var barButtonView: BarButtonView = {
         let barButtonView = BarButtonView()
-        barButtonView.logoImageView.kf.setImage(with: logoURL)
+        if let logoURL = logoURL {
+            barButtonView.logoImageView.kf.setImage(with: logoURL)
+        } else {
+            // TODO: - Fix the absence of image
+            barButtonView.logoImageView.setImageForName(assetName!,
+                                                        substringEndUp: "",
+                                                        backgroundColor: nil,
+                                                        circular: true,
+                                                        textAttributes: nil,
+                                                        gradientColors: nil
+            )
+        }
         barButtonView.descriptionLabel.text = assetName
         return barButtonView
     }()
@@ -104,7 +115,7 @@ class AssetViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
         navigationController?.navigationBar.backgroundColor = .systemBackground
-    // TODO: - Remove gap between navBar and section
+        // TODO: - Remove gap between navBar and section
         tableView.tableHeaderView = UIView(frame: CGRect(x: .zero, y: .zero, width: .zero, height: CGFloat.leastNonzeroMagnitude))
         fetchPrice(for: code ?? "", and: exchange ?? "")
         fetchHistoricalData(assetName: code ?? "", exchange: exchange ?? "", from: Date().getDateForDaysAgo(180).shortFormatString, to: Date().shortFormatString, period: Period.day.rawValue)
@@ -114,18 +125,18 @@ class AssetViewController: UIViewController {
         chartTableViewCell.callback = { [weak self] segmentedControl in
             guard let self = self else { return }
             switch self.chartTableViewCell.chartType {
-                case .line:
+            case .line:
                 let lineChartRequestInfo = self.lineChartAssetRequestInfo[segmentedControl.selectedSegmentIndex]
-                    self.fetchData(
-                        period: lineChartRequestInfo.period,
-                        daysAgo: lineChartRequestInfo.daysAgo
-                    )
-                case .candle:
+                self.fetchData(
+                    period: lineChartRequestInfo.period,
+                    daysAgo: lineChartRequestInfo.daysAgo
+                )
+            case .candle:
                 let candleChartRequestInfo = self.candleChartAssetRequestInfo[segmentedControl.selectedSegmentIndex]
-                    self.fetchData(
-                        period: candleChartRequestInfo.period,
-                        daysAgo: candleChartRequestInfo.daysAgo
-                    )
+                self.fetchData(
+                    period: candleChartRequestInfo.period,
+                    daysAgo: candleChartRequestInfo.daysAgo
+                )
             }
         }
         tableView.delegate = self
@@ -176,7 +187,7 @@ class AssetViewController: UIViewController {
         guard let type = type else { return }
         guard let name = assetName else { return }
         guard let currency = currency else { return }
- 
+        
         storageManager.saveAsset(code: code, exchange: exchange, type: type, name: name, currency: currency)
     }
     
@@ -383,7 +394,7 @@ extension AssetViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         let sectionItem = sections[section]
-
+        
         switch sectionItem {
         case .chart:
             return CGFloat.leastNormalMagnitude
@@ -394,7 +405,7 @@ extension AssetViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let sectionItem = sections[section]
-
+        
         switch sectionItem {
         case .chart:
             return nil
