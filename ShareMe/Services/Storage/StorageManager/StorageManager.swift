@@ -13,7 +13,11 @@ class StorageManager {
     static let shared = StorageManager()
     
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    
+    private lazy var privateContext: NSManagedObjectContext = {
+        let moc = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        moc.parent = context
+        return moc
+    }()
     private init() {}
     
     var fetchedResultsController: NSFetchedResultsController<Asset> {
@@ -101,7 +105,7 @@ class StorageManager {
         request.predicate = predicate
         
         do {
-            return try context.fetch(request).first
+            return try privateContext.fetch(request).first
         } catch {
             print("Could not check for favourite. \(error.localizedDescription).")
         }
@@ -111,8 +115,11 @@ class StorageManager {
     private let modifyAssetsQueue = DispatchQueue(label: "modifyAssetsQueue")
     func modifyAsset(code: String, exchange: String, block: @escaping (Asset?) -> Void) {
         modifyAssetsQueue.async { [weak self] in
-            let asset = self?.getAsset(code: code, exchange: exchange)
-            block(asset)
+            self?.privateContext.perform {
+                let asset = self?.getAsset(code: code, exchange: exchange)
+                block(asset)
+                try? self?.privateContext.save()
+            }
         }
     }
     

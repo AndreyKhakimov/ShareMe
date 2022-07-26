@@ -123,9 +123,9 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
                 substringEndUp: "-USD",
                 backgroundColor: nil,
                 circular: true,
-                textAttributes: nil,
-                gradientColors: nil
+                textAttributes: nil
             )
+            print("test \(assetName)")
         }
         assetNameLabel.text = assetName
         descriptionLabel.text = assetDescription

@@ -66,12 +66,12 @@ class AssetViewController: UIViewController {
             barButtonView.logoImageView.kf.setImage(with: logoURL)
         } else {
             // TODO: - Fix the absence of image
-            barButtonView.logoImageView.setImageForName(assetName!,
-                                                        substringEndUp: "",
-                                                        backgroundColor: nil,
-                                                        circular: true,
-                                                        textAttributes: nil,
-                                                        gradientColors: nil
+            barButtonView.logoImageView.setImageForName(
+                code ?? "",
+                substringEndUp: "",
+                backgroundColor: nil,
+                circular: false,
+                textAttributes: nil
             )
         }
         barButtonView.descriptionLabel.text = assetName
@@ -79,7 +79,7 @@ class AssetViewController: UIViewController {
     }()
     
     private lazy var tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .plain)
+        let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.estimatedRowHeight = 100
         tableView.estimatedSectionHeaderHeight = 30
         tableView.contentInsetAdjustmentBehavior = .never

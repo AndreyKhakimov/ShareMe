@@ -249,7 +249,9 @@ extension PortfolioCollectionViewController: NSFetchedResultsControllerDelegate 
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         collectionView.performBatchUpdates({ () -> Void in
-            for op: BlockOperation in self.ops { op.start() }
+            UIView.performWithoutAnimation {
+                for op: BlockOperation in self.ops { op.start() }
+            }
         }, completion: { (finished) -> Void in self.ops.removeAll() })
     }
     

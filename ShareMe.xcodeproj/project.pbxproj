@@ -65,9 +65,20 @@
 		42E700D928454F6B000EA87C /* Comparable+Clamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E700D828454F6B000EA87C /* Comparable+Clamp.swift */; };
 		42E700DB2845FCCB000EA87C /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E700DA2845FCCB000EA87C /* SectionHeaderView.swift */; };
 		42EBE6012886D9C9004E4107 /* SmallSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42EBE6002886D9C9004E4107 /* SmallSectionHeaderView.swift */; };
-		42EBE605288ADD8A004E4107 /* InitialsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42EBE604288ADD8A004E4107 /* InitialsView.swift */; };
+		42EBE605288ADD8A004E4107 /* InitialsUIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42EBE604288ADD8A004E4107 /* InitialsUIImage.swift */; };
+		42F6E4932890291A00A277D7 /* ShareMeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F6E4922890291A00A277D7 /* ShareMeTests.swift */; };
 		B88076ED76633FE0EF5EC5DB /* Pods_ShareMe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5773896E19DD619742BA63F /* Pods_ShareMe.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		42F6E4942890291A00A277D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42AD702228031D4000817752 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 42AD702928031D4000817752;
+			remoteInfo = ShareMe;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		07EE6EDCE91A76412774F57D /* Pods-ShareMe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareMe.debug.xcconfig"; path = "Target Support Files/Pods-ShareMe/Pods-ShareMe.debug.xcconfig"; sourceTree = "<group>"; };
@@ -132,7 +143,9 @@
 		42E700D828454F6B000EA87C /* Comparable+Clamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Comparable+Clamp.swift"; sourceTree = "<group>"; };
 		42E700DA2845FCCB000EA87C /* SectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
 		42EBE6002886D9C9004E4107 /* SmallSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallSectionHeaderView.swift; sourceTree = "<group>"; };
-		42EBE604288ADD8A004E4107 /* InitialsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialsView.swift; sourceTree = "<group>"; };
+		42EBE604288ADD8A004E4107 /* InitialsUIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialsUIImage.swift; sourceTree = "<group>"; };
+		42F6E4902890291A00A277D7 /* ShareMeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShareMeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		42F6E4922890291A00A277D7 /* ShareMeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareMeTests.swift; sourceTree = "<group>"; };
 		9A83B45E94240348F7A0EDE9 /* Pods-ShareMe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareMe.release.xcconfig"; path = "Target Support Files/Pods-ShareMe/Pods-ShareMe.release.xcconfig"; sourceTree = "<group>"; };
 		E5773896E19DD619742BA63F /* Pods_ShareMe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShareMe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -143,6 +156,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				B88076ED76633FE0EF5EC5DB /* Pods_ShareMe.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42F6E48D2890291A00A277D7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,6 +325,7 @@
 			isa = PBXGroup;
 			children = (
 				42AD702C28031D4000817752 /* ShareMe */,
+				42F6E4912890291A00A277D7 /* ShareMeTests */,
 				42AD702B28031D4000817752 /* Products */,
 				C60FD769128FB8C1C721A293 /* Pods */,
 				68F90F90F4EFFC2AB1A1D57B /* Frameworks */,
@@ -315,6 +336,7 @@
 			isa = PBXGroup;
 			children = (
 				42AD702A28031D4000817752 /* ShareMe.app */,
+				42F6E4902890291A00A277D7 /* ShareMeTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -454,7 +476,7 @@
 			children = (
 				423F92B828567BED00FCA7F2 /* GrayscaleView.swift */,
 				42D28D2528528B2E005A090A /* ShimmerView.swift */,
-				42EBE604288ADD8A004E4107 /* InitialsView.swift */,
+				42EBE604288ADD8A004E4107 /* InitialsUIImage.swift */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -465,6 +487,14 @@
 				42AD703828031D4200817752 /* LaunchScreen.storyboard */,
 			);
 			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		42F6E4912890291A00A277D7 /* ShareMeTests */ = {
+			isa = PBXGroup;
+			children = (
+				42F6E4922890291A00A277D7 /* ShareMeTests.swift */,
+			);
+			path = ShareMeTests;
 			sourceTree = "<group>";
 		};
 		68F90F90F4EFFC2AB1A1D57B /* Frameworks */ = {
@@ -506,6 +536,24 @@
 			productReference = 42AD702A28031D4000817752 /* ShareMe.app */;
 			productType = "com.apple.product-type.application";
 		};
+		42F6E48F2890291A00A277D7 /* ShareMeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 42F6E4982890291A00A277D7 /* Build configuration list for PBXNativeTarget "ShareMeTests" */;
+			buildPhases = (
+				42F6E48C2890291A00A277D7 /* Sources */,
+				42F6E48D2890291A00A277D7 /* Frameworks */,
+				42F6E48E2890291A00A277D7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				42F6E4952890291A00A277D7 /* PBXTargetDependency */,
+			);
+			name = ShareMeTests;
+			productName = ShareMeTests;
+			productReference = 42F6E4902890291A00A277D7 /* ShareMeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -518,6 +566,10 @@
 				TargetAttributes = {
 					42AD702928031D4000817752 = {
 						CreatedOnToolsVersion = 13.1;
+					};
+					42F6E48F2890291A00A277D7 = {
+						CreatedOnToolsVersion = 13.1;
+						TestTargetID = 42AD702928031D4000817752;
 					};
 				};
 			};
@@ -535,6 +587,7 @@
 			projectRoot = "";
 			targets = (
 				42AD702928031D4000817752 /* ShareMe */,
+				42F6E48F2890291A00A277D7 /* ShareMeTests */,
 			);
 		};
 /* End PBXProject section */
@@ -546,6 +599,13 @@
 			files = (
 				42AD703A28031D4200817752 /* LaunchScreen.storyboard in Resources */,
 				42AD703728031D4200817752 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42F6E48E2890291A00A277D7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -620,7 +680,7 @@
 				421D41B9280DFC9A002E291D /* UIViewController+Alert.swift in Sources */,
 				427A2A43283BB6820043D1C9 /* AssetMapping.swift in Sources */,
 				42E0704D2824463D00A000C2 /* Quote.swift in Sources */,
-				42EBE605288ADD8A004E4107 /* InitialsView.swift in Sources */,
+				42EBE605288ADD8A004E4107 /* InitialsUIImage.swift in Sources */,
 				42E0704E2824463D00A000C2 /* QuoteNetworkManager.swift in Sources */,
 				424AE4B7283A194100AD6002 /* Portfolio.swift in Sources */,
 				424AE4B9283A1A2500AD6002 /* PortfolioNetworkManager.swift in Sources */,
@@ -658,7 +718,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		42F6E48C2890291A00A277D7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42F6E4932890291A00A277D7 /* ShareMeTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		42F6E4952890291A00A277D7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 42AD702928031D4000817752 /* ShareMe */;
+			targetProxy = 42F6E4942890291A00A277D7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		42AD703828031D4200817752 /* LaunchScreen.storyboard */ = {
@@ -846,6 +922,54 @@
 			};
 			name = Release;
 		};
+		42F6E4962890291A00A277D7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3PVRW477K7;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = AAjr.ShareMeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ShareMe.app/ShareMe";
+			};
+			name = Debug;
+		};
+		42F6E4972890291A00A277D7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3PVRW477K7;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = AAjr.ShareMeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ShareMe.app/ShareMe";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -863,6 +987,15 @@
 			buildConfigurations = (
 				42AD703F28031D4300817752 /* Debug */,
 				42AD704028031D4300817752 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		42F6E4982890291A00A277D7 /* Build configuration list for PBXNativeTarget "ShareMeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42F6E4962890291A00A277D7 /* Debug */,
+				42F6E4972890291A00A277D7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
