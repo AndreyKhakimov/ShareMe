@@ -124,7 +124,7 @@ class StorageManager {
     }
     
     func deleteAsset(asset: Asset) {
-        context.delete(asset)
+        privateContext.delete(asset)
         
         do {
             try context.save()

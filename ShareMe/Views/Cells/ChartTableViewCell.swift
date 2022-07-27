@@ -161,11 +161,8 @@ class ChartTableViewCell: UITableViewCell {
         }
     }
     
-    func configure(chartState: ChartState, candleChartData: [CandleChartEntry]?, mainChartData: [ChartEntryData]) {
-        
-    }
-    
     private func updateView() {
+        //TODO: - Fix chartSelectionButton.setImage issue
         switch chartType {
         case .line:
             mainCandleChart.isHidden = true
