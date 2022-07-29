@@ -73,7 +73,7 @@ extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultCell.identifier, for: indexPath) as! SearchResultCell
         let asset = assets[indexPath.row]
-        cell.configure(image: asset.logo ,info: asset.info, description: asset.description, chartData: asset.chartData)
+        cell.configure(image: asset.logo ,info: asset.name, description: asset.description, chartData: asset.chartData)
         return cell
     }
     

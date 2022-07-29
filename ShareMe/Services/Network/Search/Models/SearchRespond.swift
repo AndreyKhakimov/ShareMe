@@ -20,10 +20,6 @@ struct SearchRespond: Decodable {
     var logo: URL?
     var chartData: [Double]?
     
-    var info: String {
-        "\(name)"
-    }
-    
     var description: String {
         "Exchange: \(exchange) \(country), \(previousClose) \(currency)"
     }

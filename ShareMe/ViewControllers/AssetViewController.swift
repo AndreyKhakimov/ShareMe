@@ -62,6 +62,7 @@ class AssetViewController: UIViewController {
     
     private lazy var barButtonView: BarButtonView = {
         let barButtonView = BarButtonView()
+        
         if let logoURL = logoURL {
             barButtonView.logoImageView.kf.setImage(with: logoURL)
         } else {
@@ -143,6 +144,18 @@ class AssetViewController: UIViewController {
         tableView.dataSource = self
         configureLeftBarButton()
         configureRightBarButton()
+        setupNavBar()
+        
+    }
+    
+    private func setupNavBar() {
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = .systemBackground
+
+        navigationController?.navigationBar.tintColor = .systemBlue
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
     
     private func setupViews() {

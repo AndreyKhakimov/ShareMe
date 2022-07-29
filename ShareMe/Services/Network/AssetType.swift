@@ -29,4 +29,13 @@ public enum AssetType: Int16, CaseIterable {
             return "Crypto Currencies"
         }
     }
+    
+    var exchange: String {
+        switch self {
+        case .stock:
+            return "US"
+        case .crypto:
+            return "CC"
+        }
+    }
 }

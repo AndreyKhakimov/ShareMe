@@ -16,7 +16,7 @@ class SearchAssetNetworkManager {
             switch self {
             case .searchAssetWithName(let name, let type):
                 // TODO: - Try using URLComponents to stop using Endpoints.apiKey
-                return "/search/\(name)?api_token=\(Endpoints.apiKey)&limit=3&type=\(type.assetType)"
+                return "/search/\(name)?api_token=\(Endpoints.apiKey)&limit=10&type=\(type.assetType)&exchange=\(type.exchange)"
             }
         }
     }
@@ -32,6 +32,7 @@ class SearchAssetNetworkManager {
             completion: { (result: Result<[SearchRespond], NetworkError>) in
                 switch result {
                 case .success(var assets):
+                    print(assets)
                     let myGroup = DispatchGroup()
                     
                     for i in 0..<assets.count {
@@ -41,6 +42,7 @@ class SearchAssetNetworkManager {
                             case .success(let logo):
                                 guard let logo = logo.logo else { break }
                                 guard let url = URL(string: logo) else { break }
+                                print("Logourl \(url)")
                                 assets[i].logo = url
                             case .failure:
                                 break

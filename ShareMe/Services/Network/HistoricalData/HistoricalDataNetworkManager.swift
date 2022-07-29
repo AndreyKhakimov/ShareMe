@@ -11,9 +11,9 @@ class HistoricalDataNetworkManager {
     
     private enum Endpoints: EndpointProtocol {
 
-        case getHistoricalData(String, String, String, String, String)
-        case getIntradayHistoricalData(String, String, String, String, String)
-        case getNewsForAsset(String, String)
+        case getHistoricalData(assetName: String, exchange: String, from: String, to: String, period: String)
+        case getIntradayHistoricalData(assetName: String, exchange: String, from: String, to: String, interval: String)
+        case getNewsForAsset(assetName: String, exchange: String)
 
         var query: String {
             switch self {
@@ -31,7 +31,7 @@ class HistoricalDataNetworkManager {
     
     func getHistoricalData(assetName: String, exchange: String, from: String, to: String, period: String, completion: @escaping (Result<[HistoricalDataRespond], NetworkError>) -> Void) {
         networkManager.sendRequest(
-            endpoint: Endpoints.getHistoricalData(assetName, exchange, from, to, period),
+            endpoint: Endpoints.getHistoricalData(assetName: assetName, exchange: exchange, from: from, to: to, period: period),
             completion: { (result: Result<[HistoricalDataRespond], NetworkError>) in
                 switch result {
                 case .success(let historicalData):
@@ -46,7 +46,7 @@ class HistoricalDataNetworkManager {
     
     func getIntradayHistoricalData(assetName: String, exchange: String, from: Double, to: Double, interval: String, completion: @escaping (Result<[HistoricalIntradayDataResponse], NetworkError>) -> Void) {
         networkManager.sendRequest(
-            endpoint: Endpoints.getIntradayHistoricalData(assetName, exchange, String(from), String(to), interval),
+            endpoint: Endpoints.getIntradayHistoricalData(assetName: assetName, exchange: exchange, from: String(from), to: String(to), interval: interval),
             completion: { (result: Result<[HistoricalIntradayDataResponse], NetworkError>) in
                 switch result {
                 case .success(let historicalData):
@@ -61,7 +61,7 @@ class HistoricalDataNetworkManager {
     
     func getNewsForAsset(assetName: String, exchange: String, completion: @escaping (Result<[NewsResponse], NetworkError>) -> Void) {
         networkManager.sendRequest(
-            endpoint: Endpoints.getNewsForAsset(assetName, exchange),
+            endpoint: Endpoints.getNewsForAsset(assetName: assetName, exchange: exchange),
             completion: { (result: Result<[NewsResponse], NetworkError>) in
                 switch result {
                 case .success(let news):

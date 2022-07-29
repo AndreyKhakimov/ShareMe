@@ -37,7 +37,7 @@ class PortfolioCollectionViewController: UIViewController {
     private var webSocketStockUpdates = [String:QuoteWebSocketResponse]()
     private var webSocketCryptoUpdates = [String:CryptoWebSocketResponse]()
     
-    
+    // MARK: - Override
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
@@ -47,6 +47,10 @@ class PortfolioCollectionViewController: UIViewController {
         fetchedResultsController?.delegate = self
         storageManager.performFetch(fetchedResultsController: fetchedResultsController!)
         fetchAssets(fetchedResultsController?.fetchedObjects ?? [Asset]())
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         createWebSocketSessions()
         subscribe()
         webSocketManager.stockReceive { [weak self] value in
@@ -62,6 +66,12 @@ class PortfolioCollectionViewController: UIViewController {
                 $0?.priceChange = Double(value.dailyDifferencePrice) ?? 0
             }
         }
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        print("viewWillDisappear")
     }
     
     private func fetchAssets(_ assets: [Asset]) {

@@ -17,7 +17,7 @@ protocol WebSocketEndpointProtocol {
 
 extension WebSocketEndpointProtocol {
     static var hostURL: String { WebSocketManager.hostUrl }
-    static var apiKey: String { API.apiKey }
+    static var apiKey: String { API.EOD.apiKey }
     var url: URL? {
         let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         return URL(string: Self.hostURL + encodedQuery)
