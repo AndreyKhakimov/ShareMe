@@ -10,15 +10,49 @@ import Foundation
 class SearchAssetNetworkManager {
     
     private enum Endpoints: EndpointProtocol {
-        case searchAssetWithName(String, AssetType)
+        case searchAssetWithName(name: String, type: AssetType)
         
-        var query: String {
+        var scheme: HTTPScheme {
             switch self {
-            case .searchAssetWithName(let name, let type):
-                // TODO: - Try using URLComponents to stop using Endpoints.apiKey
-                return "/search/\(name)?api_token=\(Endpoints.apiKey)&limit=10&type=\(type.assetType)&exchange=\(type.exchange)"
+            case .searchAssetWithName:
+                return .https
             }
         }
+        
+        var hostURL: String {
+            switch self {
+            case .searchAssetWithName:
+                return "eodhistoricaldata.com"
+            }
+        }
+        
+        var path: String {
+            switch self {
+            case .searchAssetWithName(let name, _):
+                return "/api/search/\(name)"
+            }
+        }
+        
+        var parameters: [URLQueryItem] {
+            switch self {
+            case .searchAssetWithName(_, let type):
+                let params = [
+                    URLQueryItem(name: "api_token", value: API.EOD.apiKey),
+                    URLQueryItem(name: "limit", value: "10"),
+                    URLQueryItem(name: "type", value: type.assetType),
+                    URLQueryItem(name: "exchange", value: type.exchange)
+                ]
+                return params
+            }
+        }
+
+        var httpMethod: HTTPMethod {
+            switch self {
+            case .searchAssetWithName:
+                return .get
+            }
+        }
+
     }
     
     private let networkManager = NetworkManager.shared
@@ -28,7 +62,7 @@ class SearchAssetNetworkManager {
     @discardableResult
     func getAssetsWithName(name: String, type: AssetType, completion: @escaping (Result<[SearchRespond], NetworkError>) -> Void) -> URLSessionDataTask? {
          networkManager.sendRequest(
-            endpoint: Endpoints.searchAssetWithName(name, type),
+            endpoint: Endpoints.searchAssetWithName(name: name, type: type),
             completion: { (result: Result<[SearchRespond], NetworkError>) in
                 switch result {
                 case .success(var assets):

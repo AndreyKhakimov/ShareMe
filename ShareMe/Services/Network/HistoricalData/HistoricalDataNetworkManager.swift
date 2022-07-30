@@ -10,21 +10,84 @@ import Foundation
 class HistoricalDataNetworkManager {
     
     private enum Endpoints: EndpointProtocol {
-
         case getHistoricalData(assetName: String, exchange: String, from: String, to: String, period: String)
         case getIntradayHistoricalData(assetName: String, exchange: String, from: String, to: String, interval: String)
         case getNewsForAsset(assetName: String, exchange: String)
-
-        var query: String {
+        
+        var scheme: HTTPScheme {
             switch self {
-            case .getHistoricalData(let assetName, let exchange, let from, let to, let period):
-                return "/eod/\(assetName).\(exchange)?fmt=json&from=\(from)&to=\(to)&period=\(period)&api_token=\(Endpoints.apiKey)"
-            case .getIntradayHistoricalData(let assetName, let exchange, let from, let to, let interval):
-                return "/intraday/\(assetName).\(exchange)?fmt=json&from=\(from)&to=\(to)&interval=\(interval)&api_token=\(Endpoints.apiKey)"
-            case .getNewsForAsset(let assetName, let exchange):
-                return "/news/?api_token=\(Endpoints.apiKey)&s=\(assetName).\(exchange)&limit=10"
+            case .getHistoricalData:
+                return .https
+            case .getIntradayHistoricalData:
+                return .https
+            case .getNewsForAsset:
+                return .https
             }
         }
+        
+        var hostURL: String {
+            switch self {
+            case .getHistoricalData:
+                return "eodhistoricaldata.com"
+            case .getIntradayHistoricalData:
+                return "eodhistoricaldata.com"
+            case .getNewsForAsset:
+                return "eodhistoricaldata.com"
+            }
+        }
+        
+        var path: String {
+            switch self {
+            case .getHistoricalData(assetName: let assetName, exchange: let exchange, _, _, _):
+                return "/api/eod/\(assetName).\(exchange)"
+            case .getIntradayHistoricalData(assetName: let assetName, exchange: let exchange, _, _, _):
+                return "/api/intraday/\(assetName).\(exchange)"
+            case .getNewsForAsset:
+                return "/api/news/"
+            }
+        }
+        
+        var parameters: [URLQueryItem] {
+            switch self {
+            case .getHistoricalData(_, _, from: let from, to: let to, period: let period):
+                let params = [
+                    URLQueryItem(name: "api_token", value: API.EOD.apiKey),
+                    URLQueryItem(name: "fmt", value: "json"),
+                    URLQueryItem(name: "from", value: from),
+                    URLQueryItem(name: "to", value: to),
+                    URLQueryItem(name: "period", value: period)
+                ]
+                return params
+            case .getIntradayHistoricalData(_, _, from: let from, to: let to, interval: let interval):
+                let params = [
+                    URLQueryItem(name: "api_token", value: API.EOD.apiKey),
+                    URLQueryItem(name: "fmt", value: "json"),
+                    URLQueryItem(name: "from", value: from),
+                    URLQueryItem(name: "to", value: to),
+                    URLQueryItem(name: "interval", value: interval)
+                ]
+                return params
+            case .getNewsForAsset(assetName: let assetName, exchange: let exchange):
+                let params = [
+                    URLQueryItem(name: "api_token", value: API.EOD.apiKey),
+                    URLQueryItem(name: "s", value: "\(assetName).\(exchange)"),
+                    URLQueryItem(name: "limit", value: "10")
+                ]
+                return params
+            }
+        }
+
+        var httpMethod: HTTPMethod {
+            switch self {
+            case .getHistoricalData:
+                return .get
+            case .getIntradayHistoricalData:
+                return .get
+            case .getNewsForAsset:
+                return .get
+            }
+        }
+
     }
     
     private let networkManager = NetworkManager.shared

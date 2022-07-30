@@ -1,29 +1,36 @@
 //
 //  NetworkManager.swift
-//  ContactsList
+//  ShareMe
 //
 //  Created by Andrey Khakimov on 06.12.2021.
 //
 
 import Foundation
 
-class NetworkManager {
+final class NetworkManager {
     
     static let shared = NetworkManager()
-    
-    static let hostUrl = "https://eodhistoricaldata.com/api"
-    
+        
     private init() {}
+    
+    private func buildURL(endpoint: EndpointProtocol) -> URLComponents {
+        var components = URLComponents()
+        components.scheme = endpoint.scheme.rawValue
+        components.host = endpoint.hostURL
+        components.path = endpoint.path
+        components.queryItems = endpoint.parameters
+        return components
+    }
     
     @discardableResult
     func sendRequest<Response: Decodable>(endpoint: EndpointProtocol, completion: @escaping (Result<Response, NetworkError>) -> Void) -> URLSessionDataTask? {
-        guard let url = endpoint.url else {
+        let components = buildURL(endpoint: endpoint)
+        guard let url = components.url else {
             completion(.failure(.badURL))
             return nil
         }
         var request = URLRequest(url: url)
-        print("----", url)
-        request.httpMethod = endpoint.httpMethod
+        request.httpMethod = endpoint.httpMethod.rawValue
         let task = URLSession.shared.dataTask(with: request) { data, _, error in
             if let error = error {
                 if let rawURLError = error as? URLError,
