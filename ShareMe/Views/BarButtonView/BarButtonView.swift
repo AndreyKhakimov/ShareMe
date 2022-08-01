@@ -15,6 +15,14 @@ class BarButtonView: UIView {
         return contentView
     }()
     
+    lazy var logoLabel: InitialsLabel = {
+        let logoLabel = InitialsLabel()
+        logoLabel.clipsToBounds = true
+        logoLabel.textColor = .white
+        logoLabel.textAlignment = .center
+        return logoLabel
+    }()
+    
     lazy var descriptionLabel: UILabel = {
         let descriptionLabel = UILabel()
         descriptionLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -41,9 +49,16 @@ class BarButtonView: UIView {
     
     private func setupLayout() {
         addSubview(logoImageView)
+        addSubview(logoLabel)
         addSubview(descriptionLabel)
         
         logoImageView.snp.makeConstraints { make in
+            make.width.height.equalTo(30)
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().offset(16)
+        }
+        
+        logoLabel.snp.makeConstraints { make in
             make.width.height.equalTo(30)
             make.centerY.equalToSuperview()
             make.leading.equalToSuperview().offset(16)

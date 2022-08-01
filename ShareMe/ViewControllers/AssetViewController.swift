@@ -65,15 +65,13 @@ class AssetViewController: UIViewController {
         
         if let logoURL = logoURL {
             barButtonView.logoImageView.kf.setImage(with: logoURL)
+            barButtonView.logoLabel.isHidden = true
         } else {
-            // TODO: - Fix the absence of image
-            barButtonView.logoImageView.setImageForName(
-                code ?? "",
-                substringEndUp: "",
-                backgroundColor: nil,
-                circular: false,
-                textAttributes: nil
-            )
+            barButtonView.logoImageView.isHidden = true
+            barButtonView.logoLabel.substringEndUp = "-USD"
+            barButtonView.logoLabel.string = code ?? ""
+            barButtonView.logoLabel.font = .systemFont(ofSize: 12)
+
         }
         barButtonView.descriptionLabel.text = assetName
         return barButtonView
