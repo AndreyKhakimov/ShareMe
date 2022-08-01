@@ -11,12 +11,26 @@ import Kingfisher
 
 class PortfolioCollectionViewCell: UICollectionViewCell {
     
-    static let identifier = "PortfolioCollectionViewCell"
+    enum PortfolioCollectionViewCellState {
+        case logoImageView
+        case logoView
+    }
     
+    static let identifier = "PortfolioCollectionViewCell"
+        
     private let logoImageView: RoundedImageView = {
         let imageView = RoundedImageView(frame: CGRect())
         imageView.contentMode = .scaleAspectFit
         return imageView
+    }()
+    
+    private let logoLabel: InitialsLabel = {
+        let logoLabel = InitialsLabel()
+        logoLabel.clipsToBounds = true
+        logoLabel.textColor = .white
+        logoLabel.textAlignment = .center
+        logoLabel.substringEndUp = "-USD"
+        return logoLabel
     }()
     
     private let assetNameLabel: UILabel = {
@@ -65,6 +79,7 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
     
     private func setupViews() {
         contentView.addSubview(logoImageView)
+        contentView.addSubview(logoLabel)
         contentView.addSubview(assetNameLabel)
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(simpleChartView)
@@ -72,6 +87,12 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(priceChangeLabel)
         
         logoImageView.snp.makeConstraints { make in
+            make.height.width.equalTo(48)
+            make.left.equalToSuperview().offset(8)
+            make.top.equalToSuperview()
+        }
+        
+        logoLabel.snp.makeConstraints { make in
             make.height.width.equalTo(48)
             make.left.equalToSuperview().offset(8)
             make.top.equalToSuperview()
@@ -117,14 +138,19 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
     func configure(logo: URL?, assetName: String, assetDescription: String, chartData: [Double]?, price: Double, currency: String, priceChange: Double, pricePercentChange: Double) {
         if let logo = logo {
             logoImageView.kf.setImage(with: logo)
+            logoLabel.isHidden = true
+            logoImageView.isHidden = false
         } else {
-            logoImageView.setImageForName(
-                assetName,
-                substringEndUp: "-USD",
-                backgroundColor: nil,
-                circular: true,
-                textAttributes: nil
-            )
+//            logoImageView.setImageForName(
+//                assetName,
+//                substringEndUp: "-USD",
+//                backgroundColor: nil,
+//                circular: true,
+//                textAttributes: nil
+//            )
+            logoLabel.string = assetName
+            logoImageView.isHidden = true
+            logoLabel.isHidden = false
             print("test \(assetName)")
         }
         assetNameLabel.text = assetName

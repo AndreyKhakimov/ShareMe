@@ -125,6 +125,7 @@ extension PortfolioCollectionViewController: UICollectionViewDataSource, UIColle
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PortfolioCollectionViewCell.identifier, for: indexPath) as! PortfolioCollectionViewCell
         guard let asset = fetchedResultsController?.object(at: indexPath) else { return cell }
         let url = URL(string: asset.logo)
+        print("urlurl: \(url)")
         cell.configure(
             logo: url,
             assetName: asset.code,

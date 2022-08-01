@@ -40,6 +40,7 @@
 		427A2A55283DF4950043D1C9 /* PortfolioCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427A2A54283DF4950043D1C9 /* PortfolioCollectionViewController.swift */; };
 		427A2A57283DF91F0043D1C9 /* PortfolioCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427A2A56283DF91F0043D1C9 /* PortfolioCollectionViewCell.swift */; };
 		427BA773283044A100D5FC81 /* AssetInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427BA772283044A100D5FC81 /* AssetInfoView.swift */; };
+		4281C8D928986B8300184358 /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4281C8D828986B8300184358 /* UIImageView.swift */; };
 		42AD702E28031D4000817752 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD702D28031D4000817752 /* AppDelegate.swift */; };
 		42AD703028031D4000817752 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD702F28031D4000817752 /* SceneDelegate.swift */; };
 		42AD703728031D4200817752 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42AD703628031D4200817752 /* Assets.xcassets */; };
@@ -64,7 +65,7 @@
 		42E700D928454F6B000EA87C /* Comparable+Clamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E700D828454F6B000EA87C /* Comparable+Clamp.swift */; };
 		42E700DB2845FCCB000EA87C /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E700DA2845FCCB000EA87C /* SectionHeaderView.swift */; };
 		42EBE6012886D9C9004E4107 /* SmallSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42EBE6002886D9C9004E4107 /* SmallSectionHeaderView.swift */; };
-		42EBE605288ADD8A004E4107 /* InitialsUIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42EBE604288ADD8A004E4107 /* InitialsUIImage.swift */; };
+		42EBE605288ADD8A004E4107 /* InitialsLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42EBE604288ADD8A004E4107 /* InitialsLabel.swift */; };
 		42F6E4932890291A00A277D7 /* ShareMeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F6E4922890291A00A277D7 /* ShareMeTests.swift */; };
 		B88076ED76633FE0EF5EC5DB /* Pods_ShareMe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5773896E19DD619742BA63F /* Pods_ShareMe.framework */; };
 /* End PBXBuildFile section */
@@ -115,6 +116,7 @@
 		427A2A54283DF4950043D1C9 /* PortfolioCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioCollectionViewController.swift; sourceTree = "<group>"; };
 		427A2A56283DF91F0043D1C9 /* PortfolioCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioCollectionViewCell.swift; sourceTree = "<group>"; };
 		427BA772283044A100D5FC81 /* AssetInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetInfoView.swift; sourceTree = "<group>"; };
+		4281C8D828986B8300184358 /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
 		42AD702A28031D4000817752 /* ShareMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42AD702D28031D4000817752 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		42AD702F28031D4000817752 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -141,7 +143,7 @@
 		42E700D828454F6B000EA87C /* Comparable+Clamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Comparable+Clamp.swift"; sourceTree = "<group>"; };
 		42E700DA2845FCCB000EA87C /* SectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
 		42EBE6002886D9C9004E4107 /* SmallSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallSectionHeaderView.swift; sourceTree = "<group>"; };
-		42EBE604288ADD8A004E4107 /* InitialsUIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialsUIImage.swift; sourceTree = "<group>"; };
+		42EBE604288ADD8A004E4107 /* InitialsLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialsLabel.swift; sourceTree = "<group>"; };
 		42F6E4902890291A00A277D7 /* ShareMeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShareMeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		42F6E4922890291A00A277D7 /* ShareMeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareMeTests.swift; sourceTree = "<group>"; };
 		9A83B45E94240348F7A0EDE9 /* Pods-ShareMe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareMe.release.xcconfig"; path = "Target Support Files/Pods-ShareMe/Pods-ShareMe.release.xcconfig"; sourceTree = "<group>"; };
@@ -194,6 +196,7 @@
 				421D41B8280DFC9A002E291D /* UIViewController+Alert.swift */,
 				42E070472824461000A000C2 /* Date.swift */,
 				42E700D828454F6B000EA87C /* Comparable+Clamp.swift */,
+				4281C8D828986B8300184358 /* UIImageView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -473,7 +476,7 @@
 			children = (
 				423F92B828567BED00FCA7F2 /* GrayscaleView.swift */,
 				42D28D2528528B2E005A090A /* ShimmerView.swift */,
-				42EBE604288ADD8A004E4107 /* InitialsUIImage.swift */,
+				42EBE604288ADD8A004E4107 /* InitialsLabel.swift */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -676,7 +679,7 @@
 				421D41B9280DFC9A002E291D /* UIViewController+Alert.swift in Sources */,
 				427A2A43283BB6820043D1C9 /* AssetMapping.swift in Sources */,
 				42E0704D2824463D00A000C2 /* Quote.swift in Sources */,
-				42EBE605288ADD8A004E4107 /* InitialsUIImage.swift in Sources */,
+				42EBE605288ADD8A004E4107 /* InitialsLabel.swift in Sources */,
 				42E0704E2824463D00A000C2 /* QuoteNetworkManager.swift in Sources */,
 				424AE4B7283A194100AD6002 /* Portfolio.swift in Sources */,
 				424AE4B9283A1A2500AD6002 /* PortfolioNetworkManager.swift in Sources */,
@@ -686,6 +689,7 @@
 				42AD702E28031D4000817752 /* AppDelegate.swift in Sources */,
 				424AE4A9283930A200AD6002 /* Asset+CoreDataClass.swift in Sources */,
 				422B9DEF2864FAC20067A5DD /* ChartTableViewCell.swift in Sources */,
+				4281C8D928986B8300184358 /* UIImageView.swift in Sources */,
 				42001CA0283FB1E2008F9953 /* CandleChart.swift in Sources */,
 				427A2A4D283C0E810043D1C9 /* AssetModel.xcdatamodeld in Sources */,
 				42E617A62828F59100101CD0 /* PillMarker.swift in Sources */,
