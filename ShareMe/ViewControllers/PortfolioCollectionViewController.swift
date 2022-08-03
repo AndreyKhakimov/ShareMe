@@ -47,31 +47,7 @@ class PortfolioCollectionViewController: UIViewController {
         fetchedResultsController?.delegate = self
         storageManager.performFetch(fetchedResultsController: fetchedResultsController!)
         fetchAssets(fetchedResultsController?.fetchedObjects ?? [Asset]())
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        createWebSocketSessions()
-        subscribe()
-        webSocketManager.stockReceive { [weak self] value in
-            self?.storageManager.modifyAsset(code: value.code, exchange: "US") {
-                $0?.currentPrice = value.price
-            }
-        }
-        
-        webSocketManager.cryptoReceive { [weak self] value in
-            self?.storageManager.modifyAsset(code: value.code, exchange: "CC") {
-                $0?.currentPrice = Double(value.price) ?? 0
-                $0?.priceChangePercent = Double(value.dailyChangePercentage) ?? 0
-                $0?.priceChange = Double(value.dailyDifferencePrice) ?? 0
-            }
-        }
-        
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        print("viewWillDisappear")
+        setupWebSockets()
     }
     
     private func fetchAssets(_ assets: [Asset]) {
@@ -125,7 +101,6 @@ extension PortfolioCollectionViewController: UICollectionViewDataSource, UIColle
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PortfolioCollectionViewCell.identifier, for: indexPath) as! PortfolioCollectionViewCell
         guard let asset = fetchedResultsController?.object(at: indexPath) else { return cell }
         let url = URL(string: asset.logo)
-        print("urlurl: \(url)")
         cell.configure(
             logo: url,
             assetName: asset.code,
@@ -175,10 +150,14 @@ extension PortfolioCollectionViewController: UICollectionViewDataSource, UIColle
             type: asset.type,
             logoURL: URL(string: asset.logo)
         )
-        
+        assetVC.callback = { [weak self] in
+            guard let self = self else { return }
+            self.setupWebSockets()
+        }
         let navigationVC = UINavigationController(rootViewController: assetVC)
         present(navigationVC, animated: true, completion: nil)
         collectionView.deselectItem(at: indexPath, animated: true)
+        webSocketManager.close()
     }
 }
 
@@ -299,6 +278,24 @@ extension PortfolioCollectionViewController: URLSessionWebSocketDelegate {
         if let cryptos = fetchedResultsController?.fetchedObjects?.filter({ $0.type == .crypto}) {
             let cryptoTickers = cryptos.compactMap({ $0.code })
             webSocketManager.subscribe(cryptoSymbols: cryptoTickers)
+        }
+    }
+    
+    func setupWebSockets() {
+        createWebSocketSessions()
+        subscribe()
+        webSocketManager.stockReceive { [weak self] value in
+            self?.storageManager.modifyAsset(code: value.code, exchange: "US") {
+                $0?.currentPrice = value.price
+            }
+        }
+        
+        webSocketManager.cryptoReceive { [weak self] value in
+            self?.storageManager.modifyAsset(code: value.code, exchange: "CC") {
+                $0?.currentPrice = Double(value.price) ?? 0
+                $0?.priceChangePercent = Double(value.dailyChangePercentage) ?? 0
+                $0?.priceChange = Double(value.dailyDifferencePrice) ?? 0
+            }
         }
     }
     

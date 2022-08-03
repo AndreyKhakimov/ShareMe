@@ -24,6 +24,7 @@ class AssetViewController: UIViewController {
     var logoURL: URL?
     var quote: Quote?
     var news = [NewsResponse]()
+    var callback: (() -> Void)?
     let chartTableViewCell = ChartTableViewCell()
     
     private let sections: [Section] = [.chart, .news]
@@ -144,6 +145,11 @@ class AssetViewController: UIViewController {
         configureRightBarButton()
         setupNavBar()
         
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        callback?()
     }
     
     private func setupNavBar() {
