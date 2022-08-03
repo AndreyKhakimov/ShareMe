@@ -48,6 +48,7 @@ class InitialsLabel: UILabel {
     }
     
     private func generateColorFor(text: String) -> UIColor {
+        guard !text.isEmpty else { return .white }
         var hash = 0
         let colorConstant = 131
         let maxSafeValue = Int.max / colorConstant

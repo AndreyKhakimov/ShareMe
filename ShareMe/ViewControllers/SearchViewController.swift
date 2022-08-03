@@ -8,9 +8,17 @@
 import UIKit
 import SnapKit
 
+let logoImageCache = Cache<String, URL>()
+
 class SearchViewController: UIViewController {
     
-    private var type: AssetType = .stock
+    private struct Section: Hashable {
+        enum SectionType {
+            case first
+        }
+        var type: SectionType
+        var items: [SearchRespond]
+    }
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -32,15 +40,23 @@ class SearchViewController: UIViewController {
     }()
     
     private let networkManager = SearchAssetNetworkManager()
-    private var assets = [SearchRespond]()
     private var cellHeights = [IndexPath: CGFloat]()
     private var searchAssetsDataTask: URLSessionDataTask?
+    private var type: AssetType = .stock
+    private lazy var dataSource = createDatasource()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-        tableView.dataSource = self
         tableView.delegate = self
+    }
+    
+    private func createDatasource() -> UITableViewDiffableDataSource<Section, SearchRespond> {
+        UITableViewDiffableDataSource(tableView: tableView, cellProvider: { tableView, indexPath, itemIdentifier in
+            let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultCell.identifier, for: indexPath) as! SearchResultCell
+            cell.configure(code: itemIdentifier.code, exchange: itemIdentifier.exchange, image: itemIdentifier.logo ,info: itemIdentifier.name, description: itemIdentifier.description, chartData: itemIdentifier.chartData)
+            return cell
+        })
     }
     
     private func fetchAssets(with name: String, and type: AssetType = .stock) {
@@ -51,9 +67,14 @@ class SearchViewController: UIViewController {
                 
                 switch result {
                 case .success(let assetsRespond):
-                    self.assets = assetsRespond
                     self.cellHeights.removeAll()
-                    self.tableView.reloadData()
+                    self.updateDataSource(assets: assetsRespond)
+                    assetsRespond.forEach { asset in
+                        if let assetLogoURL = asset.logo {
+                            let id = [asset.code, asset.exchange].joined(separator: ":")
+                            logoImageCache.insert(assetLogoURL, forKey: id)
+                        }
+                    }
                 case .failure(let error):
                     if case .cancelled = error { break }
                     self.showAlert(title: error.title, message: error.description)
@@ -62,19 +83,14 @@ class SearchViewController: UIViewController {
         }
     }
     
-}
-
-// MARK: - TableView Datasource Methods
-extension SearchViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        assets.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultCell.identifier, for: indexPath) as! SearchResultCell
-        let asset = assets[indexPath.row]
-        cell.configure(image: asset.logo ,info: asset.name, description: asset.description, chartData: asset.chartData)
-        return cell
+    func updateDataSource(assets: [SearchRespond]) {
+        let sections = [Section(type: .first, items: assets)]
+        var snapshot = NSDiffableDataSourceSnapshot<Section, SearchRespond>()
+        snapshot.appendSections(sections)
+        sections.forEach { section in
+            snapshot.appendItems(section.items, toSection: section)
+        }
+        dataSource.apply(snapshot, animatingDifferences: true, completion: nil)
     }
     
     func isSearchBarEmpty() -> Bool {
@@ -86,7 +102,9 @@ extension SearchViewController: UITableViewDataSource {
 // MARK: - TableView Delegate Methods
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let asset = assets[indexPath.row]
+        tableView.deselectRow(at: indexPath, animated: true)
+        guard let asset = dataSource.itemIdentifier(for: indexPath) else { return }
+        
         let assetVC = AssetViewController(
             code: asset.code,
             assetName: asset.name,
@@ -95,7 +113,7 @@ extension SearchViewController: UITableViewDelegate {
             type: type,
             logoURL: asset.logo
         )
-       
+        
         navigationController?.pushViewController(assetVC, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
     }

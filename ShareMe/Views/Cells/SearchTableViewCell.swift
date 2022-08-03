@@ -81,9 +81,12 @@ class SearchResultCell: UITableViewCell {
         
     }
     
-    func configure(image: URL?, info: String, description: String, chartData: [Double]?) {
+    func configure(code: String, exchange: String, image: URL?, info: String, description: String, chartData: [Double]?) {
+        let id = [code, exchange].joined(separator: ":")
         if let image = image {
             logoImageView.kf.setImage(with: image)
+        } else if let cachedURL = logoImageCache.value(forKey: id) {
+            logoImageView.kf.setImage(with: cachedURL)
         } else {
             logoImageView.image = UIImage(systemName: "photo.artframe")
         }

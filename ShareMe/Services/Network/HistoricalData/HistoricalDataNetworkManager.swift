@@ -25,16 +25,7 @@ class HistoricalDataNetworkManager {
             }
         }
         
-        var hostURL: String {
-            switch self {
-            case .getHistoricalData:
-                return "eodhistoricaldata.com"
-            case .getIntradayHistoricalData:
-                return "eodhistoricaldata.com"
-            case .getNewsForAsset:
-                return "eodhistoricaldata.com"
-            }
-        }
+        var hostURL: String { "eodhistoricaldata.com" }
         
         var path: String {
             switch self {

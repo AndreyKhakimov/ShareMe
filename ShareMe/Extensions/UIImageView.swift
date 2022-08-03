@@ -88,29 +88,32 @@ extension UIImageView {
             completion(snapshot)
         }
     }
-}
-
-private func getFirstPartFromString(for string: String, substringEndUp: String) -> String {
-    if let range = string.range(of: substringEndUp) {
-        let firstPart = string[string.startIndex..<range.lowerBound]
-        guard firstPart.count < 3 else { return String(String(firstPart).prefix(3)) }
-        return firstPart.uppercased()
-    } else {
-        return String(string.prefix(3))
+    
+    private func getFirstPartFromString(for string: String, substringEndUp: String) -> String {
+        if let range = string.range(of: substringEndUp) {
+            let firstPart = string[string.startIndex..<range.lowerBound]
+            guard firstPart.count < 3 else { return String(String(firstPart).prefix(3)) }
+            return firstPart.uppercased()
+        } else {
+            return String(string.prefix(3))
+        }
     }
+    
+    private func randomColorComponent() -> Int {
+        let limit = kColorMaxComponent - kColorMinComponent
+        return kColorMinComponent + Int(drand48() * Double(limit))
+    }
+    
+    private func randomColor(for string: String) -> UIColor {
+        srand48(string.hashValue)
+        
+        let red = CGFloat(randomColorComponent()) / 255.0
+        let green = CGFloat(randomColorComponent()) / 255.0
+        let blue = CGFloat(randomColorComponent()) / 255.0
+        
+        return UIColor(red: red, green: green, blue: blue, alpha: 1.0)
+    }
+    
 }
 
-private func randomColorComponent() -> Int {
-    let limit = kColorMaxComponent - kColorMinComponent
-    return kColorMinComponent + Int(drand48() * Double(limit))
-}
 
-private func randomColor(for string: String) -> UIColor {
-    srand48(string.hashValue)
-    
-    let red = CGFloat(randomColorComponent()) / 255.0
-    let green = CGFloat(randomColorComponent()) / 255.0
-    let blue = CGFloat(randomColorComponent()) / 255.0
-    
-    return UIColor(red: red, green: green, blue: blue, alpha: 1.0)
-}

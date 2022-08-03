@@ -41,6 +41,7 @@
 		427A2A57283DF91F0043D1C9 /* PortfolioCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427A2A56283DF91F0043D1C9 /* PortfolioCollectionViewCell.swift */; };
 		427BA773283044A100D5FC81 /* AssetInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427BA772283044A100D5FC81 /* AssetInfoView.swift */; };
 		4281C8D928986B8300184358 /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4281C8D828986B8300184358 /* UIImageView.swift */; };
+		4281C8DC289991F300184358 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4281C8DB289991F300184358 /* Cache.swift */; };
 		42AD702E28031D4000817752 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD702D28031D4000817752 /* AppDelegate.swift */; };
 		42AD703028031D4000817752 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD702F28031D4000817752 /* SceneDelegate.swift */; };
 		42AD703728031D4200817752 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42AD703628031D4200817752 /* Assets.xcassets */; };
@@ -117,6 +118,7 @@
 		427A2A56283DF91F0043D1C9 /* PortfolioCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioCollectionViewCell.swift; sourceTree = "<group>"; };
 		427BA772283044A100D5FC81 /* AssetInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetInfoView.swift; sourceTree = "<group>"; };
 		4281C8D828986B8300184358 /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
+		4281C8DB289991F300184358 /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		42AD702A28031D4000817752 /* ShareMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42AD702D28031D4000817752 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		42AD702F28031D4000817752 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -322,6 +324,14 @@
 			path = AssetInfo;
 			sourceTree = "<group>";
 		};
+		4281C8DA289991DE00184358 /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				4281C8DB289991F300184358 /* Cache.swift */,
+			);
+			path = Cache;
+			sourceTree = "<group>";
+		};
 		42AD702128031D4000817752 = {
 			isa = PBXGroup;
 			children = (
@@ -386,6 +396,7 @@
 		42AD7050280732F200817752 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				4281C8DA289991DE00184358 /* Cache */,
 				42797E722836D4C8004D1A76 /* Storage */,
 				42AD70512807331800817752 /* Network */,
 			);
@@ -664,6 +675,7 @@
 				422B87F92813241600A082F0 /* Logo.swift in Sources */,
 				424AE4AA283930A200AD6002 /* Asset+CoreDataProperties.swift in Sources */,
 				427A2A55283DF4950043D1C9 /* PortfolioCollectionViewController.swift in Sources */,
+				4281C8DC289991F300184358 /* Cache.swift in Sources */,
 				423F92C3285A48CE00FCA7F2 /* CryptoWebSocketResponse.swift in Sources */,
 				424AE4AE2839342D00AD6002 /* StorageManager.swift in Sources */,
 				42E700D928454F6B000EA87C /* Comparable+Clamp.swift in Sources */,
