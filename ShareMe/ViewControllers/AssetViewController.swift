@@ -144,11 +144,9 @@ class AssetViewController: UIViewController {
         configureLeftBarButton()
         configureRightBarButton()
         setupNavBar()
-        
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+    deinit {
         callback?()
     }
     
@@ -404,6 +402,7 @@ extension AssetViewController: UITableViewDelegate, UITableViewDataSource {
             guard let url = URL(string: pieceOfNews.link) else { return }
             let vc = WebViewViewController(url: url)
             let navVC = UINavigationController(rootViewController: vc)
+            navVC.modalPresentationStyle = .fullScreen
             present(navVC, animated: true)
         }
         tableView.deselectRow(at: indexPath, animated: true)

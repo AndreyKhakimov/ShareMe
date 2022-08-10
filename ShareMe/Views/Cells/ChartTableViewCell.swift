@@ -162,16 +162,16 @@ class ChartTableViewCell: UITableViewCell {
     }
     
     private func updateView() {
-        //TODO: - Fix chartSelectionButton.setImage issue
+        //TODO: - change image
         switch chartType {
         case .line:
             mainCandleChart.isHidden = true
             mainChart.isHidden = false
-            chartSelectionButton.setImage(UIImage(systemName: "chart.xyaxis.line"), for: .normal)
+            chartSelectionButton.setImage(UIImage(systemName: "alt"), for: .normal)
         case .candle:
             mainCandleChart.isHidden = false
             mainChart.isHidden = true
-            chartSelectionButton.setImage(UIImage(systemName: "chart.bar.xaxis"), for: .normal)
+            chartSelectionButton.setImage(UIImage(systemName: "chart.bar.fill"), for: .normal)
         }
     }
     

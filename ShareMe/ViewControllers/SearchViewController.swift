@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 
+// TODO: - Move to AppDelegate
 let logoImageCache = Cache<String, URL>()
 
 class SearchViewController: UIViewController {
@@ -90,7 +91,7 @@ class SearchViewController: UIViewController {
         sections.forEach { section in
             snapshot.appendItems(section.items, toSection: section)
         }
-        dataSource.apply(snapshot, animatingDifferences: true, completion: nil)
+        dataSource.apply(snapshot, animatingDifferences: false, completion: nil)
     }
     
     func isSearchBarEmpty() -> Bool {

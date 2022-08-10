@@ -20,7 +20,7 @@ class GrayscaleView: UIView {
     }
     
     private func commonInit() {
-        backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+        backgroundColor = .tertiarySystemBackground
         layer.compositingFilter = "colorBlendMode"
     }
 

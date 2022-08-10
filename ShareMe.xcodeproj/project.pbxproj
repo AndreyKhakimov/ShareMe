@@ -208,6 +208,7 @@
 			children = (
 				42AD702D28031D4000817752 /* AppDelegate.swift */,
 				42AD702F28031D4000817752 /* SceneDelegate.swift */,
+				42AD703628031D4200817752 /* Assets.xcassets */,
 				42AD703B28031D4300817752 /* Info.plist */,
 			);
 			path = App;
@@ -360,7 +361,6 @@
 				42AD7050280732F200817752 /* Services */,
 				421D41BA280E0415002E291D /* App */,
 				421D41B7280DFC77002E291D /* Extensions */,
-				42AD703628031D4200817752 /* Assets.xcassets */,
 			);
 			path = ShareMe;
 			sourceTree = "<group>";

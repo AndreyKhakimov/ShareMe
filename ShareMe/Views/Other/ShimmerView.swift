@@ -10,7 +10,7 @@ import UIKit
 class ShimmerView: UIView {
     
     private var gradientColorOne = UIColor(white: 1, alpha: 0).cgColor
-    private var gradientColorTwo = UIColor(white: 1, alpha: 1.0).cgColor
+    private var gradientColorTwo = UIColor(white: 1, alpha: 1).cgColor
     
     private var gradientLayer = CAGradientLayer()
     
