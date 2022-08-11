@@ -10,14 +10,7 @@ import WebKit
 class WebViewViewController: UIViewController {
     
     private let webView: WKWebView = {
-//        let preferences = WKWebpagePreferences()
-//        if #available(iOS 14.0, *) {
-//            preferences.allowsContentJavaScript = true
-//        } else {
-//            // Fallback on earlier versions
-//        }
         let configuration = WKWebViewConfiguration()
-//        configuration.defaultWebpagePreferences = preferences
         let webView = WKWebView(frame: .zero, configuration: configuration)
         return webView
     }()

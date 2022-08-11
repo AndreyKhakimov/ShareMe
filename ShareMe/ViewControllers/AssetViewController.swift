@@ -80,7 +80,7 @@ class AssetViewController: UIViewController {
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
-        tableView.estimatedRowHeight = 100
+        tableView.estimatedRowHeight = 80
         tableView.estimatedSectionHeaderHeight = 30
         tableView.contentInsetAdjustmentBehavior = .never
         tableView.sectionHeaderHeight = UITableView.automaticDimension
@@ -312,7 +312,7 @@ extension AssetViewController: ChartViewDelegate {
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
         let marker = CircleMarker(color: .lightGray)
         chartTableViewCell.mainChart.marker = marker
-        let candleMarker = PillMarker(color: .systemRed, font: .systemFont(ofSize: 14), textColor: .brown)
+        let candleMarker = PillMarker(color: .label, font: UIFont(name: "Helvetica-Bold", size: 12) ?? .systemFont(ofSize: 12), textColor: .tertiarySystemBackground)
         candleMarker.chartView = chartTableViewCell.mainCandleChart
         chartTableViewCell.mainCandleChart.marker = candleMarker
         let CandleChartDataEntry = (entry as? CandleChartDataEntry)?.data as? CandleChartEntry
@@ -336,6 +336,17 @@ extension AssetViewController: ChartViewDelegate {
     func chartViewDidEndPanning(_ chartView: ChartViewBase) {
         chartView.highlightValues(nil)
         
+        chartTableViewCell.chartSelectionButton.isHidden = false
+        
+        switch chartTableViewCell.chartType {
+        case .line:
+            chartTableViewCell.assetInfoView.state = .staticPrice(price: quote?.currentPrice ?? 0, currency: currency ?? "", priceChange: quote?.priceChange ?? 0, pricePercentChange: quote?.changePercent ?? 0)
+        case .candle:
+            chartTableViewCell.assetInfoView.state = .staticPrice(price: quote?.currentPrice ?? 0, currency: currency ?? "", priceChange: quote?.priceChange ?? 0, pricePercentChange: quote?.changePercent ?? 0)
+        }
+    }
+    
+    func chartValueNothingSelected(_ chartView: ChartViewBase) {
         chartTableViewCell.chartSelectionButton.isHidden = false
         
         switch chartTableViewCell.chartType {
@@ -428,6 +439,7 @@ extension AssetViewController: UITableViewDelegate, UITableViewDataSource {
         case .news:
             let headerView = SmallSectionHeaderView()
             headerView.label.text = "News"
+            headerView.label.font = UIFont(name: "Georgia-Bold", size: 18)
             return headerView
         }
     }

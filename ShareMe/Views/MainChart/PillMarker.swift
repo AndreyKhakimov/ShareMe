@@ -9,21 +9,14 @@ import Charts
 
 class PillMarker: MarkerImage {
 
-//    private (set) var color: UIColor
+    private (set) var color: UIColor
     private (set) var font: UIFont
     private (set) var textColor: UIColor
     private var labelText: String = ""
     private var attrs: [NSAttributedString.Key: AnyObject]!
 
-    static let formatter: DateComponentsFormatter = {
-        let f = DateComponentsFormatter()
-        f.allowedUnits = [.minute, .second]
-        f.unitsStyle = .short
-        return f
-    }()
-
     init(color: UIColor, font: UIFont, textColor: UIColor) {
-//        self.color = color
+        self.color = color
         self.font = font
         self.textColor = textColor
 
@@ -55,7 +48,7 @@ class PillMarker: MarkerImage {
         // rounded rect
         let clipPath = UIBezierPath(roundedRect: rectangle, cornerRadius: 6.0).cgPath
         context.addPath(clipPath)
-        context.setFillColor(UIColor.white.cgColor)
+        context.setFillColor(color.cgColor)
         context.setStrokeColor(UIColor.black.cgColor)
         context.closePath()
         context.drawPath(using: .fillStroke)

@@ -15,7 +15,7 @@ class NewsTableViewCell: UITableViewCell {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .medium)
+        label.font = UIFont(name: "Georgia", size: 16)
         label.numberOfLines = 0
         label.textAlignment = .justified
         return label
@@ -25,7 +25,7 @@ class NewsTableViewCell: UITableViewCell {
         let label = UILabel()
         label.textColor = .lightGray
         label.font = .systemFont(ofSize: 12)
-        label.numberOfLines = 6
+        label.numberOfLines = 4
         label.textAlignment = .left
         return label
     }()
@@ -55,7 +55,7 @@ class NewsTableViewCell: UITableViewCell {
             make.left.equalToSuperview().offset(8)
             make.right.equalToSuperview().offset(-8)
             make.top.equalTo(titleLabel.snp.bottom).offset(2)
-            make.bottom.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-4)
         }
     }
     
