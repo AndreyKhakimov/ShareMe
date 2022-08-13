@@ -23,6 +23,7 @@ class SearchResultCell: UITableViewCell {
         let logoLabel = InitialsLabel()
         logoLabel.clipsToBounds = true
         logoLabel.textColor = .white
+        logoLabel.font = .systemFont(ofSize: 12, weight: .bold)
         logoLabel.textAlignment = .center
         logoLabel.substringEndUp = ""
         return logoLabel
