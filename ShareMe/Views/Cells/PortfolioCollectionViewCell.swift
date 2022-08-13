@@ -135,19 +135,15 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    func configure(logo: URL?, assetName: String, assetDescription: String, chartData: [Double]?, price: Double, currency: String, priceChange: Double, pricePercentChange: Double) {
+    func configure(uid: String, logo: URL?, assetName: String, assetDescription: String, chartData: [Double]?, price: Double, currency: String, priceChange: Double, pricePercentChange: Double) {
         if let logo = logo {
             logoImageView.kf.setImage(with: logo)
             logoLabel.isHidden = true
             logoImageView.isHidden = false
-        } else {
-//            logoImageView.setImageForName(
-//                assetName,
-//                substringEndUp: "-USD",
-//                backgroundColor: nil,
-//                circular: true,
-//                textAttributes: nil
-//            )
+        } else if let cachedURL = logoImageCache.value(forKey: uid) {
+            logoImageView.kf.setImage(with: cachedURL)
+        }
+        else {
             logoLabel.string = assetName
             logoImageView.isHidden = true
             logoLabel.isHidden = false

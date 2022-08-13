@@ -19,6 +19,15 @@ class SearchResultCell: UITableViewCell {
         return imageView
     }()
     
+    private let logoLabel: InitialsLabel = {
+        let logoLabel = InitialsLabel()
+        logoLabel.clipsToBounds = true
+        logoLabel.textColor = .white
+        logoLabel.textAlignment = .center
+        logoLabel.substringEndUp = ""
+        return logoLabel
+    }()
+    
     private let searchResultLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .medium)
@@ -50,11 +59,17 @@ class SearchResultCell: UITableViewCell {
     
     private func setupViews() {
         contentView.addSubview(logoImageView)
+        contentView.addSubview(logoLabel)
         contentView.addSubview(searchResultLabel)
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(simpleChartView)
         
         logoImageView.snp.makeConstraints { make in
+            make.width.height.equalTo(32)
+            make.left.top.equalTo(8)
+        }
+        
+        logoLabel.snp.makeConstraints { make in
             make.width.height.equalTo(32)
             make.left.top.equalTo(8)
         }
@@ -85,10 +100,14 @@ class SearchResultCell: UITableViewCell {
         let id = [code, exchange].joined(separator: ":")
         if let image = image {
             logoImageView.kf.setImage(with: image)
+            logoLabel.isHidden = true
+            logoImageView.isHidden = false
         } else if let cachedURL = logoImageCache.value(forKey: id) {
             logoImageView.kf.setImage(with: cachedURL)
         } else {
-            logoImageView.image = UIImage(systemName: "photo.artframe")
+            logoLabel.string = code
+            logoImageView.isHidden = true
+            logoLabel.isHidden = false
         }
         searchResultLabel.text = info
         descriptionLabel.text = description

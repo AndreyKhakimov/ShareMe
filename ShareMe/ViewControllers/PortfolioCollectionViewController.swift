@@ -102,6 +102,7 @@ extension PortfolioCollectionViewController: UICollectionViewDataSource, UIColle
         guard let asset = fetchedResultsController?.object(at: indexPath) else { return cell }
         let url = URL(string: asset.logo)
         cell.configure(
+            uid: asset.uid,
             logo: url,
             assetName: asset.code,
             assetDescription: asset.name,
