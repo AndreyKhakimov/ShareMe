@@ -13,18 +13,18 @@ class NewsTableViewCell: UITableViewCell {
     
     static let identifier = "NewsTableViewCell"
     
-    private let titleLabel: UILabel = {
+    private let dateLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Georgia", size: 16)
+        label.font = UIFont(name: "Georgia", size: 12)
+        label.textColor = .lightGray
         label.numberOfLines = 0
         label.textAlignment = .justified
         return label
     }()
 
-    private let descriptionLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .lightGray
-        label.font = .systemFont(ofSize: 12)
+        label.font = UIFont(name: "Georgia", size: 20)
         label.numberOfLines = 4
         label.textAlignment = .left
         return label
@@ -40,34 +40,34 @@ class NewsTableViewCell: UITableViewCell {
     }
     
     private func setupViews() {
+        contentView.addSubview(dateLabel)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(descriptionLabel)
  
+        
+        dateLabel.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(8)
+            make.right.equalToSuperview().offset(-8)
+            make.top.equalToSuperview().offset(2)
+            make.bottom.equalTo(titleLabel.snp.top).offset(-2)
+        }
         
         titleLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(8)
             make.right.equalToSuperview().offset(-8)
-            make.top.equalToSuperview().offset(2)
-            make.bottom.equalTo(descriptionLabel.snp.top).offset(-2)
-        }
-        
-        descriptionLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(8)
-            make.right.equalToSuperview().offset(-8)
-            make.top.equalTo(titleLabel.snp.bottom).offset(2)
+            make.top.equalTo(dateLabel.snp.bottom).offset(2)
             make.bottom.equalToSuperview().offset(-4)
         }
     }
     
     func configure(title: String, description: String) {
-        titleLabel.text = title
-        descriptionLabel.text = description
+        dateLabel.text = title
+        titleLabel.text = description
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        dateLabel.text = nil
         titleLabel.text = nil
-        descriptionLabel.text = nil
     }
     
 }

@@ -118,9 +118,20 @@ class HistoricalDataNetworkManager {
             endpoint: Endpoints.getNewsForAsset(assetName: assetName, exchange: exchange),
             completion: { (result: Result<[NewsResponse], NetworkError>) in
                 switch result {
-                case .success(let news):
+                case .success(var news):
+                    let formatter = ISO8601DateFormatter()
+                    for index in 0..<news.count {
+                        let date = formatter.date(from: news[index].date) ?? Date()
+                        formatter.formatOptions = [.withFullDate, .withDashSeparatorInDate]
+                        let stringFromDate = formatter.string(from: date)
+                        news[index].date = stringFromDate
+                    }
+//                    news.forEach { pieceOfNews in
+//                        let date = formatter.date(from: pieceOfNews.date) ?? Date()
+//                        let stringFromDate = formatter.string(from: date)
+//                        pieceOfNews.date = stringFromDate
+//                    }
                     completion(.success(news))
-                    
                 case .failure(let error):
                     completion(.failure(error))
                 }

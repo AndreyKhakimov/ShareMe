@@ -384,7 +384,7 @@ extension AssetViewController: UITableViewDelegate, UITableViewDataSource {
         case .news:
             let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier, for: indexPath) as! NewsTableViewCell
             let pieceOfNews = news[indexPath.row]
-            cell.configure(title: pieceOfNews.title, description: pieceOfNews.content)
+            cell.configure(title: pieceOfNews.date, description: pieceOfNews.title)
             return cell
         }
     }
