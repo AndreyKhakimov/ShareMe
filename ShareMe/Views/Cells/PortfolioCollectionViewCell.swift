@@ -9,6 +9,36 @@ import UIKit
 import SnapKit
 import Kingfisher
 
+struct PortfolioCellData: Hashable {
+    var uid: String
+    var code: String
+    var exchange: String
+    var type: AssetType
+    var currentPrice: Double
+    var priceChange: Double
+    var priceChangePercent: Double
+    var name: String
+    var logo: String
+    var currency: String
+    var country: String
+    var chartData: [Double]
+    
+    init(asset: Asset) {
+        self.uid = asset.uid
+        self.code = asset.code
+        self.exchange = asset.exchange
+        self.type = asset.type
+        self.currentPrice = asset.currentPrice
+        self.priceChange = asset.priceChange
+        self.priceChangePercent = asset.priceChangePercent
+        self.name = asset.name
+        self.logo = asset.logo
+        self.currency = asset.currency
+        self.country = asset.country
+        self.chartData = asset.chartData
+    }
+}
+
 class PortfolioCollectionViewCell: UICollectionViewCell {
     
     enum PortfolioCollectionViewCellState {

@@ -13,7 +13,7 @@ class StorageManager {
     static let shared = StorageManager()
     
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    private lazy var privateContext: NSManagedObjectContext = {
+    lazy var privateContext: NSManagedObjectContext = {
         let moc = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         moc.parent = context
         return moc
@@ -128,6 +128,7 @@ class StorageManager {
         
         do {
             try context.save()
+            print("deleteAsset context.save()")
         } catch {
             print("Could not delete. \(error.localizedDescription).")
         }
