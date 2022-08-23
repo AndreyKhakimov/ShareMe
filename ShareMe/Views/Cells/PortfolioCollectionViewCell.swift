@@ -184,6 +184,15 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
         
         if let chartData = chartData {
             simpleChartView.chartData = chartData
+            guard let first = simpleChartView.chartData.first,
+                  let last = simpleChartView.chartData.last else { return }
+            if first < last {
+                simpleChartView.lineColor = .systemGreen
+                simpleChartView.gradientColor = .systemGreen
+            } else {
+                simpleChartView.lineColor = .systemRed
+                simpleChartView.gradientColor = .systemRed
+            }
         }
         
         switch price {
@@ -196,14 +205,11 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
         
         let formattedPricePercentChange = String(format: "%.2f", pricePercentChange)
         
+        
         if priceChange >= 0 {
-            simpleChartView.lineColor = .systemGreen
-            simpleChartView.gradientColor = .systemGreen
             priceChangeLabel.textColor = .systemGreen
             priceChangeLabel.text = "+\(formattedPricePercentChange) %"
         } else {
-            simpleChartView.lineColor = .systemRed
-            simpleChartView.gradientColor = .systemRed
             priceChangeLabel.textColor = .red
             priceChangeLabel.text = "\(formattedPricePercentChange) %"
         }
