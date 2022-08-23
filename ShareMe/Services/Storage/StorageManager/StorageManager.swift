@@ -127,6 +127,7 @@ class StorageManager {
         privateContext.delete(asset)
         
         do {
+            try privateContext.save()
             try context.save()
             print("deleteAsset context.save()")
         } catch {

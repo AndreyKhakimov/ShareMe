@@ -16,7 +16,7 @@ class PortfolioCollectionViewController: UIViewController {
     
     private struct Section: Hashable {
         var type: AssetType
-        var items: [NSManagedObjectID]
+        var items: [PortfolioCellData]
     }
     
     private lazy var fetchedResultsController: NSFetchedResultsController<Asset> = {
@@ -33,6 +33,7 @@ class PortfolioCollectionViewController: UIViewController {
                 cacheName: nil)
             return fetchedResultsController
     }()
+    
     private lazy var collectionView: UICollectionView = {
         let layout = generateCollectionViewLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -47,8 +48,8 @@ class PortfolioCollectionViewController: UIViewController {
     private let webSocketManager = WebSocketManager()
     private var webSocketStockUpdates = [String:QuoteWebSocketResponse]()
     private var webSocketCryptoUpdates = [String:CryptoWebSocketResponse]()
-    private lazy var managedObjectContext = storageManager.privateContext
-    private var dataSource: UICollectionViewDiffableDataSource<String, NSManagedObjectID>?
+//    private lazy var managedObjectContext = storageManager.privateContext
+    private var dataSource: UICollectionViewDiffableDataSource<Section, PortfolioCellData>?
     
     // MARK: - Override
     override func viewDidLoad() {
@@ -59,9 +60,9 @@ class PortfolioCollectionViewController: UIViewController {
         collectionView.delegate = self
 //        fetchedResultsController = storageManager.fetchedResultsController
 //        fetchedResultsController.performFetch()
+        dataSource = createDatasource()
         fetchedResultsController.delegate = self
 //        storageManager.performFetch(fetchedResultsController: fetchedResultsController!)
-        dataSource = createDatasource()
         do {
             try fetchedResultsController.performFetch()
         } catch let error as NSError {
@@ -107,8 +108,8 @@ class PortfolioCollectionViewController: UIViewController {
         })
     }
     
-    private func createDatasource() -> UICollectionViewDiffableDataSource<String, NSManagedObjectID> {
-        let dataSource: UICollectionViewDiffableDataSource<String, NSManagedObjectID> = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { [fetchedResultsController] collectionView, indexPath, itemIdentifier in
+    private func createDatasource() -> UICollectionViewDiffableDataSource<Section, PortfolioCellData> {
+        let dataSource: UICollectionViewDiffableDataSource<Section, PortfolioCellData> = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { [fetchedResultsController] collectionView, indexPath, itemIdentifier in
             let object = fetchedResultsController.object(at: indexPath)
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PortfolioCollectionViewCell.identifier, for: indexPath) as! PortfolioCollectionViewCell
             let url = URL(string: object.logo)
@@ -158,34 +159,34 @@ class PortfolioCollectionViewController: UIViewController {
         }
     }
     
-//    func updateDataSource(assets: [Asset]) {
-//        //        let sections = [Section(type: .first, items: assets)]
-//        var sections = [Section]()
-//        let stockAssets = assets
-//            .filter({ $0.type == .stock })
-//            .map { PortfolioCellData(asset: $0) }
-//        let cryptoAssets = assets
-//            .filter({ $0.type == .crypto })
-//            .map { PortfolioCellData(asset: $0) }
-//
-//        if !stockAssets.isEmpty {
-//            sections.append(Section(type: .stock, items: stockAssets))
-//        }
-//
-//        if !cryptoAssets.isEmpty {
-//            sections.append(Section(type: .crypto, items: cryptoAssets))
-//        }
-//
-//        if !sections.isEmpty {
-//            var snapshot = NSDiffableDataSourceSnapshot<Section, PortfolioCellData>()
-//            snapshot.appendSections(sections)
-//
-//            sections.forEach { section in
-//                snapshot.appendItems(section.items, toSection: section)
-//            }
-//            dataSource.apply(snapshot, animatingDifferences: false, completion: nil)
-//        }
-//    }
+    func updateDataSource(assets: [Asset]) {
+        //        let sections = [Section(type: .first, items: assets)]
+        var sections = [Section]()
+        let stockAssets = assets
+            .filter({ $0.type == .stock })
+            .map { PortfolioCellData(asset: $0) }
+        let cryptoAssets = assets
+            .filter({ $0.type == .crypto })
+            .map { PortfolioCellData(asset: $0) }
+
+        if !stockAssets.isEmpty {
+            sections.append(Section(type: .stock, items: stockAssets))
+        }
+
+        if !cryptoAssets.isEmpty {
+            sections.append(Section(type: .crypto, items: cryptoAssets))
+        }
+
+        if !sections.isEmpty {
+            var snapshot = NSDiffableDataSourceSnapshot<Section, PortfolioCellData>()
+            snapshot.appendSections(sections)
+
+            sections.forEach { section in
+                snapshot.appendItems(section.items, toSection: section)
+            }
+            dataSource?.apply(snapshot, animatingDifferences: false, completion: nil)
+        }
+    }
     
     deinit {
         for o in ops { o.cancel() }
@@ -288,24 +289,31 @@ extension PortfolioCollectionViewController: UICollectionViewDelegate {
 extension PortfolioCollectionViewController: NSFetchedResultsControllerDelegate {
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
-        guard let dataSource = collectionView.dataSource as? UICollectionViewDiffableDataSource<String, NSManagedObjectID> else {
+        guard let dataSource = collectionView.dataSource as? UICollectionViewDiffableDataSource<Section, PortfolioCellData> else {
             assertionFailure("The data source has not implemented snapshot support while it should")
             return
         }
         var snapshot = snapshot as NSDiffableDataSourceSnapshot<String, NSManagedObjectID>
-        let currentSnapshot = dataSource.snapshot() as NSDiffableDataSourceSnapshot<String, NSManagedObjectID>
-        
-        let reloadIdentifiers: [NSManagedObjectID] = snapshot.itemIdentifiers.compactMap { itemIdentifier in
-            guard let currentIndex = currentSnapshot.indexOfItem(itemIdentifier), let index = snapshot.indexOfItem(itemIdentifier), index == currentIndex else {
-                return nil
-            }
-            guard let existingObject = try? controller.managedObjectContext.existingObject(with: itemIdentifier), existingObject.isUpdated else { return nil }
-            return itemIdentifier
+        let reloadIdentifiers: [NSManagedObjectID] = snapshot.itemIdentifiers
+        let newValue = reloadIdentifiers.compactMap { itemId -> Asset? in
+            guard let existingObject = try? controller.managedObjectContext.existingObject(with: itemId) else { return nil }
+
+            return existingObject as? Asset
         }
-        snapshot.reloadItems(reloadIdentifiers)
+        updateDataSource(assets: newValue)
+//        let currentSnapshot = dataSource.snapshot() as NSDiffableDataSourceSnapshot<String, PortfolioCellData>
         
-        let shouldAnimate = collectionView.numberOfSections != 0
-        dataSource.apply(snapshot as NSDiffableDataSourceSnapshot<String, NSManagedObjectID>, animatingDifferences: shouldAnimate)
+//        let reloadIdentifiers: [NSManagedObjectID] = snapshot.itemIdentifiers.compactMap { itemIdentifier in
+//            guard let currentIndex = currentSnapshot.indexOfItem(itemIdentifier), let index = snapshot.indexOfItem(itemIdentifier), index == currentIndex else {
+//                return nil
+//            }
+//            guard let existingObject = try? controller.managedObjectContext.existingObject(with: itemIdentifier), existingObject.isUpdated else { return nil }
+//            return itemIdentifier
+//        }
+//        snapshot.reloadItems(reloadIdentifiers)
+//
+//        let shouldAnimate = collectionView.numberOfSections != 0
+//        dataSource.apply(snapshot as NSDiffableDataSourceSnapshot<String, PortfolioCellData>, animatingDifferences: shouldAnimate)
     }
 //
 //    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
@@ -433,25 +441,29 @@ extension PortfolioCollectionViewController: URLSessionWebSocketDelegate {
                 $0?.currentPrice = value.price
             }
 //            DispatchQueue.main.async {
-//                self?.updateDataSource(assets: self?.fetchedResultsController?.fetchedObjects ?? [])
+//                self?.updateDataSource(assets: self?.fetchedResultsController.fetchedObjects ?? [])
 //            }
         }
         
         webSocketManager.cryptoReceive { [weak self] value in
+            
             self?.storageManager.modifyAsset(code: value.code, exchange: "CC") {
                 $0?.currentPrice = Double(value.price) ?? 0
                 $0?.priceChangePercent = Double(value.dailyChangePercentage) ?? 0
                 $0?.priceChange = Double(value.dailyDifferencePrice) ?? 0
             }
 //            DispatchQueue.main.async {
-//                self?.updateDataSource(assets: self?.fetchedResultsController?.fetchedObjects ?? [])
+//                self?.updateDataSource(assets: self?.fetchedResultsController.fetchedObjects ?? [])
 //            }
         }
     }
     
-    func updateVisibleItems(collectionView: UICollectionView, itemID: String) {
-        let visibleItems = collectionView.indexPathsForVisibleItems
-        visibleItems
-    }
+//    func updateVisibleItems(collectionView: UICollectionView, itemID: NSManagedObjectID) {
+//        let visibleIndexpathes = collectionView.indexPathsForVisibleItems
+//        let visibleItems = visibleIndexpathes.filter({ dataSource?.itemIdentifier(for: $0) == itemID })
+//        var cellsToUpdate = visibleItems.map({ [weak self] index in
+//            self?.collectionView.cellForItem(at: index)
+//        })
+//    }
     
 }

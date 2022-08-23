@@ -28,9 +28,9 @@ struct PortfolioCellData: Hashable {
         self.code = asset.code
         self.exchange = asset.exchange
         self.type = asset.type
-        self.currentPrice = asset.currentPrice
-        self.priceChange = asset.priceChange
-        self.priceChangePercent = asset.priceChangePercent
+        self.currentPrice = asset.currentPrice.rounded(toPlaces: 2)
+        self.priceChange = asset.priceChange.rounded(toPlaces: 2)
+        self.priceChangePercent = asset.priceChangePercent.rounded(toPlaces: 2)
         self.name = asset.name
         self.logo = asset.logo
         self.currency = asset.currency

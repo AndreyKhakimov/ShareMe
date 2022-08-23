@@ -312,7 +312,7 @@ extension AssetViewController: ChartViewDelegate {
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
         let marker = CircleMarker(color: .lightGray)
         chartTableViewCell.mainChart.marker = marker
-        let candleMarker = PillMarker(color: .label, font: UIFont(name: "Helvetica-Bold", size: 12) ?? .systemFont(ofSize: 12), textColor: .tertiarySystemBackground)
+        let candleMarker = PillMarker(color: .label, font: Fonts.helveticaBold12, textColor: .tertiarySystemBackground)
         candleMarker.chartView = chartTableViewCell.mainCandleChart
         chartTableViewCell.mainCandleChart.marker = candleMarker
         let CandleChartDataEntry = (entry as? CandleChartDataEntry)?.data as? CandleChartEntry
@@ -438,8 +438,8 @@ extension AssetViewController: UITableViewDelegate, UITableViewDataSource {
             return nil
         case .news:
             let headerView = SmallSectionHeaderView()
-            headerView.label.text = "News"
-            headerView.label.font = UIFont(name: "Georgia-Bold", size: 18)
+            headerView.label.text = "NEWS"
+            headerView.label.font = UIFont(name: "Baskerville-Bold", size: 18)
             return headerView
         }
     }
