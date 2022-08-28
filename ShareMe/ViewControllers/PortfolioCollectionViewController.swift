@@ -130,11 +130,14 @@ class PortfolioCollectionViewController: UIViewController {
             guard kind == UICollectionView.elementKindSectionHeader else {
                 return nil
             }
+            guard let sections = self?.fetchedResultsController.sections else { return SectionHeaderView() }
             let view = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
                 withReuseIdentifier: "header",
                 for: indexPath) as? SectionHeaderView
-            view?.label.text = "Test"
+            let asset = AssetType(rawValue: Int16(sections[indexPath.section].name) ?? 0)
+//            let asset = AssetType(rawValue: Int16(object?.type))
+            view?.label.text = asset?.assetName
             return view
         }
         return dataSource
@@ -293,12 +296,48 @@ extension PortfolioCollectionViewController: NSFetchedResultsControllerDelegate 
             assertionFailure("The data source has not implemented snapshot support while it should")
             return
         }
+        let currentSnapshot = dataSource.snapshot() as NSDiffableDataSourceSnapshot<Section, PortfolioCellData>
         var snapshot = snapshot as NSDiffableDataSourceSnapshot<String, NSManagedObjectID>
         let reloadIdentifiers: [NSManagedObjectID] = snapshot.itemIdentifiers
         let newValue = reloadIdentifiers.compactMap { itemId -> Asset? in
             guard let existingObject = try? controller.managedObjectContext.existingObject(with: itemId) else { return nil }
-
             return existingObject as? Asset
+        }
+        let insertedAssets = newValue.filter { newItem in
+            !currentSnapshot.itemIdentifiers.contains { newItem.uid == $0.uid }
+        }
+        if !insertedAssets.isEmpty {
+            insertedAssets.forEach{ newAsset in
+                fetchAssets([newAsset])
+                if newAsset.type == .stock {
+                    if webSocketManager.stockWebSocket == nil {
+                        webSocketManager.createStockSession(delegate: self)
+                        webSocketManager.subscribe(stockSymbols: [newAsset.code])
+                    } else {
+                        webSocketManager.subscribe(stockSymbols: [newAsset.code])
+                    }
+                } else {
+                    if webSocketManager.cryptoWebSocket == nil {
+                        webSocketManager.createCryptoSession(delegate: self)
+                        webSocketManager.subscribe(cryptoSymbols: [newAsset.code])
+                    } else {
+                        webSocketManager.subscribe(cryptoSymbols: [newAsset.code])
+                    }
+                }
+            }
+        }
+        let deletedAssets = currentSnapshot.itemIdentifiers.filter { oldItem in
+            !newValue.contains { oldItem.uid == $0.uid }
+        }
+        if !deletedAssets.isEmpty {
+            deletedAssets.forEach { asset in
+                if asset.type == .stock {
+                    self.webSocketManager.unsubscribe(stockSymbols: [asset.code])
+                } else {
+                    self.webSocketManager.unsubscribe(cryptoSymbols: [asset.code])
+                }
+            }
+            print("Remove socket \(deletedAssets)")
         }
         updateDataSource(assets: newValue)
 //        let currentSnapshot = dataSource.snapshot() as NSDiffableDataSourceSnapshot<String, PortfolioCellData>
@@ -398,6 +437,39 @@ extension PortfolioCollectionViewController: NSFetchedResultsControllerDelegate 
 //        }, completion: { (finished) -> Void in self.ops.removeAll() })
 //    }
 //
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith diff: CollectionDifference<NSManagedObjectID>) {
+        for change in diff {
+            switch change {
+            case .insert(offset: _, element: let elementID, associatedWith: _):
+                guard let newAsset = try? controller.managedObjectContext.existingObject(with: elementID) as? Asset else { return
+                }
+                fetchAssets([newAsset])
+                if newAsset.type == .stock {
+                    if webSocketManager.stockWebSocket == nil {
+                        webSocketManager.createStockSession(delegate: self)
+                        webSocketManager.subscribe(stockSymbols: [newAsset.code])
+                    } else {
+                        webSocketManager.subscribe(stockSymbols: [newAsset.code])
+                    }
+                } else {
+                    if webSocketManager.cryptoWebSocket == nil {
+                        webSocketManager.createCryptoSession(delegate: self)
+                        webSocketManager.subscribe(cryptoSymbols: [newAsset.code])
+                    } else {
+                        webSocketManager.subscribe(cryptoSymbols: [newAsset.code])
+                    }
+                }
+            case .remove(offset: _, element: let elementID, associatedWith: _):
+                guard let asset = try? controller.managedObjectContext.existingObject(with: elementID) as? Asset else { return
+                }
+                if asset.type == .stock {
+                    self.webSocketManager.unsubscribe(stockSymbols: [asset.code])
+                } else {
+                    self.webSocketManager.unsubscribe(cryptoSymbols: [asset.code])
+                }
+            }
+        }
+    }
 }
 
 // MARK: - URLSessionWebSocket Delegate Methods

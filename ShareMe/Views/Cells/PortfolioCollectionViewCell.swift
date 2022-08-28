@@ -177,7 +177,7 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
             logoLabel.string = assetName
             logoImageView.isHidden = true
             logoLabel.isHidden = false
-            print("test \(assetName)")
+            print("configure new PortfolioCollectionViewCell \(assetName)")
         }
         assetNameLabel.text = assetName
         descriptionLabel.text = assetDescription
