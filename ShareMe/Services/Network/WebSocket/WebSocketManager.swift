@@ -174,7 +174,7 @@ class WebSocketManager {
             case .failure(let error):
                 print("Failed to receive message: \(error.localizedDescription)")
             }
-            DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
+            DispatchQueue.global().async {
                 self.stockReceive(
                     stockCompletion: stockCompletion
                 )
