@@ -17,6 +17,14 @@ class PortfolioCollectionViewController: UIViewController {
     private struct Section: Hashable {
         var type: AssetType
         var items: [PortfolioCellData]
+        
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(type)
+        }
+    
+        static func == (lhs: Self, rhs: Self) -> Bool {
+            lhs.type == rhs.type
+        }
     }
     
     private lazy var fetchedResultsController: NSFetchedResultsController<Asset> = {
@@ -43,26 +51,22 @@ class PortfolioCollectionViewController: UIViewController {
         collectionView.register(SectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         return collectionView
     }()
+    
+    private let updateAssetCacheQueue = DispatchQueue(label: "updateAssetCacheQueue", qos: .background, target: .global())
     private let networkManager = PortfolioNetworkManager()
     private let storageManager = StorageManager.shared
     private let webSocketManager = WebSocketManager()
-    private var webSocketStockUpdates = [String:QuoteWebSocketResponse]()
-    private var webSocketCryptoUpdates = [String:CryptoWebSocketResponse]()
-//    private lazy var managedObjectContext = storageManager.privateContext
+    private var webSocketStockCache = [String:QuoteWebSocketResponse]()
+    private var webSocketCryptoCache = [String:CryptoWebSocketResponse]()
     private var dataSource: UICollectionViewDiffableDataSource<Section, PortfolioCellData>?
     
     // MARK: - Override
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-//        collectionView.dataSource = dataSource
-        //        collectionView.dataSource = self
         collectionView.delegate = self
-//        fetchedResultsController = storageManager.fetchedResultsController
-//        fetchedResultsController.performFetch()
         dataSource = createDatasource()
         fetchedResultsController.delegate = self
-//        storageManager.performFetch(fetchedResultsController: fetchedResultsController!)
         do {
             try fetchedResultsController.performFetch()
         } catch let error as NSError {
@@ -70,6 +74,14 @@ class PortfolioCollectionViewController: UIViewController {
         }
         fetchAssets(fetchedResultsController.fetchedObjects ?? [Asset]())
         setupWebSockets()
+        
+        let timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            self?.updateAssetCacheQueue.async {
+                self?.updateQuoteItemsWithTimer()
+                self?.updateCryptoItemsWithTimer()
+            }
+        }
+        RunLoop.current.add(timer, forMode: .common)
     }
     
     private func generateCollectionViewLayout() -> UICollectionViewCompositionalLayout {
@@ -136,7 +148,6 @@ class PortfolioCollectionViewController: UIViewController {
                 withReuseIdentifier: "header",
                 for: indexPath) as? SectionHeaderView
             let asset = AssetType(rawValue: Int16(sections[indexPath.section].name) ?? 0)
-//            let asset = AssetType(rawValue: Int16(object?.type))
             view?.label.text = asset?.assetName
             return view
         }
@@ -297,7 +308,7 @@ extension PortfolioCollectionViewController: NSFetchedResultsControllerDelegate 
             return
         }
         let currentSnapshot = dataSource.snapshot() as NSDiffableDataSourceSnapshot<Section, PortfolioCellData>
-        var snapshot = snapshot as NSDiffableDataSourceSnapshot<String, NSManagedObjectID>
+        let snapshot = snapshot as NSDiffableDataSourceSnapshot<String, NSManagedObjectID>
         let reloadIdentifiers: [NSManagedObjectID] = snapshot.itemIdentifiers
         let newValue = reloadIdentifiers.compactMap { itemId -> Asset? in
             guard let existingObject = try? controller.managedObjectContext.existingObject(with: itemId) else { return nil }
@@ -340,135 +351,7 @@ extension PortfolioCollectionViewController: NSFetchedResultsControllerDelegate 
             print("Remove socket \(deletedAssets)")
         }
         updateDataSource(assets: newValue)
-//        let currentSnapshot = dataSource.snapshot() as NSDiffableDataSourceSnapshot<String, PortfolioCellData>
         
-//        let reloadIdentifiers: [NSManagedObjectID] = snapshot.itemIdentifiers.compactMap { itemIdentifier in
-//            guard let currentIndex = currentSnapshot.indexOfItem(itemIdentifier), let index = snapshot.indexOfItem(itemIdentifier), index == currentIndex else {
-//                return nil
-//            }
-//            guard let existingObject = try? controller.managedObjectContext.existingObject(with: itemIdentifier), existingObject.isUpdated else { return nil }
-//            return itemIdentifier
-//        }
-//        snapshot.reloadItems(reloadIdentifiers)
-//
-//        let shouldAnimate = collectionView.numberOfSections != 0
-//        dataSource.apply(snapshot as NSDiffableDataSourceSnapshot<String, PortfolioCellData>, animatingDifferences: shouldAnimate)
-    }
-//
-//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-//        switch type {
-//        case .insert:
-//            if let newAsset = anObject as? Asset {
-//                fetchAssets([newAsset])
-//                if newAsset.type == .stock {
-//                    if webSocketManager.stockWebSocket == nil {
-//                        webSocketManager.createStockSession(delegate: self)
-//                        webSocketManager.subscribe(stockSymbols: [newAsset.code])
-//                    } else {
-//                        webSocketManager.subscribe(stockSymbols: [newAsset.code])
-//                    }
-//                } else {
-//                    if webSocketManager.cryptoWebSocket == nil {
-//                        webSocketManager.createCryptoSession(delegate: self)
-//                        webSocketManager.subscribe(cryptoSymbols: [newAsset.code])
-//                    } else {
-//                        webSocketManager.subscribe(cryptoSymbols: [newAsset.code])
-//                    }
-//                }
-//            }
-//            ops.append(BlockOperation(block: { [weak self] in
-//                self?.collectionView.insertItems(at: [newIndexPath!])
-//            }))
-//        case .delete:
-//            if let indexPath = indexPath {
-//                ops.append(BlockOperation(block: { [weak self] in
-//                    guard let self = self, let asset = anObject as? Asset else { return }
-//                    if asset.type == .stock {
-//                        self.webSocketManager.unsubscribe(stockSymbols: [asset.code])
-//                    } else {
-//                        self.webSocketManager.unsubscribe(cryptoSymbols: [asset.code])
-//                    }
-//                    self.collectionView.deleteItems(at: [indexPath])
-//                }))
-//            }
-//        case .update:
-//            ops.append(BlockOperation(block: { [weak self] in
-//                UIView.performWithoutAnimation({
-//                    self?.collectionView.reloadItems(at: [indexPath!])
-//                })
-//            }))
-//        case .move:
-//            ops.append(BlockOperation(block: { [weak self] in
-//                self?.collectionView.moveItem(at: indexPath!, to: newIndexPath!)
-//            }))
-//        @unknown default:
-//            break
-//        }
-//    }
-//
-//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-//        let indexSection = IndexSet(integer: sectionIndex)
-//        switch type {
-//        case .insert:
-//            ops.append(BlockOperation(block: { [weak self] in
-//                self?.collectionView.insertSections(indexSection)
-//            }))
-//            break
-//        case .delete:
-//            ops.append(BlockOperation(block: { [weak self] in
-//                self?.collectionView.deleteSections(indexSection)
-//            }))
-//        case .move:
-//            break
-//        case .update:
-//            ops.append(BlockOperation(block: { [weak self] in
-//                self?.collectionView.reloadSections(indexSection)
-//            }))
-//        @unknown default:
-//            break
-//        }
-//    }
-//
-//    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-//        collectionView.performBatchUpdates({ () -> Void in
-//            UIView.performWithoutAnimation {
-//                for op: BlockOperation in self.ops { op.start() }
-//            }
-//        }, completion: { (finished) -> Void in self.ops.removeAll() })
-//    }
-//
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith diff: CollectionDifference<NSManagedObjectID>) {
-        for change in diff {
-            switch change {
-            case .insert(offset: _, element: let elementID, associatedWith: _):
-                guard let newAsset = try? controller.managedObjectContext.existingObject(with: elementID) as? Asset else { return
-                }
-                fetchAssets([newAsset])
-                if newAsset.type == .stock {
-                    if webSocketManager.stockWebSocket == nil {
-                        webSocketManager.createStockSession(delegate: self)
-                        webSocketManager.subscribe(stockSymbols: [newAsset.code])
-                    } else {
-                        webSocketManager.subscribe(stockSymbols: [newAsset.code])
-                    }
-                } else {
-                    if webSocketManager.cryptoWebSocket == nil {
-                        webSocketManager.createCryptoSession(delegate: self)
-                        webSocketManager.subscribe(cryptoSymbols: [newAsset.code])
-                    } else {
-                        webSocketManager.subscribe(cryptoSymbols: [newAsset.code])
-                    }
-                }
-            case .remove(offset: _, element: let elementID, associatedWith: _):
-                guard let asset = try? controller.managedObjectContext.existingObject(with: elementID) as? Asset else { return
-                }
-                if asset.type == .stock {
-                    self.webSocketManager.unsubscribe(stockSymbols: [asset.code])
-                } else {
-                    self.webSocketManager.unsubscribe(cryptoSymbols: [asset.code])
-                }
-            }
-        }
     }
 }
 
@@ -505,36 +388,100 @@ extension PortfolioCollectionViewController: URLSessionWebSocketDelegate {
         }
     }
     
-    func setupWebSockets() {
-        createWebSocketSessions()
-        subscribe()
-        webSocketManager.stockReceive { [weak self] value in
+    func updateWebSocketStockCache(for quoteResponse: QuoteWebSocketResponse) {
+        webSocketStockCache[quoteResponse.code] = quoteResponse
+    }
+    
+    func updateWebSocketCryptoCache(for quoteResponse: CryptoWebSocketResponse) {
+        webSocketCryptoCache[quoteResponse.code] = quoteResponse
+    }
+    
+    @objc func updateCoreDataWithWebSocketCache() {
+        webSocketStockCache.forEach{ [weak self] _, value in
             self?.storageManager.modifyAsset(code: value.code, exchange: "US") {
                 $0?.currentPrice = value.price
             }
-//            DispatchQueue.main.async {
-//                self?.updateDataSource(assets: self?.fetchedResultsController.fetchedObjects ?? [])
-//            }
         }
         
-        webSocketManager.cryptoReceive { [weak self] value in
-            
+        webSocketCryptoCache.forEach{ [weak self] _, value in
             self?.storageManager.modifyAsset(code: value.code, exchange: "CC") {
                 $0?.currentPrice = Double(value.price) ?? 0
                 $0?.priceChangePercent = Double(value.dailyChangePercentage) ?? 0
                 $0?.priceChange = Double(value.dailyDifferencePrice) ?? 0
             }
-//            DispatchQueue.main.async {
-//                self?.updateDataSource(assets: self?.fetchedResultsController.fetchedObjects ?? [])
-//            }
         }
+        webSocketStockCache.removeAll()
+        webSocketCryptoCache.removeAll()
+        print("TIMER RAN")
     }
     
-//    func updateVisibleItems(collectionView: UICollectionView, itemID: NSManagedObjectID) {
+    func setupWebSockets() {
+        createWebSocketSessions()
+        subscribe()
+        webSocketManager.stockReceive { [weak self] value in
+//            self?.storageManager.modifyAsset(code: value.code, exchange: "US") {
+//                $0?.currentPrice = value.price
+//            }
+            self?.updateWebSocketStockCache(for: value)
+        }
+        
+        webSocketManager.cryptoReceive { [weak self] value in
+            self?.updateWebSocketCryptoCache(for: value)
+//            self?.storageManager.modifyAsset(code: value.code, exchange: "CC") {
+//                $0?.currentPrice = Double(value.price) ?? 0
+//                $0?.priceChangePercent = Double(value.dailyChangePercentage) ?? 0
+//                $0?.priceChange = Double(value.dailyDifferencePrice) ?? 0
+            }
+        }
+//    }
+    
+    func updateQuoteItemsWithTimer() {
+        webSocketStockCache.forEach{ [weak self] _, value in
+            self?.storageManager.modifyAsset(code: value.code, exchange: "US") {
+                $0?.currentPrice = value.price
+            }
+        }
+        webSocketStockCache.removeAll()
+    }
+    
+    func updateCryptoItemsWithTimer() {
+        webSocketCryptoCache.forEach{ [weak self] _, value in
+            self?.storageManager.modifyAsset(code: value.code, exchange: "CC") {
+                $0?.currentPrice = Double(value.price) ?? 0
+                $0?.priceChangePercent = Double(value.dailyChangePercentage) ?? 0
+                $0?.priceChange = Double(value.dailyDifferencePrice) ?? 0
+            }
+        }
+        webSocketCryptoCache.removeAll()
+    }
+    
+//    func updateVisibleStockItem(collectionView: UICollectionView, itemID: String, item: QuoteWebSocketResponse) {
 //        let visibleIndexpathes = collectionView.indexPathsForVisibleItems
-//        let visibleItems = visibleIndexpathes.filter({ dataSource?.itemIdentifier(for: $0) == itemID })
-//        var cellsToUpdate = visibleItems.map({ [weak self] index in
-//            self?.collectionView.cellForItem(at: index)
+//        let visibleItems = visibleIndexpathes.filter({ dataSource?.itemIdentifier(for: $0)?.code == itemID })
+//        let cellsToUpdate = visibleItems.compactMap({ [weak self] index in
+//            self?.collectionView.cellForItem(at: index) as? PortfolioCollectionViewCell
+//        })
+//        cellsToUpdate.forEach({ cell in
+//            cell.updatePrice(
+//                price: item.price,
+//                currency: "USD",
+//                priceChange: 0,
+//                pricePercentChange: 0)
+//        })
+//    }
+    
+//    func updateVisibleCryptoItem(collectionView: UICollectionView, itemID: String, item: CryptoWebSocketResponse) {
+//        let visibleIndexpathes = collectionView.indexPathsForVisibleItems
+//        let visibleItems = visibleIndexpathes.filter({ dataSource?.itemIdentifier(for: $0)?.code == itemID })
+//        let cellsToUpdate = visibleItems.compactMap({ [weak self] index in
+//            self?.collectionView.cellForItem(at: index) as? PortfolioCollectionViewCell
+//        })
+//        cellsToUpdate.forEach({ cell in
+//            cell.updatePrice(
+//                price: Double(item.price) ?? 0,
+//                currency: "USD",
+//                priceChange: Double(item.dailyDifferencePrice) ?? 0,
+//                pricePercentChange: Double(item.dailyChangePercentage) ?? 0)
 //        })
 //    }
     

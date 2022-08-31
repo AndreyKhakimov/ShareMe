@@ -143,7 +143,8 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
         }
         
         simpleChartView.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-8)
             make.left.equalTo(assetNameLabel.snp.right)
             make.right.equalTo(priceLabel.snp.left)
         }
@@ -166,6 +167,9 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(uid: String, logo: URL?, assetName: String, assetDescription: String, chartData: [Double]?, price: Double, currency: String, priceChange: Double, pricePercentChange: Double) {
+        if assetNameLabel.text != assetName {
+            print("switched \(assetNameLabel.text ?? "") -> \(assetName)")
+        }
         if let logo = logo {
             logoImageView.kf.setImage(with: logo)
             logoLabel.isHidden = true
@@ -177,8 +181,8 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
             logoLabel.string = assetName
             logoImageView.isHidden = true
             logoLabel.isHidden = false
-            print("configure new PortfolioCollectionViewCell \(assetName)")
         }
+        print("configure new PortfolioCollectionViewCell \(assetName)")
         assetNameLabel.text = assetName
         descriptionLabel.text = assetDescription
         
@@ -187,9 +191,11 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
             guard let first = simpleChartView.chartData.first,
                   let last = simpleChartView.chartData.last else { return }
             if first < last {
+                print("\(assetName) - green: \(first) - \(last)")
                 simpleChartView.lineColor = .systemGreen
                 simpleChartView.gradientColor = .systemGreen
             } else {
+                print("\(assetName) - red: \(first) - \(last)")
                 simpleChartView.lineColor = .systemRed
                 simpleChartView.gradientColor = .systemRed
             }
@@ -215,13 +221,33 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    func updatePrice(price: Double, currency: String, priceChange: Double, pricePercentChange: Double) {
+        switch price {
+        case 10000... :
+            priceLabel.text = "\(String(format: "%.f", price)) \(currency)"
+        default:
+            priceLabel.text = "\(String(format: "%.2f", price)) \(currency)"
+            
+        }
+        
+        let formattedPricePercentChange = String(format: "%.2f", pricePercentChange)
+        
+        
+        if priceChange >= 0 {
+            priceChangeLabel.textColor = .systemGreen
+            priceChangeLabel.text = "+\(formattedPricePercentChange) %"
+        } else {
+            priceChangeLabel.textColor = .red
+            priceChangeLabel.text = "\(formattedPricePercentChange) %"
+        }
+    }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         logoImageView.image = nil
-        assetNameLabel.text = nil
         descriptionLabel.text = nil
         priceLabel.text = nil
         priceChangeLabel.text = nil
     }
-    
+
 }
