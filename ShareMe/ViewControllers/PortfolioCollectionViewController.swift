@@ -25,17 +25,18 @@ class PortfolioCollectionViewController: UIViewController {
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .systemBackground
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
+//        collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(PortfolioCollectionViewCell.self, forCellWithReuseIdentifier: PortfolioCollectionViewCell.identifier)
         collectionView.register(SectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         return collectionView
     }()
     
+    private let updateAssetCacheQueue = DispatchQueue(label: "updateAssetCacheQueue", qos: .background, target: .global())
     private let networkManager = PortfolioNetworkManager()
     private let storageManager = StorageManager.shared
     private let webSocketManager = WebSocketManager()
-    private var webSocketStockUpdates = [String:QuoteWebSocketResponse]()
-    private var webSocketCryptoUpdates = [String:CryptoWebSocketResponse]()
+    private var webSocketStockCache = [String:QuoteWebSocketResponse]()
+    private var webSocketCryptoCache = [String:CryptoWebSocketResponse]()
     
     // MARK: - Override
     override func viewDidLoad() {
@@ -48,6 +49,13 @@ class PortfolioCollectionViewController: UIViewController {
         storageManager.performFetch(fetchedResultsController: fetchedResultsController!)
         fetchAssets(fetchedResultsController?.fetchedObjects ?? [Asset]())
         setupWebSockets()
+        let timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            self?.updateAssetCacheQueue.async {
+                self?.updateQuoteItemsWithTimer()
+                self?.updateCryptoItemsWithTimer()
+            }
+        }
+        RunLoop.current.add(timer, forMode: .common)
     }
     
     private func fetchAssets(_ assets: [Asset]) {
@@ -282,22 +290,52 @@ extension PortfolioCollectionViewController: URLSessionWebSocketDelegate {
         }
     }
     
+    func updateWebSocketStockCache(for quoteResponse: QuoteWebSocketResponse) {
+        webSocketStockCache[quoteResponse.code] = quoteResponse
+    }
+    
+    func updateWebSocketCryptoCache(for quoteResponse: CryptoWebSocketResponse) {
+        webSocketCryptoCache[quoteResponse.code] = quoteResponse
+    }
+    
     func setupWebSockets() {
         createWebSocketSessions()
         subscribe()
         webSocketManager.stockReceive { [weak self] value in
+//            self?.storageManager.modifyAsset(code: value.code, exchange: "US") {
+//                $0?.currentPrice = value.price
+//            }
+            self?.updateWebSocketStockCache(for: value)
+        }
+        
+        webSocketManager.cryptoReceive { [weak self] value in
+            self?.updateWebSocketCryptoCache(for: value)
+//            self?.storageManager.modifyAsset(code: value.code, exchange: "CC") {
+//                $0?.currentPrice = Double(value.price) ?? 0
+//                $0?.priceChangePercent = Double(value.dailyChangePercentage) ?? 0
+//                $0?.priceChange = Double(value.dailyDifferencePrice) ?? 0
+            }
+        }
+//    }
+    
+    func updateQuoteItemsWithTimer() {
+        webSocketStockCache.forEach{ [weak self] _, value in
             self?.storageManager.modifyAsset(code: value.code, exchange: "US") {
                 $0?.currentPrice = value.price
             }
         }
-        
-        webSocketManager.cryptoReceive { [weak self] value in
+        webSocketStockCache.removeAll()
+    }
+    
+    func updateCryptoItemsWithTimer() {
+        webSocketCryptoCache.forEach{ [weak self] _, value in
             self?.storageManager.modifyAsset(code: value.code, exchange: "CC") {
                 $0?.currentPrice = Double(value.price) ?? 0
                 $0?.priceChangePercent = Double(value.dailyChangePercentage) ?? 0
                 $0?.priceChange = Double(value.dailyDifferencePrice) ?? 0
             }
         }
+        webSocketCryptoCache.removeAll()
     }
     
 }
