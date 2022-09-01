@@ -136,6 +136,9 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(uid: String, logo: URL?, assetName: String, assetDescription: String, chartData: [Double]?, price: Double, currency: String, priceChange: Double, pricePercentChange: Double) {
+        if assetNameLabel.text != assetName {
+            print("switched \(assetNameLabel.text ?? "") -> \(assetName)")
+        }
         if let logo = logo {
             logoImageView.kf.setImage(with: logo)
             logoLabel.isHidden = true
@@ -154,6 +157,17 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
         
         if let chartData = chartData {
             simpleChartView.chartData = chartData
+            guard let first = simpleChartView.chartData.first,
+                  let last = simpleChartView.chartData.last else { return }
+            if first < last {
+                print("\(assetName) - green: \(first) - \(last)")
+                simpleChartView.lineColor = .systemGreen
+                simpleChartView.gradientColor = .systemGreen
+            } else {
+                print("\(assetName) - red: \(first) - \(last)")
+                simpleChartView.lineColor = .systemRed
+                simpleChartView.gradientColor = .systemRed
+            }
         }
         
         switch price {
@@ -166,14 +180,11 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
         
         let formattedPricePercentChange = String(format: "%.2f", pricePercentChange)
         
+        
         if priceChange >= 0 {
-            simpleChartView.lineColor = .systemGreen
-            simpleChartView.gradientColor = .systemGreen
             priceChangeLabel.textColor = .systemGreen
             priceChangeLabel.text = "+\(formattedPricePercentChange) %"
         } else {
-            simpleChartView.lineColor = .systemRed
-            simpleChartView.gradientColor = .systemRed
             priceChangeLabel.textColor = .red
             priceChangeLabel.text = "\(formattedPricePercentChange) %"
         }
@@ -182,7 +193,6 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         logoImageView.image = nil
-        assetNameLabel.text = nil
         descriptionLabel.text = nil
         priceLabel.text = nil
         priceChangeLabel.text = nil
