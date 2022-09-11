@@ -20,12 +20,13 @@ class AssetViewController: UIViewController {
     var assetName: String?
     var exchange: String?
     var currency: String?
-    var type: AssetType?
+    var type: AssetType
     var logoURL: URL?
     var quote: Quote?
     var news = [NewsResponse]()
     var callback: (() -> Void)?
     let chartTableViewCell = ChartTableViewCell()
+    var isChartSelected = false
     
     private let sections: [Section] = [.chart, .news]
     
@@ -58,6 +59,7 @@ class AssetViewController: UIViewController {
     ]
     
     private let networkManager = QuoteNetworkManager()
+    private let webSocketManager = WebSocketManager()
     private let historicalDataNetworkManager = HistoricalDataNetworkManager()
     private let storageManager = StorageManager.shared
     
@@ -102,9 +104,13 @@ class AssetViewController: UIViewController {
     }
     
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        commonInit()
+        fatalError("init(coder:) has not been implemented")
     }
+    
+//    required init?(coder: NSCoder) {
+//        super.init(coder: coder)
+//        commonInit()
+//    }
     
     private func commonInit() {
         hidesBottomBarWhenPushed = true
@@ -144,10 +150,12 @@ class AssetViewController: UIViewController {
         configureLeftBarButton()
         configureRightBarButton()
         setupNavBar()
+        setupWebSockets()
     }
     
     deinit {
         callback?()
+        webSocketManager.close()
     }
     
     private func setupNavBar() {
@@ -199,7 +207,7 @@ class AssetViewController: UIViewController {
     @objc private func setFavourite() {
         guard let code = code else { return }
         guard let exchange = exchange else { return }
-        guard let type = type else { return }
+//        guard let type = type else { return }
         guard let name = assetName else { return }
         guard let currency = currency else { return }
         
@@ -310,6 +318,7 @@ class AssetViewController: UIViewController {
 // MARK: - ChartView Delegate methods
 extension AssetViewController: ChartViewDelegate {
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
+        isChartSelected = true
         let marker = CircleMarker(color: .lightGray)
         chartTableViewCell.mainChart.marker = marker
         let candleMarker = PillMarker(color: .label, font: Fonts.helveticaBold12, textColor: .tertiarySystemBackground)
@@ -334,6 +343,7 @@ extension AssetViewController: ChartViewDelegate {
     }
     
     func chartViewDidEndPanning(_ chartView: ChartViewBase) {
+        isChartSelected = false
         chartView.highlightValues(nil)
         
         chartTableViewCell.chartSelectionButton.isHidden = false
@@ -347,6 +357,7 @@ extension AssetViewController: ChartViewDelegate {
     }
     
     func chartValueNothingSelected(_ chartView: ChartViewBase) {
+        isChartSelected = false
         chartTableViewCell.chartSelectionButton.isHidden = false
         
         switch chartTableViewCell.chartType {
@@ -445,3 +456,63 @@ extension AssetViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
 }
+
+// MARK: - URLSessionWebSocket Methods
+extension AssetViewController: URLSessionDelegate {
+
+    func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
+        print("Did connect to socket")
+    }
+
+    func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
+        print("Did close connection with reason")
+    }
+
+    func createWebSocketSession() {
+        switch type {
+        case .stock:
+            webSocketManager.createStockSession(delegate: self)
+        case .crypto:
+            webSocketManager.createCryptoSession(delegate: self)
+        }
+    }
+
+    func subscribe() {
+        switch type {
+        case .stock:
+            webSocketManager.subscribe(stockSymbols: [code ?? ""])
+        case .crypto:
+            webSocketManager.subscribe(cryptoSymbols: [code ?? ""])
+        }
+    }
+
+    func setupWebSockets() {
+        createWebSocketSession()
+        subscribe()
+        switch type {
+        case .stock:
+            webSocketManager.stockReceive { [weak self] response in
+                self?.chartTableViewCell.assetInfoView.updatePrice(price: String(response.price))
+            }
+        case .crypto:
+            webSocketManager.cryptoReceive { [weak self] response in
+                DispatchQueue.main.async {
+                    guard self?.isChartSelected != true else { return }
+                    self?.chartTableViewCell.assetInfoView.state = .staticPrice(price: Double(response.price) ?? 0, currency: "USD", priceChange: Double(response.dailyDifferencePrice) ?? 0, pricePercentChange: Double(response.dailyChangePercentage) ?? 0)
+                }
+            }
+        }
+    }
+
+}
+
+//extension AssetViewController: WebSocketManagerDelegate {
+//
+//    func updateStockCacheData(with stockCache: [String: QuoteWebSocketResponse]) {
+//        updateQuoteCoreDataItems(stockCache: stockCache)
+//    }
+//
+//    func updateCryptoCacheData(with cryptoCache: [String: CryptoWebSocketResponse]) {
+//        updateCryptoCoreDataItems(cryptoCache: cryptoCache)
+//    }
+//}

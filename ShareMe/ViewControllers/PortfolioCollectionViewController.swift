@@ -52,12 +52,9 @@ class PortfolioCollectionViewController: UIViewController {
         return collectionView
     }()
     
-    private let updateAssetCacheQueue = DispatchQueue(label: "updateAssetCacheQueue", qos: .background, target: .global())
     private let networkManager = PortfolioNetworkManager()
     private let storageManager = StorageManager.shared
     private let webSocketManager = WebSocketManager()
-    private var webSocketStockCache = [String:QuoteWebSocketResponse]()
-    private var webSocketCryptoCache = [String:CryptoWebSocketResponse]()
     private var dataSource: UICollectionViewDiffableDataSource<Section, PortfolioCellData>?
     
     // MARK: - Override
@@ -73,15 +70,8 @@ class PortfolioCollectionViewController: UIViewController {
             print("Fetching error: \(error), \(error.userInfo)")
         }
         fetchAssets(fetchedResultsController.fetchedObjects ?? [Asset]())
+        webSocketManager.delegate = self
         setupWebSockets()
-        
-        let timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-            self?.updateAssetCacheQueue.async {
-                self?.updateQuoteItemsWithTimer()
-                self?.updateCryptoItemsWithTimer()
-            }
-        }
-        RunLoop.current.add(timer, forMode: .common)
     }
     
     private func generateCollectionViewLayout() -> UICollectionViewCompositionalLayout {
@@ -301,7 +291,7 @@ extension PortfolioCollectionViewController: NSFetchedResultsControllerDelegate 
     
 }
 
-// MARK: - URLSessionWebSocket Delegate Methods
+// MARK: - URLSessionWebSocket Methods
 extension PortfolioCollectionViewController: URLSessionWebSocketDelegate {
     
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
@@ -334,63 +324,41 @@ extension PortfolioCollectionViewController: URLSessionWebSocketDelegate {
         }
     }
     
-    func updateWebSocketStockCache(for quoteResponse: QuoteWebSocketResponse) {
-        webSocketStockCache[quoteResponse.code] = quoteResponse
-    }
-    
-    func updateWebSocketCryptoCache(for quoteResponse: CryptoWebSocketResponse) {
-        webSocketCryptoCache[quoteResponse.code] = quoteResponse
-    }
-    
-    @objc func updateCoreDataWithWebSocketCache() {
-        webSocketStockCache.forEach{ [weak self] _, value in
-            self?.storageManager.modifyAsset(code: value.code, exchange: "US") {
-                $0?.currentPrice = value.price
-            }
-        }
-        
-        webSocketCryptoCache.forEach{ [weak self] _, value in
-            self?.storageManager.modifyAsset(code: value.code, exchange: "CC") {
-                $0?.currentPrice = Double(value.price) ?? 0
-                $0?.priceChangePercent = Double(value.dailyChangePercentage) ?? 0
-                $0?.priceChange = Double(value.dailyDifferencePrice) ?? 0
-            }
-        }
-        webSocketStockCache.removeAll()
-        webSocketCryptoCache.removeAll()
-        print("TIMER RAN")
-    }
-    
     func setupWebSockets() {
         createWebSocketSessions()
         subscribe()
-        webSocketManager.stockReceive { [weak self] value in
-            self?.updateWebSocketStockCache(for: value)
-        }
-        
-        webSocketManager.cryptoReceive { [weak self] value in
-            self?.updateWebSocketCryptoCache(for: value)
-            }
+        webSocketManager.stockReceive()
+        webSocketManager.cryptoReceive()
         }
     
-    func updateQuoteItemsWithTimer() {
-        webSocketStockCache.forEach{ [weak self] _, value in
+    func updateQuoteCoreDataItems(stockCache: [String: QuoteWebSocketResponse]) {
+        stockCache.forEach{ [weak self] _, value in
             self?.storageManager.modifyAsset(code: value.code, exchange: "US") {
                 $0?.currentPrice = value.price
             }
         }
-        webSocketStockCache.removeAll()
     }
     
-    func updateCryptoItemsWithTimer() {
-        webSocketCryptoCache.forEach{ [weak self] _, value in
+    func updateCryptoCoreDataItems(cryptoCache: [String: CryptoWebSocketResponse]) {
+        cryptoCache.forEach{ [weak self] _, value in
             self?.storageManager.modifyAsset(code: value.code, exchange: "CC") {
                 $0?.currentPrice = Double(value.price) ?? 0
                 $0?.priceChangePercent = Double(value.dailyChangePercentage) ?? 0
                 $0?.priceChange = Double(value.dailyDifferencePrice) ?? 0
             }
         }
-        webSocketCryptoCache.removeAll()
+    }
+    
+}
+
+extension PortfolioCollectionViewController: WebSocketManagerDelegate {
+    
+    func updateStockCacheData(with stockCache: [String: QuoteWebSocketResponse]) {
+        updateQuoteCoreDataItems(stockCache: stockCache)
+    }
+    
+    func updateCryptoCacheData(with cryptoCache: [String: CryptoWebSocketResponse]) {
+        updateCryptoCoreDataItems(cryptoCache: cryptoCache)
     }
     
 }

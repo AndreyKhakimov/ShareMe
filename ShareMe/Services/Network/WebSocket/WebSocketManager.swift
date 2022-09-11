@@ -9,7 +9,14 @@ import Foundation
 import UIKit
 import SwiftUI
 
+protocol WebSocketManagerDelegate: AnyObject {
+    func updateStockCacheData(with stockCache: [String:QuoteWebSocketResponse])
+    func updateCryptoCacheData(with cryptoCache: [String:CryptoWebSocketResponse])
+}
+
 class WebSocketManager {
+    
+    weak var delegate: WebSocketManagerDelegate?
         
     enum Action: String {
         case subscribe
@@ -38,8 +45,12 @@ class WebSocketManager {
     var stockWebSocket: URLSessionWebSocketTask?
     var cryptoWebSocket: URLSessionWebSocketTask?
     
+    private var timer: Timer?
+    private let updateAssetCacheQueue = DispatchQueue(label: "updateAssetCacheQueue", qos: .background, target: .global())
     private var stockAssets = Set<String>()
     private var cryptoAssets = Set<String>()
+    private var webSocketStockCache = [String:QuoteWebSocketResponse]()
+    private var webSocketCryptoCache = [String:CryptoWebSocketResponse]()
     private weak var stockSocketDelegate: URLSessionDelegate?
     private weak var cryptoSocketDelegate: URLSessionDelegate?
 
@@ -54,6 +65,7 @@ class WebSocketManager {
     }
     
     @objc private func appWillEnterForeground() {
+         print("--appWillEnterForeground")
         if !stockAssets.isEmpty && stockWebSocket == nil {
             createStockSession(delegate: stockSocketDelegate)
             subscribe(stockSymbols: Array(stockAssets))
@@ -63,6 +75,19 @@ class WebSocketManager {
             createCryptoSession(delegate: cryptoSocketDelegate)
             subscribe(cryptoSymbols: Array(cryptoAssets))
         }
+        let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            self.updateAssetCacheQueue.async {
+                self.delegate?.updateStockCacheData(with: self.webSocketStockCache)
+                self.delegate?.updateCryptoCacheData(with: self.webSocketCryptoCache)
+                self.webSocketStockCache.removeAll()
+                self.webSocketCryptoCache.removeAll()
+            }
+        }
+        RunLoop.current.add(timer, forMode: .common)
+        self.timer = timer
+        stockReceive()
+        cryptoReceive()
     }
     
     @objc private func appDidEnterBackgroundNotification() {
@@ -112,6 +137,10 @@ class WebSocketManager {
     func close() {
         stockWebSocket?.cancel(with: .goingAway, reason: nil)
         cryptoWebSocket?.cancel(with: .goingAway, reason: nil)
+        stockWebSocket = nil
+        cryptoWebSocket = nil
+        timer?.invalidate()
+        timer = nil
     }
     
     func send(message: String, action: Action, webSocket: URLSessionWebSocketTask?) {
@@ -148,7 +177,7 @@ class WebSocketManager {
         send(message: message, action: .unsubscribe, webSocket: cryptoWebSocket)
     }
     
-    func stockReceive(stockCompletion: @escaping (QuoteWebSocketResponse) -> Void) {
+    func stockReceive(stockCompletion: ((QuoteWebSocketResponse) -> Void)? = nil) {
         stockWebSocket?.receive(completionHandler: { [ weak self ] result in
             guard let self = self else { return }
             switch result {
@@ -183,7 +212,7 @@ class WebSocketManager {
         
     }
     
-    func cryptoReceive(cryptoCompletion: @escaping (CryptoWebSocketResponse) -> Void) {
+    func cryptoReceive(cryptoCompletion: ((CryptoWebSocketResponse) -> Void)? = nil) {
         cryptoWebSocket?.receive(completionHandler: { [ weak self ] result in
             guard let self = self else { return }
             switch result {
@@ -219,22 +248,36 @@ class WebSocketManager {
     
     private func onReceiveStockData(
         _ data: Data,
-        stockCompletion: @escaping (QuoteWebSocketResponse) -> Void)
+        stockCompletion: ((QuoteWebSocketResponse) -> Void)? = nil)
     {
         let decoder = JSONDecoder()
         if let socketData = try? decoder.decode(QuoteWebSocketResponse.self, from: data) {
-            stockCompletion(socketData)
+            updateWebSocketStockCache(with: socketData)
+            stockCompletion?(socketData)
         }
     }
-    
+    // TODO: - crypto completion
     private func onReceiveCryptoData(
         _ data: Data,
-        cryptoCompletion: @escaping (CryptoWebSocketResponse) -> Void)
+        cryptoCompletion: ((CryptoWebSocketResponse) -> Void)? = nil)
     {
         let decoder = JSONDecoder()
         if let socketData = try? decoder.decode(CryptoWebSocketResponse.self, from: data) {
-            cryptoCompletion(socketData)
+            updateWebSocketCryptoCache(with: socketData)
+            cryptoCompletion?(socketData)
         }
     }
     
+    func updateWebSocketStockCache(with quoteResponse: QuoteWebSocketResponse) {
+        updateAssetCacheQueue.sync {
+            webSocketStockCache[quoteResponse.code] = quoteResponse
+        }
+    }
+    
+    func updateWebSocketCryptoCache(with quoteResponse: CryptoWebSocketResponse) {
+        updateAssetCacheQueue.sync {
+            webSocketCryptoCache[quoteResponse.code] = quoteResponse
+        }
+    }
+        
 }
