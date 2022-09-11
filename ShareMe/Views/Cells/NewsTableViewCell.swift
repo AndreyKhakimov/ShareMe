@@ -15,7 +15,7 @@ class NewsTableViewCell: UITableViewCell {
     
     private let dateLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Georgia", size: 12)
+        label.font = UIFont(name: "Georgia", size: 14)
         label.textColor = .lightGray
         label.numberOfLines = 0
         label.textAlignment = .justified
@@ -24,7 +24,7 @@ class NewsTableViewCell: UITableViewCell {
 
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Georgia", size: 20)
+        label.font = UIFont(name: "Baskerville", size: 20)
         label.numberOfLines = 4
         label.textAlignment = .left
         return label
@@ -47,7 +47,7 @@ class NewsTableViewCell: UITableViewCell {
         dateLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(8)
             make.right.equalToSuperview().offset(-8)
-            make.top.equalToSuperview().offset(2)
+            make.top.equalToSuperview().offset(8)
             make.bottom.equalTo(titleLabel.snp.top).offset(-2)
         }
         
@@ -55,7 +55,7 @@ class NewsTableViewCell: UITableViewCell {
             make.left.equalToSuperview().offset(8)
             make.right.equalToSuperview().offset(-8)
             make.top.equalTo(dateLabel.snp.bottom).offset(2)
-            make.bottom.equalToSuperview().offset(-4)
+            make.bottom.equalToSuperview().offset(-8)
         }
     }
     

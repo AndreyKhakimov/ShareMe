@@ -44,6 +44,7 @@ class SimpleChartView: UIView {
     
     var chartData = [Double]() {
         didSet {
+            guard oldValue != chartData else { return }
             setNeedsLayout()
             layoutIfNeeded()
         }

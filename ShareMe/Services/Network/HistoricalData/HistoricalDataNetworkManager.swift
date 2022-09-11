@@ -120,17 +120,14 @@ class HistoricalDataNetworkManager {
                 switch result {
                 case .success(var news):
                     let formatter = ISO8601DateFormatter()
+                    let df = DateFormatter()
+                    df.dateFormat = "HH:mm MMM dd"
+                    // 18:01 Aug 16
                     for index in 0..<news.count {
                         let date = formatter.date(from: news[index].date) ?? Date()
-                        formatter.formatOptions = [.withFullDate, .withDashSeparatorInDate]
-                        let stringFromDate = formatter.string(from: date)
-                        news[index].date = stringFromDate
+                        let formattedString = df.string(from: date)
+                        news[index].date = formattedString
                     }
-//                    news.forEach { pieceOfNews in
-//                        let date = formatter.date(from: pieceOfNews.date) ?? Date()
-//                        let stringFromDate = formatter.string(from: date)
-//                        pieceOfNews.date = stringFromDate
-//                    }
                     completion(.success(news))
                 case .failure(let error):
                     completion(.failure(error))

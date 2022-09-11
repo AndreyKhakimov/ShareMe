@@ -42,7 +42,11 @@
 		427BA773283044A100D5FC81 /* AssetInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427BA772283044A100D5FC81 /* AssetInfoView.swift */; };
 		4281C8D928986B8300184358 /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4281C8D828986B8300184358 /* UIImageView.swift */; };
 		4281C8DC289991F300184358 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4281C8DB289991F300184358 /* Cache.swift */; };
-		4299777C28A7EC6700E983ED /* LaunchPicture.png in Resources */ = {isa = PBXBuildFile; fileRef = 4299777B28A7EC6700E983ED /* LaunchPicture.png */; };
+		4299778228ACF2A200E983ED /* launchScreenBackground.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4299778128ACF2A200E983ED /* launchScreenBackground.jpg */; };
+		4299778428ACF2AB00E983ED /* launchScreenLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 4299778328ACF2AB00E983ED /* launchScreenLogo.png */; };
+		4299778628B4F1AB00E983ED /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4299778528B4F1AB00E983ED /* Font.swift */; };
+		4299778828B50B4D00E983ED /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4299778728B50B4D00E983ED /* Fonts.swift */; };
+		4299778A28B5473700E983ED /* Double+RoundToPlaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4299778928B5473700E983ED /* Double+RoundToPlaces.swift */; };
 		42AD702E28031D4000817752 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD702D28031D4000817752 /* AppDelegate.swift */; };
 		42AD703028031D4000817752 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD702F28031D4000817752 /* SceneDelegate.swift */; };
 		42AD703728031D4200817752 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42AD703628031D4200817752 /* Assets.xcassets */; };
@@ -120,7 +124,11 @@
 		427BA772283044A100D5FC81 /* AssetInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetInfoView.swift; sourceTree = "<group>"; };
 		4281C8D828986B8300184358 /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
 		4281C8DB289991F300184358 /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
-		4299777B28A7EC6700E983ED /* LaunchPicture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchPicture.png; sourceTree = "<group>"; };
+		4299778128ACF2A200E983ED /* launchScreenBackground.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = launchScreenBackground.jpg; sourceTree = "<group>"; };
+		4299778328ACF2AB00E983ED /* launchScreenLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launchScreenLogo.png; sourceTree = "<group>"; };
+		4299778528B4F1AB00E983ED /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
+		4299778728B50B4D00E983ED /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
+		4299778928B5473700E983ED /* Double+RoundToPlaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+RoundToPlaces.swift"; sourceTree = "<group>"; };
 		42AD702A28031D4000817752 /* ShareMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42AD702D28031D4000817752 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		42AD702F28031D4000817752 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -201,6 +209,7 @@
 				42E070472824461000A000C2 /* Date.swift */,
 				42E700D828454F6B000EA87C /* Comparable+Clamp.swift */,
 				4281C8D828986B8300184358 /* UIImageView.swift */,
+				4299778928B5473700E983ED /* Double+RoundToPlaces.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -339,7 +348,10 @@
 		4299777828A7EBCA00E983ED /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
-				4299777B28A7EC6700E983ED /* LaunchPicture.png */,
+				4299778728B50B4D00E983ED /* Fonts.swift */,
+				4299778528B4F1AB00E983ED /* Font.swift */,
+				4299778328ACF2AB00E983ED /* launchScreenLogo.png */,
+				4299778128ACF2A200E983ED /* launchScreenBackground.jpg */,
 			);
 			path = SupportingFiles;
 			sourceTree = "<group>";
@@ -619,8 +631,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4299778428ACF2AB00E983ED /* launchScreenLogo.png in Resources */,
 				42AD703A28031D4200817752 /* LaunchScreen.storyboard in Resources */,
-				4299777C28A7EC6700E983ED /* LaunchPicture.png in Resources */,
+				4299778228ACF2A200E983ED /* launchScreenBackground.jpg in Resources */,
 				42AD703728031D4200817752 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -697,6 +710,7 @@
 				42E700DB2845FCCB000EA87C /* SectionHeaderView.swift in Sources */,
 				42AD705A2807335400817752 /* NetworkError.swift in Sources */,
 				423F92B928567BED00FCA7F2 /* GrayscaleView.swift in Sources */,
+				4299778828B50B4D00E983ED /* Fonts.swift in Sources */,
 				423F92C9285F489200FCA7F2 /* WebViewViewController.swift in Sources */,
 				423F92C7285F235A00FCA7F2 /* NewsTableViewCell.swift in Sources */,
 				420EA72B2818915D00BA9FD1 /* HistoricalDataNetworkManager.swift in Sources */,
@@ -708,8 +722,10 @@
 				424AE4B7283A194100AD6002 /* Portfolio.swift in Sources */,
 				424AE4B9283A1A2500AD6002 /* PortfolioNetworkManager.swift in Sources */,
 				42EBE6012886D9C9004E4107 /* SmallSectionHeaderView.swift in Sources */,
+				4299778628B4F1AB00E983ED /* Font.swift in Sources */,
 				420EA7302819995200BA9FD1 /* HistoricalDataResponse.swift in Sources */,
 				427A2A57283DF91F0043D1C9 /* PortfolioCollectionViewCell.swift in Sources */,
+				4299778A28B5473700E983ED /* Double+RoundToPlaces.swift in Sources */,
 				42AD702E28031D4000817752 /* AppDelegate.swift in Sources */,
 				424AE4A9283930A200AD6002 /* Asset+CoreDataClass.swift in Sources */,
 				422B9DEF2864FAC20067A5DD /* ChartTableViewCell.swift in Sources */,

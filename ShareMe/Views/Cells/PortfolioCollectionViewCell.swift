@@ -9,6 +9,36 @@ import UIKit
 import SnapKit
 import Kingfisher
 
+struct PortfolioCellData: Hashable {
+    var uid: String
+    var code: String
+    var exchange: String
+    var type: AssetType
+    var currentPrice: Double
+    var priceChange: Double
+    var priceChangePercent: Double
+    var name: String
+    var logo: String
+    var currency: String
+    var country: String
+    var chartData: [Double]
+    
+    init(asset: Asset) {
+        self.uid = asset.uid
+        self.code = asset.code
+        self.exchange = asset.exchange
+        self.type = asset.type
+        self.currentPrice = asset.currentPrice.rounded(toPlaces: 2)
+        self.priceChange = asset.priceChange.rounded(toPlaces: 2)
+        self.priceChangePercent = asset.priceChangePercent.rounded(toPlaces: 2)
+        self.name = asset.name
+        self.logo = asset.logo
+        self.currency = asset.currency
+        self.country = asset.country
+        self.chartData = asset.chartData
+    }
+}
+
 class PortfolioCollectionViewCell: UICollectionViewCell {
     
     enum PortfolioCollectionViewCellState {
@@ -113,7 +143,8 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
         }
         
         simpleChartView.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-8)
             make.left.equalTo(assetNameLabel.snp.right)
             make.right.equalTo(priceLabel.snp.left)
         }
@@ -150,8 +181,8 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
             logoLabel.string = assetName
             logoImageView.isHidden = true
             logoLabel.isHidden = false
-            print("test \(assetName)")
         }
+        print("configure new PortfolioCollectionViewCell \(assetName)")
         assetNameLabel.text = assetName
         descriptionLabel.text = assetDescription
         
@@ -190,6 +221,27 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    func updatePrice(price: Double, currency: String, priceChange: Double, pricePercentChange: Double) {
+        switch price {
+        case 10000... :
+            priceLabel.text = "\(String(format: "%.f", price)) \(currency)"
+        default:
+            priceLabel.text = "\(String(format: "%.2f", price)) \(currency)"
+            
+        }
+        
+        let formattedPricePercentChange = String(format: "%.2f", pricePercentChange)
+        
+        
+        if priceChange >= 0 {
+            priceChangeLabel.textColor = .systemGreen
+            priceChangeLabel.text = "+\(formattedPricePercentChange) %"
+        } else {
+            priceChangeLabel.textColor = .red
+            priceChangeLabel.text = "\(formattedPricePercentChange) %"
+        }
+    }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         logoImageView.image = nil
@@ -197,5 +249,5 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
         priceLabel.text = nil
         priceChangeLabel.text = nil
     }
-    
+
 }

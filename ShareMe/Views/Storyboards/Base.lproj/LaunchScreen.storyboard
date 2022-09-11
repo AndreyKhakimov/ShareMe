@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
@@ -14,11 +14,17 @@
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchPicture.png" translatesAutoresizingMaskIntoConstraints="NO" id="GYt-7g-NmB">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchScreenBackground.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="GYt-7g-NmB">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchScreenLogo.png" translatesAutoresizingMaskIntoConstraints="NO" id="E1v-Pt-olK">
+                                <rect key="frame" x="8" y="226.66666666666663" width="359" height="359"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="E1v-Pt-olK" secondAttribute="height" id="kym-Ni-cVp"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -26,18 +32,22 @@
                         <constraints>
                             <constraint firstItem="GYt-7g-NmB" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="0Aj-Q4-TuZ"/>
                             <constraint firstAttribute="trailing" secondItem="GYt-7g-NmB" secondAttribute="trailing" id="1ao-dU-Rsz"/>
+                            <constraint firstItem="E1v-Pt-olK" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="D4D-ck-vn8"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="E1v-Pt-olK" secondAttribute="trailing" constant="8" id="D8O-Db-0dL"/>
                             <constraint firstAttribute="bottom" secondItem="GYt-7g-NmB" secondAttribute="bottom" id="Lbm-HJ-3Oy"/>
                             <constraint firstItem="GYt-7g-NmB" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="MFO-SH-y1s"/>
+                            <constraint firstItem="E1v-Pt-olK" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="csw-3k-Bec"/>
                         </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="53" y="375"/>
+            <point key="canvasLocation" x="52.173913043478265" y="375"/>
         </scene>
     </scenes>
     <resources>
-        <image name="LaunchPicture.png" width="810" height="1440"/>
+        <image name="launchScreenBackground.jpg" width="810" height="1440"/>
+        <image name="launchScreenLogo.png" width="375" height="375"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

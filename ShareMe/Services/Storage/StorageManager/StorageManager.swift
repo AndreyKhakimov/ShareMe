@@ -13,7 +13,7 @@ class StorageManager {
     static let shared = StorageManager()
     
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    private lazy var privateContext: NSManagedObjectContext = {
+    lazy var privateContext: NSManagedObjectContext = {
         let moc = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         moc.parent = context
         return moc
@@ -123,11 +123,22 @@ class StorageManager {
         }
     }
     
+    func modifyAssetWithCache(code: String, exchange: String, block: @escaping (Asset?) -> Void) {
+        modifyAssetsQueue.async { [weak self] in
+            self?.privateContext.perform {
+                let asset = self?.getAsset(code: code, exchange: exchange)
+                block(asset)
+            }
+        }
+    }
+    
     func deleteAsset(asset: Asset) {
         privateContext.delete(asset)
         
         do {
+            try privateContext.save()
             try context.save()
+            print("deleteAsset context.save()")
         } catch {
             print("Could not delete. \(error.localizedDescription).")
         }
