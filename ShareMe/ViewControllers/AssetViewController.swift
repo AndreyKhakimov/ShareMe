@@ -492,7 +492,10 @@ extension AssetViewController: URLSessionDelegate {
         switch type {
         case .stock:
             webSocketManager.stockReceive { [weak self] response in
-                self?.chartTableViewCell.assetInfoView.updatePrice(price: String(response.price))
+                DispatchQueue.main.async {
+                    guard self?.isChartSelected != true else { return }
+                    self?.chartTableViewCell.assetInfoView.state = .staticPrice(price: response.price, currency: "USD", priceChange: 0, pricePercentChange: 0)
+                }
             }
         case .crypto:
             webSocketManager.cryptoReceive { [weak self] response in
