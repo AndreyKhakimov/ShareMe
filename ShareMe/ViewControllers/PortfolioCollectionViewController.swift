@@ -12,8 +12,6 @@ import SwiftUI
 
 class PortfolioCollectionViewController: UIViewController {
     
-    private var ops: [BlockOperation] = []
-    
     private struct Section: Hashable {
         var type: AssetType
         var items: [PortfolioCellData]
@@ -192,11 +190,6 @@ class PortfolioCollectionViewController: UIViewController {
         }
     }
     
-    deinit {
-        for o in ops { o.cancel() }
-        ops.removeAll()
-    }
-    
 }
 
 // MARK: - Setup Views
@@ -225,12 +218,14 @@ extension PortfolioCollectionViewController: UICollectionViewDelegate {
         )
         assetVC.callback = { [weak self] in
             guard let self = self else { return }
-            self.setupWebSockets()
+            self.webSocketManager.isDismissed = false
+            self.webSocketManager.appWillEnterForeground()
         }
         let navigationVC = UINavigationController(rootViewController: assetVC)
         present(navigationVC, animated: true, completion: nil)
         collectionView.deselectItem(at: indexPath, animated: true)
         webSocketManager.close()
+        webSocketManager.isDismissed = true
     }
     
 }
@@ -258,14 +253,14 @@ extension PortfolioCollectionViewController: NSFetchedResultsControllerDelegate 
                 fetchAssets([newAsset])
                 if newAsset.type == .stock {
                     if webSocketManager.stockWebSocket == nil {
-                        webSocketManager.createStockSession(delegate: self)
+                        webSocketManager.createStockSession(delegate: nil)
                         webSocketManager.subscribe(stockSymbols: [newAsset.code])
                     } else {
                         webSocketManager.subscribe(stockSymbols: [newAsset.code])
                     }
                 } else {
                     if webSocketManager.cryptoWebSocket == nil {
-                        webSocketManager.createCryptoSession(delegate: self)
+                        webSocketManager.createCryptoSession(delegate: nil)
                         webSocketManager.subscribe(cryptoSymbols: [newAsset.code])
                     } else {
                         webSocketManager.subscribe(cryptoSymbols: [newAsset.code])
@@ -292,23 +287,15 @@ extension PortfolioCollectionViewController: NSFetchedResultsControllerDelegate 
 }
 
 // MARK: - URLSessionWebSocket Methods
-extension PortfolioCollectionViewController: URLSessionWebSocketDelegate {
-    
-    func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
-        print("Did connect to socket")
-    }
-    
-    func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
-        print("Did close connection with reason")
-    }
+extension PortfolioCollectionViewController {
     
     func createWebSocketSessions() {
         if let _ = fetchedResultsController.fetchedObjects?.filter({ $0.type == .stock && $0.exchange == "US"}).first {
-            webSocketManager.createStockSession(delegate: self)
+            webSocketManager.createStockSession(delegate: nil)
         }
         
         if let _ = fetchedResultsController.fetchedObjects?.filter({ $0.type == .crypto}).first {
-            webSocketManager.createCryptoSession(delegate: self)
+            webSocketManager.createCryptoSession(delegate: nil)
         }
     }
     

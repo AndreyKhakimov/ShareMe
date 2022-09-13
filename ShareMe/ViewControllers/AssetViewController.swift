@@ -151,6 +151,7 @@ class AssetViewController: UIViewController {
         configureRightBarButton()
         setupNavBar()
         setupWebSockets()
+        webSocketManager.isUsingTimer = false
     }
     
     deinit {
@@ -458,22 +459,14 @@ extension AssetViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 // MARK: - URLSessionWebSocket Methods
-extension AssetViewController: URLSessionDelegate {
-
-    func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
-        print("Did connect to socket")
-    }
-
-    func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
-        print("Did close connection with reason")
-    }
+extension AssetViewController {
 
     func createWebSocketSession() {
         switch type {
         case .stock:
-            webSocketManager.createStockSession(delegate: self)
+            webSocketManager.createStockSession(delegate: nil)
         case .crypto:
-            webSocketManager.createCryptoSession(delegate: self)
+            webSocketManager.createCryptoSession(delegate: nil)
         }
     }
 
@@ -508,14 +501,3 @@ extension AssetViewController: URLSessionDelegate {
     }
 
 }
-
-//extension AssetViewController: WebSocketManagerDelegate {
-//
-//    func updateStockCacheData(with stockCache: [String: QuoteWebSocketResponse]) {
-//        updateQuoteCoreDataItems(stockCache: stockCache)
-//    }
-//
-//    func updateCryptoCacheData(with cryptoCache: [String: CryptoWebSocketResponse]) {
-//        updateCryptoCoreDataItems(cryptoCache: cryptoCache)
-//    }
-//}

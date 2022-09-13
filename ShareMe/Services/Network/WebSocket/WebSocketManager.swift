@@ -44,6 +44,8 @@ class WebSocketManager {
     
     var stockWebSocket: URLSessionWebSocketTask?
     var cryptoWebSocket: URLSessionWebSocketTask?
+    var isDismissed = false
+    var isUsingTimer = true
     
     private var timer: Timer?
     private let updateAssetCacheQueue = DispatchQueue(label: "updateAssetCacheQueue", qos: .background, target: .global())
@@ -64,8 +66,9 @@ class WebSocketManager {
         NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
     
-    @objc private func appWillEnterForeground() {
-         print("--appWillEnterForeground")
+    @objc func appWillEnterForeground() {
+        guard !isDismissed else { return }
+        print("--appWillEnterForeground")
         if !stockAssets.isEmpty && stockWebSocket == nil {
             createStockSession(delegate: stockSocketDelegate)
             subscribe(stockSymbols: Array(stockAssets))
@@ -75,17 +78,19 @@ class WebSocketManager {
             createCryptoSession(delegate: cryptoSocketDelegate)
             subscribe(cryptoSymbols: Array(cryptoAssets))
         }
-        let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
-            guard let self = self else { return }
-            self.updateAssetCacheQueue.async {
-                self.delegate?.updateStockCacheData(with: self.webSocketStockCache)
-                self.delegate?.updateCryptoCacheData(with: self.webSocketCryptoCache)
-                self.webSocketStockCache.removeAll()
-                self.webSocketCryptoCache.removeAll()
+        if isUsingTimer {
+            let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+                guard let self = self else { return }
+                self.updateAssetCacheQueue.async {
+                    self.delegate?.updateStockCacheData(with: self.webSocketStockCache)
+                    self.delegate?.updateCryptoCacheData(with: self.webSocketCryptoCache)
+                    self.webSocketStockCache.removeAll()
+                    self.webSocketCryptoCache.removeAll()
+                }
             }
+            RunLoop.current.add(timer, forMode: .common)
+            self.timer = timer
         }
-        RunLoop.current.add(timer, forMode: .common)
-        self.timer = timer
         stockReceive()
         cryptoReceive()
     }
@@ -98,7 +103,7 @@ class WebSocketManager {
     func createStockSession(delegate: URLSessionDelegate?) {
         let session = URLSession(
             configuration: .default,
-            delegate: delegate,
+            delegate: nil,
             delegateQueue: nil
         )
         
