@@ -13,7 +13,6 @@ let kColorMaxComponent: Int = 214
 
 extension UIImageView {
     
-    
     func setImageForName(
         _ string: String,
         substringEndUp: String,
@@ -67,7 +66,6 @@ extension UIImageView {
             context.setFillColor(backgroundColor.cgColor)
             context.fill(CGRect(x: 0, y: 0, width: size.width, height: size.height))
             
-            // Draw text in the context
             let textSize: CGSize = imageText.size(withAttributes: textAttributes)
             
             imageText.draw(

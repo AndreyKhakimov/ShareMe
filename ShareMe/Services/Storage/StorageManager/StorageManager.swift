@@ -118,17 +118,13 @@ class StorageManager {
             self?.privateContext.perform {
                 let asset = self?.getAsset(code: code, exchange: exchange)
                 block(asset)
-                try? self?.privateContext.save()
             }
         }
     }
     
-    func modifyAssetWithCache(code: String, exchange: String, block: @escaping (Asset?) -> Void) {
+    func savePrivateContext() {
         modifyAssetsQueue.async { [weak self] in
-            self?.privateContext.perform {
-                let asset = self?.getAsset(code: code, exchange: exchange)
-                block(asset)
-            }
+            try? self?.privateContext.save()
         }
     }
     
