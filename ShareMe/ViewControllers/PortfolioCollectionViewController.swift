@@ -324,6 +324,7 @@ extension PortfolioCollectionViewController {
                 $0?.currentPrice = value.price
             }
         }
+        storageManager.savePrivateContext()
     }
     
     func updateCryptoCoreDataItems(cryptoCache: [String: CryptoWebSocketResponse]) {
@@ -334,6 +335,7 @@ extension PortfolioCollectionViewController {
                 $0?.priceChange = Double(value.dailyDifferencePrice) ?? 0
             }
         }
+        storageManager.savePrivateContext()
     }
     
 }
