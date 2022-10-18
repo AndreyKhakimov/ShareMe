@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		29272DC7E82AB044078138F7 /* Pods_ShareMe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36AD8CF43DF72863333DAFA5 /* Pods_ShareMe.framework */; };
 		42001C9C283E8CAB008F9953 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42001C9B283E8CAB008F9953 /* API.swift */; };
 		42001CA0283FB1E2008F9953 /* CandleChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42001C9F283FB1E1008F9953 /* CandleChart.swift */; };
 		420EA72B2818915D00BA9FD1 /* HistoricalDataNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420EA72A2818915D00BA9FD1 /* HistoricalDataNetworkManager.swift */; };
@@ -47,6 +48,7 @@
 		4299778628B4F1AB00E983ED /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4299778528B4F1AB00E983ED /* Font.swift */; };
 		4299778828B50B4D00E983ED /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4299778728B50B4D00E983ED /* Fonts.swift */; };
 		4299778A28B5473700E983ED /* Double+RoundToPlaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4299778928B5473700E983ED /* Double+RoundToPlaces.swift */; };
+		42997DF728FF139400B6E25D /* SVGImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42997DF628FF139400B6E25D /* SVGImageProcessor.swift */; };
 		42AD702E28031D4000817752 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD702D28031D4000817752 /* AppDelegate.swift */; };
 		42AD703028031D4000817752 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AD702F28031D4000817752 /* SceneDelegate.swift */; };
 		42AD703728031D4200817752 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42AD703628031D4200817752 /* Assets.xcassets */; };
@@ -73,7 +75,6 @@
 		42EBE6012886D9C9004E4107 /* SmallSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42EBE6002886D9C9004E4107 /* SmallSectionHeaderView.swift */; };
 		42EBE605288ADD8A004E4107 /* InitialsLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42EBE604288ADD8A004E4107 /* InitialsLabel.swift */; };
 		42F6E4932890291A00A277D7 /* ShareMeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F6E4922890291A00A277D7 /* ShareMeTests.swift */; };
-		B88076ED76633FE0EF5EC5DB /* Pods_ShareMe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5773896E19DD619742BA63F /* Pods_ShareMe.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,7 +88,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		07EE6EDCE91A76412774F57D /* Pods-ShareMe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareMe.debug.xcconfig"; path = "Target Support Files/Pods-ShareMe/Pods-ShareMe.debug.xcconfig"; sourceTree = "<group>"; };
+		2482CDC8C54D023DBBAAFD18 /* Pods-ShareMe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareMe.release.xcconfig"; path = "Target Support Files/Pods-ShareMe/Pods-ShareMe.release.xcconfig"; sourceTree = "<group>"; };
+		36AD8CF43DF72863333DAFA5 /* Pods_ShareMe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShareMe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42001C9B283E8CAB008F9953 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		42001C9F283FB1E1008F9953 /* CandleChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleChart.swift; sourceTree = "<group>"; };
 		420EA72A2818915D00BA9FD1 /* HistoricalDataNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricalDataNetworkManager.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 		4299778528B4F1AB00E983ED /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
 		4299778728B50B4D00E983ED /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		4299778928B5473700E983ED /* Double+RoundToPlaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+RoundToPlaces.swift"; sourceTree = "<group>"; };
+		42997DF628FF139400B6E25D /* SVGImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SVGImageProcessor.swift; sourceTree = "<group>"; };
 		42AD702A28031D4000817752 /* ShareMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42AD702D28031D4000817752 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		42AD702F28031D4000817752 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -158,8 +161,7 @@
 		42EBE604288ADD8A004E4107 /* InitialsLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialsLabel.swift; sourceTree = "<group>"; };
 		42F6E4902890291A00A277D7 /* ShareMeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShareMeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		42F6E4922890291A00A277D7 /* ShareMeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareMeTests.swift; sourceTree = "<group>"; };
-		9A83B45E94240348F7A0EDE9 /* Pods-ShareMe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareMe.release.xcconfig"; path = "Target Support Files/Pods-ShareMe/Pods-ShareMe.release.xcconfig"; sourceTree = "<group>"; };
-		E5773896E19DD619742BA63F /* Pods_ShareMe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShareMe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB40BE110386DCCA3C4AA6B6 /* Pods-ShareMe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareMe.debug.xcconfig"; path = "Target Support Files/Pods-ShareMe/Pods-ShareMe.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,7 +169,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B88076ED76633FE0EF5EC5DB /* Pods_ShareMe.framework in Frameworks */,
+				29272DC7E82AB044078138F7 /* Pods_ShareMe.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -356,6 +358,14 @@
 			path = SupportingFiles;
 			sourceTree = "<group>";
 		};
+		42997DF828FF1C7900B6E25D /* ImageProcessor */ = {
+			isa = PBXGroup;
+			children = (
+				42997DF628FF139400B6E25D /* SVGImageProcessor.swift */,
+			);
+			path = ImageProcessor;
+			sourceTree = "<group>";
+		};
 		42AD702128031D4000817752 = {
 			isa = PBXGroup;
 			children = (
@@ -363,7 +373,7 @@
 				42F6E4912890291A00A277D7 /* ShareMeTests */,
 				42AD702B28031D4000817752 /* Products */,
 				C60FD769128FB8C1C721A293 /* Pods */,
-				68F90F90F4EFFC2AB1A1D57B /* Frameworks */,
+				A350DAAAA71C4C217564D4A2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -422,6 +432,7 @@
 				4281C8DA289991DE00184358 /* Cache */,
 				42797E722836D4C8004D1A76 /* Storage */,
 				42AD70512807331800817752 /* Network */,
+				42997DF828FF1C7900B6E25D /* ImageProcessor */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -531,10 +542,10 @@
 			path = ShareMeTests;
 			sourceTree = "<group>";
 		};
-		68F90F90F4EFFC2AB1A1D57B /* Frameworks */ = {
+		A350DAAAA71C4C217564D4A2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E5773896E19DD619742BA63F /* Pods_ShareMe.framework */,
+				36AD8CF43DF72863333DAFA5 /* Pods_ShareMe.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -542,8 +553,8 @@
 		C60FD769128FB8C1C721A293 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				07EE6EDCE91A76412774F57D /* Pods-ShareMe.debug.xcconfig */,
-				9A83B45E94240348F7A0EDE9 /* Pods-ShareMe.release.xcconfig */,
+				DB40BE110386DCCA3C4AA6B6 /* Pods-ShareMe.debug.xcconfig */,
+				2482CDC8C54D023DBBAAFD18 /* Pods-ShareMe.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -555,11 +566,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 42AD703E28031D4300817752 /* Build configuration list for PBXNativeTarget "ShareMe" */;
 			buildPhases = (
-				930625A6FE81012C50384963 /* [CP] Check Pods Manifest.lock */,
+				75A920696FE746304B7E2E64 /* [CP] Check Pods Manifest.lock */,
 				42AD702628031D4000817752 /* Sources */,
 				42AD702728031D4000817752 /* Frameworks */,
 				42AD702828031D4000817752 /* Resources */,
-				4C0889B72661950EC4C02E40 /* [CP] Embed Pods Frameworks */,
+				D5B2779CA0621E38EC85E40B /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -648,24 +659,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4C0889B72661950EC4C02E40 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ShareMe/Pods-ShareMe-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ShareMe/Pods-ShareMe-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ShareMe/Pods-ShareMe-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		930625A6FE81012C50384963 /* [CP] Check Pods Manifest.lock */ = {
+		75A920696FE746304B7E2E64 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -687,6 +681,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		D5B2779CA0621E38EC85E40B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ShareMe/Pods-ShareMe-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ShareMe/Pods-ShareMe-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ShareMe/Pods-ShareMe-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -699,6 +710,7 @@
 				42E617A928298C0B00101CD0 /* CustomSegmentedControl.swift in Sources */,
 				422B87F92813241600A082F0 /* Logo.swift in Sources */,
 				424AE4AA283930A200AD6002 /* Asset+CoreDataProperties.swift in Sources */,
+				42997DF728FF139400B6E25D /* SVGImageProcessor.swift in Sources */,
 				427A2A55283DF4950043D1C9 /* PortfolioCollectionViewController.swift in Sources */,
 				4281C8DC289991F300184358 /* Cache.swift in Sources */,
 				423F92C3285A48CE00FCA7F2 /* CryptoWebSocketResponse.swift in Sources */,
@@ -906,7 +918,7 @@
 		};
 		42AD703F28031D4300817752 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 07EE6EDCE91A76412774F57D /* Pods-ShareMe.debug.xcconfig */;
+			baseConfigurationReference = DB40BE110386DCCA3C4AA6B6 /* Pods-ShareMe.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -935,7 +947,7 @@
 		};
 		42AD704028031D4300817752 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9A83B45E94240348F7A0EDE9 /* Pods-ShareMe.release.xcconfig */;
+			baseConfigurationReference = 2482CDC8C54D023DBBAAFD18 /* Pods-ShareMe.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

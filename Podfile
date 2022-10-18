@@ -7,8 +7,9 @@ target 'ShareMe' do
 
    pod 'SnapKit', '~> 5.0.0'
    pod 'Kingfisher', '~> 7.1'
-   #pod 'Charts', '~> 3.6.0'
-   pod 'Charts', :git => 'https://github.com/AndreyKhakimov/Charts.git', :branch => 'master'
+   pod 'Charts', '~> 4.1.0'
+   pod 'SVGKit', :git => 'https://github.com/SVGKit/SVGKit.git', :branch => '3.x'
+   #pod 'Charts', :git => 'https://github.com/AndreyKhakimov/Charts.git', :branch => 'master'
 
 
 

@@ -8,9 +8,6 @@
 import UIKit
 import SnapKit
 
-// TODO: - Move to AppDelegate
-let logoImageCache = Cache<String, URL>()
-
 class SearchViewController: UIViewController {
     
     private struct Section: Hashable {
@@ -73,7 +70,8 @@ class SearchViewController: UIViewController {
                     assetsRespond.forEach { asset in
                         if let assetLogoURL = asset.logo {
                             let id = [asset.code, asset.exchange].joined(separator: ":")
-                            logoImageCache.insert(assetLogoURL, forKey: id)
+                            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                            appDelegate.logoImageCache.insert(assetLogoURL, forKey: id)
                         }
                     }
                 case .failure(let error):

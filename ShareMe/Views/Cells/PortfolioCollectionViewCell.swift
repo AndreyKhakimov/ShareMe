@@ -170,12 +170,13 @@ class PortfolioCollectionViewCell: UICollectionViewCell {
         if assetNameLabel.text != assetName {
             print("switched \(assetNameLabel.text ?? "") -> \(assetName)")
         }
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         if let logo = logo {
-            logoImageView.kf.setImage(with: logo)
+            logoImageView.kf.setImage(with: logo, options: [.processor(SVGImgProcessor())])
             logoLabel.isHidden = true
             logoImageView.isHidden = false
-        } else if let cachedURL = logoImageCache.value(forKey: uid) {
-            logoImageView.kf.setImage(with: cachedURL)
+        } else if let cachedURL = appDelegate.logoImageCache.value(forKey: uid) {
+            logoImageView.kf.setImage(with: cachedURL, options: [.processor(SVGImgProcessor())])
         }
         else {
             logoLabel.string = assetName

@@ -114,9 +114,9 @@ class StorageManager {
     
     private let modifyAssetsQueue = DispatchQueue(label: "modifyAssetsQueue")
     func modifyAsset(code: String, exchange: String, block: @escaping (Asset?) -> Void) {
-        modifyAssetsQueue.async { [weak self] in
-            self?.privateContext.perform {
-                let asset = self?.getAsset(code: code, exchange: exchange)
+        modifyAssetsQueue.sync { [weak self] in
+            let asset = self?.getAsset(code: code, exchange: exchange)
+            self?.privateContext.performAndWait {
                 block(asset)
             }
         }

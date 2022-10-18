@@ -99,12 +99,13 @@ class SearchResultCell: UITableViewCell {
     
     func configure(code: String, exchange: String, image: URL?, info: String, description: String, chartData: [Double]?) {
         let id = [code, exchange].joined(separator: ":")
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         if let image = image {
-            logoImageView.kf.setImage(with: image)
+            logoImageView.kf.setImage(with: image, options: [.processor(SVGImgProcessor())])
             logoLabel.isHidden = true
             logoImageView.isHidden = false
-        } else if let cachedURL = logoImageCache.value(forKey: id) {
-            logoImageView.kf.setImage(with: cachedURL)
+        } else if let cachedURL = appDelegate.logoImageCache.value(forKey: id) {
+            logoImageView.kf.setImage(with: cachedURL, options: [.processor(SVGImgProcessor())])
         } else {
             logoLabel.string = code
             logoImageView.isHidden = true
