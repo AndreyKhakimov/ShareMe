@@ -14,7 +14,7 @@ protocol WebSocketManagerDelegate: AnyObject {
     func updateCryptoCacheData(with cryptoCache: [String:CryptoWebSocketResponse])
 }
 
-class WebSocketManager {
+class WebSocketManager: NSObject {
     
     weak var delegate: WebSocketManagerDelegate?
         
@@ -48,7 +48,11 @@ class WebSocketManager {
     var isUsingTimer = true
     
     private var timer: Timer?
-    private let updateAssetCacheQueue = DispatchQueue(label: "updateAssetCacheQueue", qos: .background, target: .global())
+    private let updateAssetCacheQueue = DispatchQueue(
+        label: "updateAssetCacheQueue",
+        qos: .background,
+        target: .global()
+    )
     private var stockAssets = Set<String>()
     private var cryptoAssets = Set<String>()
     private var webSocketStockCache = [String:QuoteWebSocketResponse]()
@@ -56,7 +60,8 @@ class WebSocketManager {
     private weak var stockSocketDelegate: URLSessionDelegate?
     private weak var cryptoSocketDelegate: URLSessionDelegate?
 
-    init() {
+    override init() {
+        super.init()
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackgroundNotification), name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
@@ -79,7 +84,7 @@ class WebSocketManager {
             subscribe(cryptoSymbols: Array(cryptoAssets))
         }
         if isUsingTimer {
-            let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            let timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { [weak self] _ in
                 guard let self = self else { return }
                 self.updateAssetCacheQueue.async {
                     self.delegate?.updateStockCacheData(with: self.webSocketStockCache)
@@ -103,8 +108,8 @@ class WebSocketManager {
     func createStockSession(delegate: URLSessionDelegate?) {
         let session = URLSession(
             configuration: .default,
-            delegate: nil,
-            delegateQueue: nil
+            delegate: self,
+            delegateQueue: OperationQueue()
         )
         
         guard let url = URL(string: "\(WebSocketManager.hostUrl)\(WebSocketEndpoints.getQuoteRealTimeData.query)") else { return }
@@ -117,8 +122,8 @@ class WebSocketManager {
     func createCryptoSession(delegate: URLSessionDelegate?) {
         let session = URLSession(
             configuration: .default,
-            delegate: delegate,
-            delegateQueue: nil
+            delegate: self,
+            delegateQueue: OperationQueue()
         )
         
         guard let url = URL(string: "\(WebSocketManager.hostUrl)\(WebSocketEndpoints.getCryptoRealTimeData.query)") else { return }
@@ -126,17 +131,6 @@ class WebSocketManager {
         cryptoWebSocket = session.webSocketTask(with: url)
         cryptoWebSocket?.resume()
         cryptoSocketDelegate = delegate
-    }
-    
-    func ping() {
-        stockWebSocket?.sendPing { error in
-            guard let error = error  else { return }
-            print("Ping error: \(error)")
-        }
-        cryptoWebSocket?.sendPing { error in
-            guard let error = error  else { return }
-            print("Ping error: \(error)")
-        }
     }
     
     func close() {
@@ -180,6 +174,36 @@ class WebSocketManager {
         cryptoSymbols.forEach { cryptoAssets.remove($0) }
         let message = cryptoSymbols.joined(separator: ", ")
         send(message: message, action: .unsubscribe, webSocket: cryptoWebSocket)
+    }
+    
+    func pingStock() {
+        stockWebSocket?.sendPing { [weak self] error in
+            guard let self = self else { return }
+            guard let error = error  else {
+                DispatchQueue.global().asyncAfter(deadline: .now() + 5) {
+                    self.pingStock()
+                }
+                return
+            }
+            print("Ping error: \(error)")
+            self.createStockSession(delegate: self.stockSocketDelegate)
+            self.subscribe(stockSymbols: Array(self.stockAssets))
+        }
+    }
+    
+    func pingCrypto() {
+        cryptoWebSocket?.sendPing { [weak self] error in
+            guard let self = self else { return }
+            guard let error = error  else {
+                DispatchQueue.global().asyncAfter(deadline: .now() + 5) {
+                    self.pingStock()
+                }
+                return
+            }
+            print("Ping error: \(error)")
+            self.createCryptoSession(delegate: self.cryptoSocketDelegate)
+            self.subscribe(cryptoSymbols: Array(self.cryptoAssets))
+        }
     }
     
     func stockReceive(stockCompletion: ((QuoteWebSocketResponse) -> Void)? = nil) {
@@ -285,4 +309,15 @@ class WebSocketManager {
         }
     }
         
+}
+
+extension WebSocketManager: URLSessionWebSocketDelegate {
+    func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
+        print("didOpenWithProtocol crypto:\(cryptoAssets)\nStocks\(stockAssets)")
+        pingStock()
+        pingCrypto()
+    }
+    func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
+        print("didCloseWith")
+    }
 }

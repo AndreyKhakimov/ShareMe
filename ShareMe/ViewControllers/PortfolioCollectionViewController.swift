@@ -43,7 +43,6 @@ class PortfolioCollectionViewController: UIViewController {
         let layout = generateCollectionViewLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .systemBackground
-//        collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(PortfolioCollectionViewCell.self, forCellWithReuseIdentifier: PortfolioCollectionViewCell.identifier)
         collectionView.register(SectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         return collectionView
@@ -280,7 +279,9 @@ extension PortfolioCollectionViewController: NSFetchedResultsControllerDelegate 
             }
             print("Remove socket \(deletedAssets)")
         }
-        updateDataSource(assets: newValue)
+        DispatchQueue.main.async {
+            self.updateDataSource(assets: newValue)
+        }
     }
     
 }
@@ -350,3 +351,4 @@ extension PortfolioCollectionViewController: WebSocketManagerDelegate {
     }
     
 }
+
